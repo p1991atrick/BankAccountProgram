@@ -23,7 +23,7 @@
 #
 # ------------------------------------------------------------------------------
 
-PROGRAM_NAME=cs20212
+PROGRAM_NAME=BankAccount
 
 .PHONY: all clean see
 
@@ -35,10 +35,10 @@ all:
 	#reset
 	@echo
 	@echo
-	g++ -c -o factorial.o factorial.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -c -o main.o main.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 	@echo
 	@echo
-	g++ factorial.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
+	g++ main.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
 	@echo
 	@echo
 
@@ -47,7 +47,7 @@ all:
 #
 
 clean:
-	rm -f $(PROGRAM_NAME)
+    #rm -f $(PROGRAM_NAME)
 	rm -f *.o
 	rm -f *.rpo
 	#reset
