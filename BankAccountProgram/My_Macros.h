@@ -7,7 +7,7 @@
 
 
 //debug comments (T/F)
-#define SHOW_DEBUG_OUTPUT 0
+#define SHOW_DEBUG_OUTPUT 1
 
 //trace output
 #define SHOW_TRACE 0
