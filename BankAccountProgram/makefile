@@ -31,7 +31,7 @@ all:
 	@echo
 	@echo
     g++ -c -o main.o *.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
-
+    @echo
     g++ main.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
 	@echo
 	@echo
