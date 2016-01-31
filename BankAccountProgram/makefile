@@ -17,7 +17,7 @@
 #
 # FOR Bank Account Program
 
-$PROGRAM_NAME = Bank_Account
+PROGRAM_NAME = Bank_Account
 
 
 
