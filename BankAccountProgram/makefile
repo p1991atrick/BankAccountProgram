@@ -18,8 +18,7 @@
 # FOR Bank Account Program
 
 $PROGRAM_NAME = Bank_Account
-$CC = g++
-$INClUDES = *.h
+
 
 
 .PHONY: all clean
@@ -31,10 +30,10 @@ $INClUDES = *.h
 all:
 	@echo
 	@echo
-    ${CC} -c -o main.o main.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+    g++ -c -o main.o main.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 	@echo
 	@echo
-    ${CC} main.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
+    g++ main.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
 	@echo
 	@echo
 
