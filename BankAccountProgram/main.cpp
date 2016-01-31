@@ -15,10 +15,14 @@ using std::endl;
 using std::cin;
 
 
-int main(int argc, const char * argv[]) {
-#if DEBUG_OUTPUT
-    cout << "TEST/n";
-#endif
+int main(int argc, const char * argv[])
+{
     
-    return 0;
+#if DEBUG_OUTPUT
+    cout << "TEST\n";
+#endif
+    cout << "this is another test\n";
+    
+    
+    return EXIT_CODE_SUCCESS;
 }
