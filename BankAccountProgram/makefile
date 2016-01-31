@@ -19,7 +19,8 @@
 
 PROGRAM_NAME=Bank_Account
 CC=g++
-INCUDES = Includes/
+INClUDES = *.h
+
 
 .PHONY: all clean
 
@@ -30,7 +31,7 @@ INCUDES = Includes/
 all:
 	@echo
 	@echo
-    ${CC} -c -o main.o main.cpp -c -I${INCLUDES} -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+    ${CC} -c -I ${INCLUDES} -o main.o main.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 	@echo
 	@echo
     ${CC} main.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
