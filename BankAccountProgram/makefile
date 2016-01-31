@@ -15,24 +15,30 @@
 #                  http://superuser.com/questions/112316/what-is-the-shell-command-to-display-contents-of-a-file
 #                  http://www.tldp.org/HOWTO/Keyboard-and-Console-HOWTO-4.html
 #
-# FOR Bank Account Program
+# MODIFICATION HISTORY:
+#
+# Author              Date          Modification(s)
+# ----------------    ----------    ---------------
+# Joel Fredrickson    2016-01-22    Version 0001
+#
+# ------------------------------------------------------------------------------
 
-PROGRAM_NAME = Bank_Account
+PROGRAM_NAME=cs20212
 
-
-
-.PHONY: all clean
+.PHONY: all clean see
 
 #
 # Compile and link ...
 #
 
 all:
+	#reset
 	@echo
 	@echo
-    g++ -c *.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra -o main.o
-    @echo
-    g++ main.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
+	g++ -c -o factorial.o factorial.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	@echo
+	@echo
+	g++ factorial.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
 	@echo
 	@echo
 
@@ -41,6 +47,25 @@ all:
 #
 
 clean:
+	rm -f $(PROGRAM_NAME)
 	rm -f *.o
 	rm -f *.rpo
+	#reset
+	@echo Contents of this directory ...
+	@echo
+	@echo
+	ls -ltr
+	@echo
+	@echo
 
+#
+# See the values of the internal variables ...
+#
+
+see:
+#	#reset
+	@echo
+	@echo
+	@echo "Program name:  " ${PROGRAM_NAME}
+	@echo
+	@echo
