@@ -1,18 +1,19 @@
-/* -----------------------------------------------------------------------------
+#/* -----------------------------------------------------------------------------
 
-FILE NAME:         makefile
+#FILE NAME:         makefile
 
-DESCRIPTION:       Modular makefile for make under Linux
+#DESCRIPTION:       Modular makefile for make under Linux
 
-MODIFICATION HISTORY:
+#MODIFICATION HISTORY:
 
-Author          Date           Modification(s)
--------------   -----------    ---------------
-Patrick Kelly   01-31-2016     1.0
+#Author          Date           Modification(s)
+#-------------   -----------    ---------------
+#Patrick Kelly   01-31-2016     1.0
 
------------------------------------------------------------------------------ */
+#----------------------------------------------------------------------------- */
+
+
 PROGRAM_NAME=BankAccount
-
 
 #FILE1 is always main
 FILE1=main
@@ -30,8 +31,6 @@ FILE5=
 #
 
 build:
-	@echo
-	@echo
 	g++ -c -o $(FILE1).o $(FILE1).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 #2	g++ -c -o $(FILE2).o $(FILE2).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 #3	g++ -c -o $(FILE3).o $(FILE3).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
@@ -54,6 +53,6 @@ link:
 #
 
 clean:
-	rm -f *.o
-	rm -f *.rpo
+	rm *.o
+	rm *.rpo
 
