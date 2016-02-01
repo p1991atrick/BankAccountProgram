@@ -27,6 +27,7 @@
 		CD9577B51C5EB95C0052A835 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		CD9577BD1C5EBBB50052A835 /* My_Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = My_Macros.h; sourceTree = "<group>"; };
 		CD9577BE1C5EC6720052A835 /* makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = makefile; path = BankAccountProgram/makefile; sourceTree = "<group>"; };
+		CD9577BF1C5EE7EC0052A835 /* make.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = make.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +45,7 @@
 			isa = PBXGroup;
 			children = (
 				CD9577BE1C5EC6720052A835 /* makefile */,
+				CD9577BF1C5EE7EC0052A835 /* make.sh */,
 				CD9577B41C5EB95C0052A835 /* BankAccountProgram */,
 				CD9577B31C5EB95C0052A835 /* Products */,
 			);
