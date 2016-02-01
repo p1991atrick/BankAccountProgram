@@ -24,29 +24,74 @@
 # ------------------------------------------------------------------------------
 
 PROGRAM_NAME=BankAccount
+FILE1=main
+FILE2=
+FILE3=
+FILE4=
+FILE5=
+
 
 .PHONY: build link clean
 
 #
-# Compile and link ...
+# Compile ...
 #
 
 build:
     @echo
 	@echo
-	g++ -c -o main.o *.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -c -o main.o main.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+if [ -z $FILE2 ]
+then
+    g++ -c -o ${FILE2}.o ${FILE2}.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+fi
+if [ -z $FILE3 ]
+then
+    g++ -c -o ${FILE3}.o ${FILE3}.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+fi
+
+#
+#this must run...
+#
 
 link:
-	g++ *.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
-	@echo
-	@echo
+
+# Only main.cpp
+if [[ -z $FILE2 ]] && [[ -z $FILE3 ]] && [[ -z $FILE4 ]] && [[ -z $FILE5 ]]
+then
+	g++ main.o -L ../../../usr/local/lib -o $PROGRAM_NAME
+fi
+
+# Two source files
+if [[ -z $FILE2 ]] && [[ -n $FILE3 ]] && [[ -n $FILE4 ]] && [[ -n $FILE5 ]]
+then
+    g++ main.o $[FILE2].o -L ../../../usr/local/lib -o $PROGRAM_NAME
+fi
+
+# Three source files
+if [[ -z $FILE2 ]] && [[ -z $FILE3 ]] && [[ -n $FILE4 ]] && [[ -n $FILE5 ]]
+then
+    g++ main.o $[FILE2].o $[FILE3].o -L ../../../usr/local/lib -o $PROGRAM_NAME
+fi
+
+# Four source files
+if [[ -z $FILE2 ]] && [[ -z $FILE3 ]] && [[ -z $FILE4 ]] && [[ -n $FILE5 ]]
+then
+    g++ main.o $[FILE2].o $[FILE3].o $[FILE4].o -L ../../../usr/local/lib -o $PROGRAM_NAME
+fi
+
+# Five source files
+if [[ -z $FILE2 ]] && [[ -z $FILE3 ]] && [[ -z $FILE4 ]] && [[ -z $FILE5 ]]
+then
+    g++ main.o $[FILE2].o $[FILE3].o $[FILE4].o $[FILE5].o -L ../../../usr/local/lib -o $PROGRAM_NAME
+fi
+
 
 #
 # Clean up ...
 #
 
 clean:
-    #rm -f $(PROGRAM_NAME)
 	rm -f *.o
 	rm -f *.rpo
 
