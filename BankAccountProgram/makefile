@@ -25,20 +25,19 @@
 
 PROGRAM_NAME=BankAccount
 
-.PHONY: all clean see
+.PHONY: build link clean
 
 #
 # Compile and link ...
 #
 
-all:
-	#reset
-	@echo
+build:
+    @echo
 	@echo
 	g++ -c -o main.o *.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
-	@echo
-	@echo
-	g++ main.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
+
+link:
+	g++ *.o -L ../../../usr/local/lib -o ${PROGRAM_NAME}
 	@echo
 	@echo
 
@@ -50,22 +49,4 @@ clean:
     #rm -f $(PROGRAM_NAME)
 	rm -f *.o
 	rm -f *.rpo
-	#reset
-	@echo Contents of this directory ...
-	@echo
-	@echo
-	ls -ltr
-	@echo
-	@echo
 
-#
-# See the values of the internal variables ...
-#
-
-see:
-#	#reset
-	@echo
-	@echo
-	@echo "Program name:  " ${PROGRAM_NAME}
-	@echo
-	@echo
