@@ -15,10 +15,10 @@ using std::endl;
 using std::cin;
 
 
-int main(int argc, const char * argv[])
+int main(/*int argc, const char * argv[]*/)
 {
     
-#if DEBUG_OUTPUT
+#if SHOW_DEBUG_OUTPUT
     cout << "TEST\n";
 #endif
     cout << "this is another test\n";
