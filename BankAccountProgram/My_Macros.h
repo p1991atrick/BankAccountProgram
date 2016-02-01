@@ -4,13 +4,24 @@
 //
 //  Created by Gordon Freeman on 8/27/15.
 //  Copyright © 2015 Patrick Kelly. All rights reserved.
-
-
-//debug comments (T/F)
-#define SHOW_DEBUG_OUTPUT 1
+/* -----------------------------------------------------------------------------
+ 
+ FILE NAME:         My_Macros.h
+ 
+ DESCRIPTION:       PP Macros
+ 
+ NOTES:             None
+ 
+ MODIFICATION HISTORY:
+ 
+ Author          Date           Modification(s)
+ -------------   -----------    ---------------
+ Patrick Kelly   08-27-2015     X.X (independant file)
+ 
+ ----------------------------------------------------------------------------- */
 
 //trace output
-#define SHOW_TRACE 0
+#define TRACE 1
 
 //array size calculation    total bytes/bytes of 0 location
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))

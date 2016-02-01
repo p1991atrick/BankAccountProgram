@@ -1,4 +1,16 @@
+/* -----------------------------------------------------------------------------
 
+FILE NAME:         makefile
+
+DESCRIPTION:       Modular makefile for make under Linux
+
+MODIFICATION HISTORY:
+
+Author          Date           Modification(s)
+-------------   -----------    ---------------
+Patrick Kelly   01-31-2016     1.0
+
+----------------------------------------------------------------------------- */
 PROGRAM_NAME=BankAccount
 
 
