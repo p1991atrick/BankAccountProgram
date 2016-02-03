@@ -50,6 +50,6 @@
 #define EXIT_CODE_SUCCESS 0
 #define EXIT_CODE_FILE_IO 1
 #define EXIT_CODE_ERROR_NO_MATCH_FOUND 2
-#define EXIT_CODE_
+#define EXIT_CODE_NO_SELECTION 3
 
 #define DEBUG_OUTPUT(x) std::cout << #x << " = " << x << std::endl;
