@@ -36,7 +36,6 @@
 #include "My_Macros.h"
 #include <fstream>
 #include <iomanip>
-#include <string>
 #include <cstdlib>
 
 
@@ -59,10 +58,20 @@ int main(/*int argc, const char * argv[]*/)
 {
     
 #if TRACE
-    cout << "TEST\n";
+    cout << "In Main\n";
 #endif
-    cout << "this is another test\n";
+    char LName[];
+    
     
     
     return EXIT_CODE_SUCCESS;
 }
+
+
+
+
+
+
+
+
+
