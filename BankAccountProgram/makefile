@@ -13,7 +13,7 @@
 #----------------------------------------------------------------------------- */
 
 
-PROGRAM_NAME=BankAccount
+PROGRAM_NAME=bankacct
 
 #FILE1 is always main
 FILE1=main
