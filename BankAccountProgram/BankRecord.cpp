@@ -6,7 +6,7 @@
 //  Copyright © 2016 Patrick Kelly. All rights reserved.
 //
 
-#include "BankRecord.hpp"
+#include "BankRecord.h"
 #include <ostream>
 
 database::database()

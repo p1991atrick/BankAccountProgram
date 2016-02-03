@@ -37,6 +37,7 @@
 #include <fstream>
 #include <iomanip>
 #include <cstdlib>
+#include "BankRecord.h"
 
 
 using std::cout;
@@ -60,7 +61,6 @@ int main(/*int argc, const char * argv[]*/)
 #if TRACE
     cout << "In Main\n";
 #endif
-    char LName[];
     
     
     

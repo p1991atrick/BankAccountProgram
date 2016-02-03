@@ -1,13 +1,13 @@
 //
-//  BankRecord.hpp
+//  BankRecord.h
 //  BankAccountProgram
 //
 //  Created by Gordon Freeman on 2/2/16.
 //  Copyright © 2016 Patrick Kelly. All rights reserved.
 //
 
-#ifndef BankRecord_hpp
-#define BankRecord_hpp
+#ifndef BankRecord_h
+#define BankRecord_h
 
 #include <stdio.h>
 
@@ -45,4 +45,4 @@ public:
 
 
 
-#endif /* BankRecord_hpp */
+#endif /* BankRecord_h */

@@ -25,7 +25,7 @@
 
 /* Begin PBXFileReference section */
 		CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BankRecord.cpp; sourceTree = "<group>"; };
-		CD3B6BC11C61A4CE0052A835 /* BankRecord.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BankRecord.hpp; sourceTree = "<group>"; };
+		CD3B6BC11C61A4CE0052A835 /* BankRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankRecord.h; sourceTree = "<group>"; };
 		CD9577B21C5EB95C0052A835 /* BankAccountProgram */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BankAccountProgram; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD9577B51C5EB95C0052A835 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		CD9577BD1C5EBBB50052A835 /* My_Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = My_Macros.h; sourceTree = "<group>"; };
@@ -66,7 +66,7 @@
 				CD9577BD1C5EBBB50052A835 /* My_Macros.h */,
 				CD9577B51C5EB95C0052A835 /* main.cpp */,
 				CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */,
-				CD3B6BC11C61A4CE0052A835 /* BankRecord.hpp */,
+				CD3B6BC11C61A4CE0052A835 /* BankRecord.h */,
 			);
 			path = BankAccountProgram;
 			sourceTree = "<group>";
