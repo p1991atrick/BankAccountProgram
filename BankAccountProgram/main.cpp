@@ -45,11 +45,15 @@ using std::cout;
 using std::endl;
 using std::cin;
 using std::string;
+using std::fstream;
+
 
 // Function Prototyes
 int Menu(int *);
+void Create_File(char *Filename);
+fstream Open_File(char*);
+void Set_Info(database *Record);
 void Display_Output(database *);
-
 
 /* -----------------------------------------------------------------------------
  FUNCTION NAME:     main()
@@ -64,11 +68,27 @@ int main(/*int argc, const char * argv[]*/)
     cout << "In Main\n";
 #endif
     database BankRecord;
-    int choice;
+    int choice = 0;
     int *pchoice = &choice;
-    
+    char Filename[41];
+
     Menu(pchoice);
-    
+    switch (*pchoice)
+    {
+        case 1:
+            Create_File(Filename);
+            Set_Info(&BankRecord);
+            break;
+        case 2:
+            //code here
+            break;
+        case 3:
+            //code here
+            break;
+        default:
+            return EXIT_CODE_NO_SELECTION;
+            break;
+    }
     Display_Output(&BankRecord);
     
     return EXIT_CODE_SUCCESS;
@@ -90,6 +110,45 @@ int Menu(int *pchoice)
     return *pchoice;
 }
 
+void Create_File(char *Filename)
+{
+    cout << "What should the database be called: ";
+    char file[41]; //filename can be up to 40 char's
+    strncpy(file, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 41);
+    cin >> file;
+    strcpy(Filename, file);
+    strcat(Filename, ".db");
+    fstream database(Filename, std::ios::out | std::ios::app | std::ios::binary);
+    database.close();
+}
+
+void Set_Info(database *Record)
+{
+    //set first name
+    cout << "Enter First Name: ";
+    char * FNAME[30];
+    cin >> *FNAME;
+    Record->Set_FName(*FNAME);
+    delete [] *FNAME;
+    //set last name
+    cout << "Enter Last Name: ";
+    char * LNAME[30];
+    cin >> *LNAME;
+    Record->Set_LName(*LNAME);
+    delete [] *LNAME;
+    //set middel initial
+    char MI;
+    cout << "Enter Middle Initial: ";
+    cin >> MI;
+    Record->Set_MI(MI);
+    //set ssn
+    char ssn[15];
+    cout << "Enter SSN (no dashes): ";
+    cin >> ssn;
+    Record->Set_SSN(ssn);
+    //set phone area code
+    
+}
 
 void Display_Output(database *Record)
 {

@@ -8,7 +8,7 @@
  
  FILE NAME:         My_Macros.h
  
- DESCRIPTION:       PP Macros
+ DESCRIPTION:       Macros
  
  NOTES:             None
  

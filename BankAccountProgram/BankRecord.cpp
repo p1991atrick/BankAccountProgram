@@ -7,10 +7,12 @@
 //
 
 #include "BankRecord.h"
-#include <ostream>
 
 database::database()
 {
+#if TRACE
+    std::cout << "In Constructor\n";
+#endif
     strncpy(LName, "\0", 21);
     strncpy(FName, "\0", 21);
     MI = '\0';
@@ -22,8 +24,11 @@ database::database()
     strncpy(PassWd, "\0", 7);
 }
 
-database::database(char* l, char* f, char mi, unsigned int ssn, unsigned int pa, unsigned int ph, float bal, char * acount, char * pass)
+database::database(const char* l, const char* f, char mi, unsigned int ssn, unsigned int pa, unsigned int ph, float bal, const char * acount, const char * pass)
 {
+#if TRACE
+    std::cout << "In Overloaded Constructor\n";
+#endif
     strncpy(LName, l, strlen(l));
     strncpy(FName, f, strlen(f));
     MI = mi;
@@ -37,16 +42,35 @@ database::database(char* l, char* f, char mi, unsigned int ssn, unsigned int pa,
 
 database::~database()
 {
+#if TRACE
+    std::cout << "In Destructor\n";
+#endif
+    
+    
 }
 
 void database::Set_LName(char * l)
 {
-    strncpy(LName, l, strlen(l));
+    if (strlen(l) > 1 && strlen(l) < 21)//check for char count to prevent overflow
+    {
+        strncpy(LName, l, strlen(l));
+    }
+    else
+    {
+        strncpy(LName, l, 20);
+    }
 }
 
 void database::Set_FName(char * f)
 {
-    strncpy(FName, f, strlen(f));
+    if (strlen(f) > 1 && strlen(f) < 21)//check for char count to prevent overflow
+    {
+        strncpy(FName, f, strlen(f));
+    }
+    else
+    {
+        strncpy(FName, f, 20);
+    }
 }
 
 void database::Set_MI(char M)
@@ -54,9 +78,13 @@ void database::Set_MI(char M)
     MI = M;
 }
 
-void database::Set_SSN(unsigned int s)
+void database::Set_SSN(char * s)
 {
-    SSN = s;
+    if (strlen(s) == 9)
+    {
+        SSN = atoi(s);
+    }
+    //SSN = s;
 }
 
 void database::Set_PhoneArea(unsigned int pa)
@@ -91,6 +119,60 @@ char* database::Get_LName()
 {
     return LName;
 }
+
+char* database::Get_FName()
+{
+    return FName;
+}
+
+char database::Get_MI()
+{
+    return MI;
+}
+
+unsigned int database::Get_SSN()
+{
+    return SSN;
+}
+
+unsigned int database::Get_PhoneArea()
+{
+    return PhoneArea;
+}
+
+unsigned int database::Get_Phone()
+{
+    return Phone;
+}
+
+float database::Get_Balance()
+{
+    return Balance;
+}
+
+char* database::Get_Account()
+{
+    return Account;
+}
+
+char* database::Get_PassWd()
+{
+    return PassWd;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
