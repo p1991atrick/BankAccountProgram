@@ -24,7 +24,7 @@ FILE4=
 FILE5=
 
 
-.PHONY: build link clean
+.PHONY: build clean all
 
 #
 # Compile ...
@@ -38,10 +38,6 @@ build:
 #5	g++ -c -o $(FILE5).o $(FILE5).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 
 
-#this must run...
-#
-
-link:
 	g++ $(FILE1).o -L /usr/local/lib -o $(PROGRAM_NAME)
 	g++ $(FILE1).o $(FILE2).o -L /usr/local/lib -o $(PROGRAM_NAME)
 #3	g++ $(FILE1).o $(FILE2).o $(FILE3).o -L /usr/local/lib -o $(PROGRAM_NAME)
