@@ -36,8 +36,8 @@ public:
     void Set_FName(char *);
     void Set_MI(char);
     void Set_SSN(char *);
-    void Set_PhoneArea(unsigned int);
-    void Set_Phone(unsigned int);
+    void Set_PhoneArea(char *);
+    void Set_Phone(char *);
     void Set_Balance(double);
     void Set_Account(char *);
     void Set_PassWD(char *);

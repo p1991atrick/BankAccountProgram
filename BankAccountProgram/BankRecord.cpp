@@ -80,21 +80,17 @@ void database::Set_MI(char M)
 
 void database::Set_SSN(char * s)
 {
-    if (strlen(s) == 9)
-    {
-        SSN = atoi(s);
-    }
-    //SSN = s;
+        SSN = atoi(s);//converts string to int
 }
 
-void database::Set_PhoneArea(unsigned int pa)
+void database::Set_PhoneArea(char * pa)
 {
-    PhoneArea = pa;
+    PhoneArea = atoi(pa);
 }
 
-void database::Set_Phone(unsigned int phone)
+void database::Set_Phone(char * phone)
 {
-    Phone = phone;
+    Phone = atoi(phone);
 }
 
 void database::Set_Balance(double b)
