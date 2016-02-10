@@ -131,9 +131,9 @@ int Menu(int *pchoice)
 void Create_File(char *Filename, database *Record)
 {
     cout << "What should the database be called: ";
-    char *file[41]; //filename can be up to 40 char's
-    cin >> *file;
-    strcpy(Filename, *file);
+    char file[41]; //filename can be up to 40 char's
+    cin >> file;
+    strcpy(Filename, file);
     strcat(Filename, ".db");
     Record->count = 0;
     cout << "Creating database file called \"" << Filename << "\", and overwriting any existing file of the same name\n";
