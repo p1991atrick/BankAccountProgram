@@ -23,6 +23,8 @@
 //trace output
 #define TRACE 1
 
+//testing block
+#define TEST_CODE 1
 //array size calculation    total bytes/bytes of 0 location
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
@@ -51,5 +53,5 @@
 #define EXIT_CODE_FILE_IO 1
 #define EXIT_CODE_ERROR_NO_MATCH_FOUND 2
 #define EXIT_CODE_NO_SELECTION 3
-
+#define EXIT_CODE_PROGRAM_HALT 9
 #define DEBUG_OUTPUT(x) std::cout << #x << " = " << x << std::endl;
