@@ -71,7 +71,14 @@ int main(/*int argc, const char * argv[]*/)
     int choice = 0;
     int *pchoice = &choice;
     char Filename[41];
-
+    
+#if TEST_CODE
+    //Test function location
+    Set_Info(&BankRecord);
+    return EXIT_CODE_PROGRAM_HALT;
+    //
+#endif
+    
     Menu(pchoice);
     switch (*pchoice)
     {
@@ -124,30 +131,56 @@ void Create_File(char *Filename)
 
 void Set_Info(database *Record)
 {
+#if TRACE
+    cout << "In Set_Info\n";
+#endif
     //set first name
-    cout << "Enter First Name: ";
-    char * FNAME[30];
-    cin >> *FNAME;
-    Record->Set_FName(*FNAME);
-    delete [] *FNAME;
-    //set last name
-    cout << "Enter Last Name: ";
-    char * LNAME[30];
-    cin >> *LNAME;
-    Record->Set_LName(*LNAME);
-    delete [] *LNAME;
-    //set middel initial
-    char MI;
-    cout << "Enter Middle Initial: ";
-    cin >> MI;
-    Record->Set_MI(MI);
-    //set ssn
-    char ssn[15];
-    cout << "Enter SSN (no dashes): ";
-    cin >> ssn;
-    Record->Set_SSN(ssn);
-    //set phone area code
+    cout << std::setw(25) << std::right << "Enter First Name: ";
+    char  FNAME[21];
+    cin.getline(FNAME, 20);
+    Record->Set_FName(FNAME);
     
+    //set last name
+    cout << std::setw(25) << "Enter Last Name: ";
+    char LNAME[21];
+    cin.getline(LNAME, 20);
+    Record->Set_LName(LNAME);
+    
+    //set middel initial
+
+    cout << std::setw(25) << "Enter Middle Initial: ";
+    char MI;
+    cin >> MI;
+    while (islower(MI) || isnumber(MI) || !isalpha(MI))
+    {
+        cout << std::setw(25) << "Uppercase Letter ONLY\n";
+        cout << std::setw(25) << "Enter Middle Initial: ";
+        cin >> MI;
+    }
+    Record->Set_MI(MI);
+    
+    //set ssn
+    char ssn[11];
+    cout << std::setw(25) << "Enter SSN (no dashes): ";
+    cin.ignore();
+    cin.getline(ssn, 10);//only takes the first 9 numbers. all others are discarded/
+    Record->Set_SSN(ssn);
+    
+    //set phone area code
+    char phonearea[4];
+    phonearea[3] = '\0';
+    cout << std::setw(25) << "Enter Phone Area Code: ";
+    cin.getline(phonearea, 4);
+    Record->Set_PhoneArea(phonearea);
+    
+    //set Phone base number
+    char phone[8];
+    phone[7] = '\0';
+    cout << std::setw(25) << "Enter Phone Number: ";
+    cin.getline(phone, 8);
+    Record->Set_Phone(phone);
+    
+    //set 
 }
 
 void Display_Output(database *Record)
