@@ -8,6 +8,7 @@
 
 #include "BankRecord.h"
 
+
 database::database()
 {
 #if TRACE

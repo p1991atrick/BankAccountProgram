@@ -11,7 +11,9 @@
 
 #include <stdio.h>
 #include <cstring>
-#include <ostream>
+#include <iostream>
+#include "My_Macros.h"
+
 using std::ostream;
 
 
