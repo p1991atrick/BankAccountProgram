@@ -85,17 +85,18 @@ void database::Set_SSN(char * s)
 
 void database::Set_PhoneArea(char * pa)
 {
-    PhoneArea = atoi(pa);
+    PhoneArea = atoi(pa);//converts string to int
 }
 
 void database::Set_Phone(char * phone)
 {
-    Phone = atoi(phone);
+    Phone = atoi(phone);//converts string to int
 }
 
-void database::Set_Balance(double b)
+void database::Set_Balance(float *b)
 {
-    Balance = b;
+    *b += .00;
+    Balance = *b;
 }
 
 void database::Set_Account(char * acount)

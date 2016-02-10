@@ -38,7 +38,7 @@ public:
     void Set_SSN(char *);
     void Set_PhoneArea(char *);
     void Set_Phone(char *);
-    void Set_Balance(double);
+    void Set_Balance(float *);
     void Set_Account(char *);
     void Set_PassWD(char *);
     

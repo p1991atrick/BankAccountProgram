@@ -52,6 +52,7 @@ using std::fstream;
 int Menu(int *);
 void Create_File(char *Filename);
 fstream Open_File(char*);
+void Save_db(database *, char *);
 void Set_Info(database *Record);
 void Display_Output(database *);
 
@@ -74,7 +75,7 @@ int main(/*int argc, const char * argv[]*/)
     
 #if TEST_CODE
     //Test function location
-    Set_Info(&BankRecord);
+    
     return EXIT_CODE_PROGRAM_HALT;
     //
 #endif
@@ -85,6 +86,7 @@ int main(/*int argc, const char * argv[]*/)
         case 1:
             Create_File(Filename);
             Set_Info(&BankRecord);
+            //Save_db(&BankRecord, Filename);
             break;
         case 2:
             //code here
@@ -101,7 +103,12 @@ int main(/*int argc, const char * argv[]*/)
     return EXIT_CODE_SUCCESS;
 }
 
-
+/* -----------------------------------------------------------------------------
+ FUNCTION:          menu()
+ DESCRIPTION:       displays options and lets user choose
+ RETURNS:           int of choice
+ NOTES:
+ ----------------------------------------------------------------------------- */
 int Menu(int *pchoice)
 {
     cout << std::setw(30) << std::right << "Bank Account Database\n\n";
@@ -117,6 +124,12 @@ int Menu(int *pchoice)
     return *pchoice;
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION:          Create_File()
+ DESCRIPTION:       Creates a file with user defined name
+ RETURNS:           void function
+ NOTES:
+ ----------------------------------------------------------------------------- */
 void Create_File(char *Filename)
 {
     cout << "What should the database be called: ";
@@ -137,6 +150,7 @@ void Set_Info(database *Record)
     //set first name
     cout << std::setw(25) << std::right << "Enter First Name: ";
     char  FNAME[21];
+    cin.ignore();
     cin.getline(FNAME, 20);
     Record->Set_FName(FNAME);
     
@@ -147,7 +161,6 @@ void Set_Info(database *Record)
     Record->Set_LName(LNAME);
     
     //set middel initial
-
     cout << std::setw(25) << "Enter Middle Initial: ";
     char MI;
     cin >> MI;
@@ -180,7 +193,48 @@ void Set_Info(database *Record)
     cin.getline(phone, 8);
     Record->Set_Phone(phone);
     
-    //set 
+    //set balance
+    cout << std::setw(25) << "Enter Account Balance: ";
+    float bal;
+    float *pbal = &bal;
+    cin >> *pbal;
+    Record->Set_Balance(pbal);
+    
+    //set account number
+    char accout[6];
+    accout[5] = '\0';
+    cout << std::setw(25) << "Enter Account Number: ";
+    cin.ignore();
+    cin.getline(accout, 6);
+    Record->Set_Account(accout);
+    
+    //set account pasword
+    char passwd[7];
+    cout << std::setw(25) << "Enter Account Password: ";
+    cin.getline(passwd, 7);
+    Record->Set_PassWD(passwd);
+}
+
+
+/* -----------------------------------------------------------------------------
+ FUNCTION:          WriteFile_VerifySSN()
+ DESCRIPTION:       verifyies that the SSN has 9 numbers
+ RETURNS:           void function
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void VerifySSN(char *ssn)
+{
+    unsigned long int temp, number_of_digits= 1;
+    temp = atoi(ssn);
+    do {
+        number_of_digits++;
+        temp /= 10;
+    } while (temp >= 9);
+    if (number_of_digits != 9)
+    {
+        cout << "Enter correct SSN: ";
+        cin.getline(ssn, 10);
+    }
 }
 
 void Display_Output(database *Record)

@@ -24,7 +24,7 @@
 #define TRACE 1
 
 //testing block
-#define TEST_CODE 1
+#define TEST_CODE 0
 //array size calculation    total bytes/bytes of 0 location
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
