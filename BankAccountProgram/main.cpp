@@ -50,11 +50,11 @@ using std::fstream;
 
 // Function Prototyes
 int Menu(int *);
-void Create_File(char *Filename);
+void Create_File(char *Filename, database *);
 fstream Open_File(char*);
 void Save_db(database *, char *);
-void Set_Info(database *Record);
-void Display_Output(database *);
+void Set_Info(database *Record, char *);
+void Print_Output(database *);
 
 /* -----------------------------------------------------------------------------
  FUNCTION NAME:     main()
@@ -84,22 +84,18 @@ int main(/*int argc, const char * argv[]*/)
     switch (*pchoice)
     {
         case 1:
-            Create_File(Filename);
-            Set_Info(&BankRecord);
-            //Save_db(&BankRecord, Filename);
+            Create_File(Filename, &BankRecord);
+            Set_Info(&BankRecord, Filename);
             break;
         case 2:
-            //code here
             break;
         case 3:
-            //code here
+            Print_Output(&BankRecord);
             break;
         default:
             return EXIT_CODE_NO_SELECTION;
             break;
     }
-    Display_Output(&BankRecord);
-    
     return EXIT_CODE_SUCCESS;
 }
 
@@ -119,7 +115,8 @@ int Menu(int *pchoice)
     cout << std::setw(5) << "3";
     cout << "Print database to file\n";
     do{
-    cin >> *pchoice;
+        cout << "What is your Choice: ";
+        cin >> *pchoice;
     }while (*pchoice < 1 || *pchoice > 3);
     return *pchoice;
 }
@@ -130,23 +127,37 @@ int Menu(int *pchoice)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Create_File(char *Filename)
+void Create_File(char *Filename, database *Record)
 {
     cout << "What should the database be called: ";
-    char file[41]; //filename can be up to 40 char's
-    strncpy(file, "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0", 41);
-    cin >> file;
-    strcpy(Filename, file);
+    char *file[41]; //filename can be up to 40 char's
+    cin >> *file;
+    strcpy(Filename, *file);
     strcat(Filename, ".db");
-    fstream database(Filename, std::ios::out | std::ios::app | std::ios::binary);
+    Record->count = 0;
+    cout << "Creating database file called \"" << Filename << "\", and overwriting any existing file of the same name\n";
+    fstream database(Filename, std::ios::out | std::ios::trunc);
     database.close();
 }
 
-void Set_Info(database *Record)
+/* -----------------------------------------------------------------------------
+ FUNCTION:          Set_Info()
+ DESCRIPTION:       Adds data to the class
+ RETURNS:           void function
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void Set_Info(database *Record, char *Filename)
 {
 #if TRACE
     cout << "In Set_Info\n";
 #endif
+    fstream database(Filename, std::ios::in | std::ios::ate);
+    database >> Record->count;
+    database.close();
+
+    //increment entrie count
+    Record->count++;
+
     //set first name
     cout << std::setw(25) << std::right << "Enter First Name: ";
     char  FNAME[21];
@@ -213,31 +224,36 @@ void Set_Info(database *Record)
     cout << std::setw(25) << "Enter Account Password: ";
     cin.getline(passwd, 7);
     Record->Set_PassWD(passwd);
+
+
+    //save the Record to the file
+    Save_db(Record, Filename);
+}
+
+void Save_db(database *BRecord, char *Filename)
+{
+    //save class to file in binary mode
+    fstream database(Filename, std::ios::out | std::ios::app);
+    database << BRecord->Get_LName() << endl
+    << BRecord->Get_FName() << endl
+    << BRecord->Get_MI() << endl
+    << BRecord->Get_SSN() << endl
+    << BRecord->Get_PhoneArea() << endl
+    << BRecord->Get_Phone() << endl
+    << BRecord->Get_Account() << endl
+    << BRecord->Get_PassWd() << endl
+    << BRecord->count << endl;
+    database.close();
 }
 
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          WriteFile_VerifySSN()
- DESCRIPTION:       verifyies that the SSN has 9 numbers
+ FUNCTION:          Print_Output()
+ DESCRIPTION:       Creates a file with user defined name
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void VerifySSN(char *ssn)
-{
-    unsigned long int temp, number_of_digits= 1;
-    temp = atoi(ssn);
-    do {
-        number_of_digits++;
-        temp /= 10;
-    } while (temp >= 9);
-    if (number_of_digits != 9)
-    {
-        cout << "Enter correct SSN: ";
-        cin.getline(ssn, 10);
-    }
-}
-
-void Display_Output(database *Record)
+void Print_Output(database *Record)
 {
     
 }
