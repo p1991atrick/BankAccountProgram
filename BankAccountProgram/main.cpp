@@ -145,10 +145,10 @@ void Open_File(char *Filename)
 {
     cout << "What is the name of the current database file: ";
     cin >> Filename;
-    if (strstr(Filename, ".db"))
-    {
-        strcat(Filename, ".db");
-    }
+//    if (strstr(Filename, ".db"))
+//    {
+//        strcat(Filename, ".db");
+//    }
 }
 
 /* -----------------------------------------------------------------------------
