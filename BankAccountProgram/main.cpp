@@ -50,7 +50,7 @@ using std::fstream;
 // Function Prototyes
 int Menu(int *);
 void Create_File(char *Filename, database *);
-fstream Open_File(char*);
+void Open_File(char*);
 void Save_db(database *, char *);
 void Set_Info(database *Record, char *);
 void Print_Output(database *);
@@ -87,6 +87,8 @@ int main(/*int argc, const char * argv[]*/)
             Set_Info(&BankRecord, Filename);
             break;
         case 2:
+            Open_File(Filename);
+            Set_Info(&BankRecord, Filename);
             break;
         case 3:
             Print_Output(&BankRecord);
@@ -137,6 +139,16 @@ void Create_File(char *Filename, database *Record)
     cout << "Creating database file called \"" << Filename << "\", and overwriting any existing file of the same name\n";
     fstream database(Filename, std::ios::out | std::ios::trunc);
     database.close();
+}
+
+void Open_File(char *Filename)
+{
+    cout << "What is the name of the current database file: ";
+    cin >> Filename;
+    if (strstr(Filename, ".db"))
+    {
+        strcat(Filename, ".db");
+    }
 }
 
 /* -----------------------------------------------------------------------------
