@@ -29,12 +29,9 @@ class database{
     char PassWd[7];//Length of 6+1
     
 public:
-    //var for entrie count
-    unsigned int count;
-
     //default functions
     database();
-    database(const char*, const char*, char, unsigned int, unsigned int, unsigned int, float, const char*, const char*, unsigned int);
+    database(const char*, const char*, char, unsigned int, unsigned int, unsigned int, float, const char*, const char*);
     ~database();
     
     //set var functions//

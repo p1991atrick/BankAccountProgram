@@ -23,10 +23,9 @@ database::database()
     Balance = 0.00;
     strncpy(Account, "\0", 6);
     strncpy(PassWd, "\0", 7);
-    count = 0;
 }
 
-database::database(const char* l, const char* f, char mi, unsigned int ssn, unsigned int pa, unsigned int ph, float bal, const char * acount, const char * pass, unsigned int c)
+database::database(const char* l, const char* f, char mi, unsigned int ssn, unsigned int pa, unsigned int ph, float bal, const char * acount, const char * pass)
 {
 #if TRACE
     std::cout << "In Overloaded Constructor\n";
@@ -40,7 +39,6 @@ database::database(const char* l, const char* f, char mi, unsigned int ssn, unsi
     Balance = bal;
     strncpy(Account, acount, 5);
     strncpy(PassWd, pass, 6);
-    count = c;
 }
 
 database::~database()
