@@ -21,7 +21,7 @@ class database{
     char LName[21];
     char FName[21];
     char MI;
-    unsigned int SSN;
+    char SSN[10];
     unsigned int PhoneArea;
     unsigned int Phone;
     float Balance;
@@ -31,7 +31,7 @@ class database{
 public:
     //default functions
     database();
-    database(const char*, const char*, char, unsigned int, unsigned int, unsigned int, float, const char*, const char*);
+    database(const char*, const char*, char, char *, unsigned int, unsigned int, float, const char*, const char*);
     ~database();
     
     //set var functions//
@@ -49,7 +49,7 @@ public:
     char* Get_LName();
     char* Get_FName();
     char Get_MI();
-    unsigned int Get_SSN();
+    char * Get_SSN();
     unsigned int Get_PhoneArea();
     unsigned int Get_Phone();
     float Get_Balance();
@@ -57,7 +57,7 @@ public:
     char* Get_PassWd();
     
     //other functions
-    friend ostream&  operator<< (ostream& os, const database& str);
+    //friend ostream&  operator<< (ostream& os, const database& str);
 };
 
 
