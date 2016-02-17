@@ -1,4 +1,4 @@
-program_NAME := myprogram
+program_NAME := bankaccount
 program_C_SRCS := $(wildcard *.c)
 program_CXX_SRCS := $(wildcard *.cpp)
 program_C_OBJS := ${program_C_SRCS:.c=.o}
