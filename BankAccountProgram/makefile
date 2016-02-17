@@ -31,7 +31,7 @@ FILE2=BankRecord
 #
 
 build:
-    g++ -c -o main.o main.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -c -o main.o main.cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 	g++ -c -o $(FILE2).o $(FILE2).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 #3	g++ -c -o $(FILE3).o $(FILE3).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 #4	g++ -c -o $(FILE4).o $(FILE4).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
