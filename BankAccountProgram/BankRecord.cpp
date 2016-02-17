@@ -83,15 +83,13 @@ database::database(const char* l, const char* f, char mi, char * ssn, char * pa,
  DESCRIPTION:       remove content after use
  RETURNS:           none
  NOTES:
- ----------------------------------------------------------------------------- */
-database::~database()
-{
-#if TRACE
-    std::cout << "In Destructor\n";
-#endif
-    
-    
-}
+// ----------------------------------------------------------------------------- */
+//database::~database()
+//{
+//#if TRACE
+//    std::cout << "In Destructor\n";
+//#endif  
+//}
 
 /* -----------------------------------------------------------------------------
  FUNCTION:          database::Set_LName(char * l)

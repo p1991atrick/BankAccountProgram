@@ -60,7 +60,7 @@ public:
     //default functions
     database();
     database(const char*, const char*, char, char *, char *, char *, float, const char*, const char*);
-    ~database();
+    //~database();
     
     //set var functions//
     void Set_LName(char *);
