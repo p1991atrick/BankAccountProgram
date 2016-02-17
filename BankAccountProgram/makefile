@@ -1,32 +1,54 @@
-program_NAME := bankaccount
-program_C_SRCS := $(wildcard *.c)
-program_CXX_SRCS := $(wildcard *.cpp)
-program_C_OBJS := ${program_C_SRCS:.c=.o}
-program_CXX_OBJS := ${program_CXX_SRCS:.cpp=.o}
-program_OBJS := $(program_C_OBJS) $(program_CXX_OBJS)
-program_INCLUDE_DIRS :=
-program_LIBRARY_DIRS :=
-program_LIBRARIES :=
+#/* -----------------------------------------------------------------------------
 
-CPPFLAGS += $(foreach includedir,$(program_INCLUDE_DIRS),-I$(includedir))
-LDFLAGS += $(foreach librarydir,$(program_LIBRARY_DIRS),-L$(librarydir))
-LDFLAGS += $(foreach library,$(program_LIBRARIES),-l$(library))
+#FILE NAME:         makefile
 
-.PHONY: all clean distclean
+#DESCRIPTION:       Modular makefile for make under Linux
 
-all: $(program_NAME)
+#MODIFICATION HISTORY:
 
-$(program_NAME): $(program_OBJS)
-    $(LINK.cc) $(program_OBJS) -o $(program_NAME)
+#Author          Date           Modification(s)
+#-------------   -----------    ---------------
+#Patrick Kelly   01-31-2016     1.0
+
+#----------------------------------------------------------------------------- */
+
+
+PROGRAM_NAME=bankacct
+
+#FILE1 is always main
+FILE1=main
+# for other .cpp files without extention
+FILE2=BankRecord
+#FILE3=
+#FILE4=
+#FILE5=
+
+
+.PHONY: build clean all
+
+#
+# Compile ...
+#
+
+build:
+	g++ -c -o $(FILE1).o $(FILE1).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -c -o $(FILE2).o $(FILE2).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+#3	g++ -c -o $(FILE3).o $(FILE3).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+#4	g++ -c -o $(FILE4).o $(FILE4).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+#5	g++ -c -o $(FILE5).o $(FILE5).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+
+
+	g++ $(FILE1).o -L /usr/local/lib -o $(PROGRAM_NAME)
+	g++ $(FILE1).o $(FILE2).o -L /usr/local/lib -o $(PROGRAM_NAME)
+#3	g++ $(FILE1).o $(FILE2).o $(FILE3).o -L /usr/local/lib -o $(PROGRAM_NAME)
+#4	g++ $(FILE1).o $(FILE2).o $(FILE3).o $(FILE4).o -L /usr/local/lib -o $(PROGRAM_NAME)
+#5	g++ $(FILE1).o $(FILE2).o $(FILE3).o $(FILE4).o $(FILE5).o -L /usr/local/lib -o $(PROGRAM_NAME)
+
+#
+# Clean up ...
+#
 
 clean:
-    @- $(RM) $(program_NAME)
-    @- $(RM) $(program_OBJS)
+	rm *.o
+	rm *.rpo
 
-distclean: clean
-
-define OBJECT_DEPENDS_ON_CORRESPONDING_HEADER
-    $(1) : ${1:.o=.h}
-endef
-
-$(foreach object_file,$(program_OBJS),$(eval $(call OBJECT_DEPENDS_ON_CORRESPONDING_HEADER,$(object_file))))
