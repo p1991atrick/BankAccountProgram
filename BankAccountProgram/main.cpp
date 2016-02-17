@@ -502,7 +502,7 @@ void File_Write(fstream &copyfile, database *Report)
 void File_Recopy(fstream &databasetempfile, char *Filename, unsigned int counter)
 {
     fstream databasefile(Filename, std::ios::out | std::ios::trunc);
-    int x=1;
+    unsigned int x=1;
     do{
         database Report;
         Fileload(databasetempfile, &Report);
