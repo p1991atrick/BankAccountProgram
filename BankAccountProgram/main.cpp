@@ -269,7 +269,7 @@ void Set_Info(database *Record, char *Filename)
     cout << std::setw(25) << "Enter Middle Initial: ";
     char MI;
     cin >> MI;
-    while (islower(MI) || isnumber(MI) || !isalpha(MI))
+    while (islower(MI) || isdigit(MI) || !isalpha(MI))
     {
         cout << std::setw(25) << "Uppercase Letter ONLY\n";
         cout << std::setw(25) << "Enter Middle Initial: ";
