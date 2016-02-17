@@ -19,9 +19,9 @@ PROGRAM_NAME=bankacct
 FILE1=main
 # for other .cpp files without extention
 FILE2=BankRecord
-FILE3=
-FILE4=
-FILE5=
+#FILE3=
+#FILE4=
+#FILE5=
 
 
 .PHONY: build clean all
