@@ -5,6 +5,34 @@
 //  Created by Gordon Freeman on 2/2/16.
 //  Copyright © 2016 Patrick Kelly. All rights reserved.
 //
+/* -----------------------------------------------------------------------------
+
+ FILE NAME:         BankRecord.h
+
+ DESCRIPTION:       class header file
+
+ USAGE:             none
+
+ EXAMPLES:          none
+
+ PARAMETERS:        none
+
+ EXIT CODES:        none
+
+ COMPILATION:       GNU (c++11)
+
+ NOTES:             None
+
+ MODIFICATION HISTORY:
+
+ Author          Date           Modification(s)
+ -------------   -----------    ---------------
+ Patrick Kelly   01-29-2016     Created (git source control)
+
+ ----------------------------------------------------------------------------- */
+
+
+
 
 #ifndef BankRecord_h
 #define BankRecord_h
@@ -55,9 +83,6 @@ public:
     float Get_Balance();
     char* Get_Account();
     char* Get_PassWd();
-    
-    //other functions
-    //friend ostream&  operator<< (ostream& os, const database& str);
 };
 
 
