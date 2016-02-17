@@ -47,12 +47,12 @@ using std::fstream;
 
 // Function Prototyes
 int Menu(int *);
-int File_IO(fstream *, char *Filename);
-void Create_File(char *Filename, fstream *);
-void Open_File(char*, fstream *);
-void Save_db(database, fstream *);
+int File_IO(char *Filename);
+void Create_File(char *Filename);
+void Open_File(char*);
+void Save_db(database, char *);
 void Set_Info(database *Record, char *);
-void Display_Database(database, char * Filename, fstream *);
+void Display_Database(char * Filename);
 void Print_Output(database *);
 void Print_title();
 void Print_Body(database *Record);
@@ -73,11 +73,10 @@ int main(/*int argc, const char * argv[]*/)
     int choice = 0;
     int *pchoice = &choice;
     char Filename[41] = "a";
-    fstream databasefile;
    // cout << sizeof(BankRecord);
 
     //choose what to do with the file
-    *pchoice = File_IO(&databasefile, Filename);
+    *pchoice = File_IO(Filename);
 
     int x=0;
     do{
@@ -86,15 +85,15 @@ int main(/*int argc, const char * argv[]*/)
         {
             case 1:
                 Set_Info(&BankRecord, Filename);
-                Save_db(BankRecord, &databasefile);
+                Save_db(BankRecord, Filename);
                 break;
             case 2:
-                Display_Database(BankRecord, Filename, &databasefile);
+                Display_Database(Filename);
                 break;
             case 3:
 
             case 5:
-                databasefile.close();
+                //databasefile.close();
                 return EXIT_CODE_SUCCESS;
                 break;
             default:
@@ -141,7 +140,7 @@ int Menu(int *pchoice)
     return *pchoice;
 }
 
-int File_IO(fstream *databasefile, char *Filename)
+int File_IO(char *Filename)
 {
     cout << "1. Create Database File\n";
     cout << "2. Open Database File\n";
@@ -155,23 +154,23 @@ int File_IO(fstream *databasefile, char *Filename)
     }
     if (choice == 1)
     {
-        Create_File(Filename, databasefile);
+        Create_File(Filename);
         return 1;
     }
     else
     {
-        Open_File(Filename, databasefile);
+        Open_File(Filename);
         return 0;
     }
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          Create_File(char *Filename, fstream *file)
+ FUNCTION:          Create_File(char *Filename)
  DESCRIPTION:       Creates a file with user defined name
  RETURNS:           void function
  NOTES:             Creates file with record count of 0
  ----------------------------------------------------------------------------- */
-void Create_File(char *Filename, fstream *file)
+void Create_File(char *Filename)
 {
     cout << "What should the database be called: ";
     cin >> Filename;
@@ -179,34 +178,59 @@ void Create_File(char *Filename, fstream *file)
     {
         strncat(Filename, ".db", 3);
     }
-    cout << "Creating database file called \"" << Filename << "\", and overwriting any existing file of the same name\n";
-    file->open(Filename, std::ios::out | std::ios::in | std::ios::trunc | std::ios::binary);
+    fstream databasefile(Filename, std::ios::in | std::ios::app);
+    if (!databasefile.fail())
+    {
+        cout << "Creating database file called \"" << Filename << "\"\n";
+        databasefile.close();
+        databasefile.open(Filename, std::ios::out | std::ios::in | std::ios::trunc);
+    }
+    else
+    {
+        databasefile.close();
+        cout << "The database with name \"" << Filename << "\" exists, Would you like to overwrite it? (y/N) \n";
+        char yesno = 'N';
+        cin >> yesno;
+        if (yesno == 'y' || yesno == 'Y')
+        {
+            databasefile.open(Filename, std::ios::out | std::ios::in | std::ios::trunc);
+            cout << "Creating database file called \"" << Filename << "\"\n";
+        }
+        else
+        {
+            cout << "No dabase created, as one is required the program will now exit\n";
+            exit(EXIT_CODE_FILE_IO);
+        }
+    }
+    databasefile.close();
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          Open_File(char *Filename, fstream *file)
+ FUNCTION:          Open_File(char *Filename)
  DESCRIPTION:       opens the file for both in and out
  RETURNS:           void function
  NOTES:             Creates file with record count of 0
  ----------------------------------------------------------------------------- */
-void Open_File(char *Filename, fstream *file)
+void Open_File(char *Filename)
 {
     cout << "What is the name of the current database file: ";
+    fstream file;
     cin >> Filename;
     if (strcmp(Filename, ".db") > 0)
     {
         strncat(Filename, ".db", 3);
     }
-    file->open(Filename, std::ios::in | std::ios::out | std::ios::app | std::ios::binary);
-    if (file->fail())
+    file.open(Filename, std::ios::in);
+    if (file.fail())
     {
         cout << "File Not Found\n";
         exit(EXIT_CODE_FILE_IO);
     }
     else
     {
-        cout << "File opened\n";
+        cout << Filename << " Opened\n";
     }
+    file.close();
 }
 
 /* -----------------------------------------------------------------------------
@@ -225,13 +249,11 @@ void Set_Info(database *Record, char *Filename)
     char  FNAME[21];
     cin.ignore();
     cin.getline(FNAME, 20);
-    Record->Set_FName(FNAME);
     //set last name
     cout << std::setw(25) << "Enter Last Name: ";
     char LNAME[21];
     cin.ignore();
     cin.getline(LNAME, 20);
-    Record->Set_LName(LNAME);
     //set middel initial
     cout << std::setw(25) << "Enter Middle Initial: ";
     char MI;
@@ -242,46 +264,48 @@ void Set_Info(database *Record, char *Filename)
         cout << std::setw(25) << "Enter Middle Initial: ";
         cin >> MI;
     }
-    Record->Set_MI(MI);
     //set ssn
     char ssn[11];
     cout << std::setw(25) << "Enter SSN (no dashes): ";
     cin.ignore();
     cin.getline(ssn, 10);//only takes the first 9 numbers. all others are discarded/
-    Record->Set_SSN(ssn);
     //set phone area code
     char phonearea[4];
     phonearea[3] = '\0';
     cout << std::setw(25) << "Enter Phone Area Code: ";
     cin.ignore();
     cin.getline(phonearea, 4);
-    Record->Set_PhoneArea(phonearea);
     //set Phone base number
     char phone[8];
     phone[7] = '\0';
     cout << std::setw(25) << "Enter Phone Number: ";
     cin.ignore();
     cin.getline(phone, 8);
-    Record->Set_Phone(phone);
     //set balance
     cout << std::setw(25) << "Enter Account Balance: ";
-    float bal;
-    float *pbal = &bal;
-    cin >> *pbal;
-    Record->Set_Balance(pbal);
+    float *bal;
+    cin >> *bal;
     //set account number
     char accout[6];
     accout[5] = '\0';
     cout << std::setw(25) << "Enter Account Number: ";
     cin.ignore();
     cin.getline(accout, 6);
-    Record->Set_Account(accout);
     //set account pasword
     char passwd[7];
     cout << std::setw(25) << "Enter Account Password: ";
     cin.ignore();
     cin.getline(passwd, 7);
-    Record->Set_PassWD(passwd);
+
+    //write to class
+    Record->Set_LName(LNAME);
+    Record->Set_FName(FNAME);
+    Record->Set_MI(MI);
+    Record->Set_SSN(ssn);
+    Record->Set_PhoneArea(phonearea);
+    Record->Set_Phone(phone);
+    Record->Set_Balance(bal);
+    Record->Set_Account(accout);//(LNAME, FNAME, MI, ssn, phonearea, phone, bal, accout, passwd);
 }
 
 /* -----------------------------------------------------------------------------
@@ -290,11 +314,24 @@ void Set_Info(database *Record, char *Filename)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Save_db(database BRecord, fstream *file)
+void Save_db(database BRecord, char *Filename)
 {
+    //open file
+    fstream databasefile(Filename, std::ios::out | std::ios::app);
+
     //save class to file
-    file->write(reinterpret_cast<char *>(&BRecord), sizeof(BRecord));
-    file->flush();
+    databasefile << BRecord.Get_LName() << endl
+    << BRecord.Get_FName() << endl
+    << BRecord.Get_MI() << endl
+    << BRecord.Get_SSN() << endl
+    << BRecord.Get_PhoneArea() << endl
+    << BRecord.Get_Phone() << endl
+    << BRecord.Get_Balance() << endl
+    << BRecord.Get_Account() << endl
+    << BRecord.Get_PassWd() << endl;
+
+    //close file
+    databasefile.close();
 }
 
 
@@ -304,16 +341,55 @@ void Save_db(database BRecord, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Display_Database(database Record, char * Filename, fstream *file)
+void Display_Database(char * Filename)
 {
-    cout << std::setw(30) << "Current Bank Records\n\n";
+    fstream databasefile(Filename, std::ios::in);//open file
+    cout << std::setw(30) << std::right << "Current Bank Records\n\n";
 
-    Print_title();
+    Print_title();//set up the header table
+    char Lname[21];
+    char Fnmae[21];
+    char MI;
+    char ssn[10];
+    char Phonearea[4];
+    char Phone[8];
+    float Bal, *pbal = &Bal;
+    char Account[6];
+    char Password[7];
+
     //loop for amount of records
     do{
-        file->read(reinterpret_cast<char *>(&Record), sizeof(Record));
+        database Record;
+        
+        databasefile >> Lname;
+        Record.Set_LName(Lname);
+
+        databasefile >> Fnmae;
+        Record.Set_FName(Fnmae);
+
+        databasefile >> MI;
+        Record.Set_MI(MI);
+
+        databasefile >> ssn;
+        Record.Set_SSN(ssn);
+
+        databasefile >> Phonearea;
+        Record.Set_PhoneArea(Phonearea);
+
+        databasefile >> Phone;
+        Record.Set_Phone(Phone);
+
+        databasefile >> *pbal;
+        Record.Set_Balance(pbal);
+
+        databasefile >> Account;
+        Record.Set_Account(Account);
+
+        databasefile >> Password;
+        
+
         Print_Body(&Record);
-    }while (file->eof() == 0);
+    }while (databasefile.eof() == 0);
 
 }
 
@@ -327,18 +403,20 @@ void Display_Database(database Record, char * Filename, fstream *file)
 void Print_title()
 {
     //1st line
-    cout << std::setw(2) << std::left << "Account" << std::setw(20) << "Last" << std::setw(20) << "First" << std::setw(6) << "MI" << std::setw(13) << "SS"     << std::setw(16) << "Phone"  << std::setw(15) << "Account" << endl;
+     cout << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "-----------" << endl;
     //2nd line
-    cout << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20) << "Name"  << std::setw(6) << "  " << std::setw(13) << "Number" << std::setw(16) << "Number" << std::setw(15) << "Balance" << endl;
+    cout << std::setw(12) << std::left << "Account" << std::setw(20) << "Last" << std::setw(20) << "First" << std::setw(6) << "MI" << std::setw(13) << "SSN"     << std::setw(16) << "Phone"  << std::setw(15) << "Account" << endl;
     //3rd line
-    cout << std::setw(12) << "--------" << std::setw(20) << "----" << std::setw(20) << "-----" << std::setw(6) << "--" << std::setw(13) << "------" << std::setw(16) << "------" << std::setw(15) << "------" << endl;
+    cout << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20) << "Name"  << std::setw(6) << "  " << std::setw(13) << "Number" << std::setw(16) << "Number" << std::setw(15) << "Balance" << endl;
+    //4th line
+    cout << std::setw(12) << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "-----------" << endl;
 }
 
 void Print_Body(database *Record)
 {
-    cout << std::setw(10) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
-    << std::setw(5) << Record->Get_MI() << std::setw(15) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
-    << std::setw(15) << std::right << Record->Get_Balance() << endl;
+    cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
+    << std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
+    << std::setw(10) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
 }
 
 
