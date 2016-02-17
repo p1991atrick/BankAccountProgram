@@ -56,6 +56,10 @@ void Display_Database(char * Filename);
 void Print_Output(database *);
 void Print_title();
 void Print_Body(database *Record);
+void Delete_Account(char *);
+void File_Write(fstream &databasetempfile, database *Report);
+void File_Recopy(fstream &databasetempfile, char*, unsigned int counter);
+void Fileload(fstream &databasefile, database *Report);
 
 /* -----------------------------------------------------------------------------
  FUNCTION NAME:     main()
@@ -89,6 +93,7 @@ int main(/*int argc, const char * argv[]*/)
                 break;
             case 2:
                 Display_Database(Filename);
+                Delete_Account(Filename);;
                 break;
             case 3:
 
@@ -140,6 +145,12 @@ int Menu(int *pchoice)
     return *pchoice;
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION:          File_IO(char *Filename)
+ DESCRIPTION:       asks about new or saved file
+ RETURNS:           int of choice
+ NOTES:
+ ----------------------------------------------------------------------------- */
 int File_IO(char *Filename)
 {
     cout << "1. Create Database File\n";
@@ -328,7 +339,7 @@ void Save_db(database BRecord, char *Filename)
     << BRecord.Get_Phone() << endl
     << BRecord.Get_Balance() << endl
     << BRecord.Get_Account() << endl
-    << BRecord.Get_PassWd() << endl;
+    << BRecord.Get_PassWd() << endl << endl;
 
     //close file
     databasefile.close();
@@ -360,43 +371,33 @@ void Display_Database(char * Filename)
     //loop for amount of records
     do{
         database Record;
-        
         databasefile >> Lname;
         Record.Set_LName(Lname);
-
         databasefile >> Fnmae;
         Record.Set_FName(Fnmae);
-
         databasefile >> MI;
         Record.Set_MI(MI);
-
         databasefile >> ssn;
         Record.Set_SSN(ssn);
-
         databasefile >> Phonearea;
         Record.Set_PhoneArea(Phonearea);
-
         databasefile >> Phone;
         Record.Set_Phone(Phone);
-
         databasefile >> *pbal;
         Record.Set_Balance(pbal);
-
         databasefile >> Account;
         Record.Set_Account(Account);
-
         databasefile >> Password;
-        
-
         Print_Body(&Record);
     }while (databasefile.eof() == 0);
-
+    //white space at end of chart
+    cout << endl << endl << endl;
 }
 
 
 /* -----------------------------------------------------------------------------
  FUNCTION:          Print_title()
- DESCRIPTION:       write the header lables to the report file
+ DESCRIPTION:       Write coulum labels to screen
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
@@ -412,6 +413,12 @@ void Print_title()
     cout << std::setw(12) << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "-----------" << endl;
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION:          Print_Body()
+ DESCRIPTION:       write the account informatoin to the screen
+ RETURNS:           void function
+ NOTES:
+ ----------------------------------------------------------------------------- */
 void Print_Body(database *Record)
 {
     cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
@@ -420,11 +427,121 @@ void Print_Body(database *Record)
 }
 
 
+void Delete_Account(char *Filename)
+{
+    char accountnumber[6];
+    cout << "What is the Account Number of the account you would like to delete: ";
+    cin.ignore();
+    cin.getline(accountnumber, 6);
 
+    //start looking for offending account
+    //vars for function
+    fstream databasefile(Filename, std::ios::in);//original file
+    fstream databasetempfile("Tempcopyfile.db", std::ios::out | std::ios::trunc);
+    unsigned int counter = 0;
+    char Lname[21];
+    char Fnmae[21];
+    char MI;
+    char ssn[10];
+    char Phonearea[4];
+    char Phone[8];
+    float Bal, *pbal = &Bal;
+    char Account[6];
+    char Password[7];
+    //the brains
+    do{
+        database Report;
+        databasefile >> Lname;
+        databasefile >> Fnmae;
+        databasefile >> MI;
+        databasefile >> ssn;
+        databasefile >> Phonearea;
+        databasefile >> Phone;
+        databasefile >> *pbal;
+        databasefile >> Account;
+        databasefile >> Password;
+        if (!strcmp(accountnumber, Account))
+        {
+            cout << "\nDeleting accout " << accountnumber << endl;
+        }
+        else
+        {
+            Report.Set_LName(Lname);
+            Report.Set_FName(Fnmae);
+            Report.Set_MI(MI);
+            Report.Set_SSN(ssn);
+            Report.Set_PhoneArea(Phonearea);
+            Report.Set_Phone(Phone);
+            Report.Set_Balance(pbal);
+            Report.Set_Account(Account);
+            Report.Set_PassWD(Password);
+            File_Write(databasetempfile, &Report);
+            counter++;
+        }
+    }while (databasefile.eof() == 0);
+    databasefile.close();
+    databasetempfile.close();
+    databasetempfile.open("Tempcopyfile.db", std::ios::in);
+    File_Recopy(databasetempfile, Filename, counter);
+    databasetempfile.close();
+}
 
+void File_Write(fstream &copyfile, database *Report)
+{
+    copyfile << Report->Get_LName() << endl
+    << Report->Get_FName() << endl
+    << Report->Get_MI() << endl
+    << Report->Get_SSN() << endl
+    << Report->Get_PhoneArea() << endl
+    << Report->Get_Phone() << endl
+    << Report->Get_Balance() << endl
+    << Report->Get_Account() << endl
+    << Report->Get_PassWd() << endl << endl;
+}
 
+void File_Recopy(fstream &databasetempfile, char *Filename, unsigned int counter)
+{
+    fstream databasefile(Filename, std::ios::out | std::ios::trunc);
+    int x=1;
+    do{
+        database Report;
+        Fileload(databasetempfile, &Report);
+        File_Write(databasefile, &Report);
+    }while (x < counter);
+    
+    databasefile.close();
 
-
+}
+void Fileload(fstream &databasefile, database *Report)
+{
+    char Lname[21];
+    char Fnmae[21];
+    char MI;
+    char ssn[10];
+    char Phonearea[4];
+    char Phone[8];
+    float Bal, *pbal = &Bal;
+    char Account[6];
+    char Password[7];
+    databasefile >> Lname;
+    databasefile >> Fnmae;
+    databasefile >> MI;
+    databasefile >> ssn;
+    databasefile >> Phonearea;
+    databasefile >> Phone;
+    databasefile >> *pbal;
+    databasefile >> Account;
+    databasefile >> Password;
+    Report->Set_LName(Lname);
+    Report->Set_FName(Fnmae);
+    Report->Set_MI(MI);
+    Report->Set_SSN(ssn);
+    Report->Set_PhoneArea(Phonearea);
+    Report->Set_Phone(Phone);
+    Report->Set_Balance(pbal);
+    Report->Set_Account(Account);
+    Report->Set_PassWD(Password);
+}
 
 
 
