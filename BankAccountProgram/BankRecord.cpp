@@ -18,14 +18,14 @@ database::database()
     strncpy(FName, "\0", 21);
     MI = '\0';
     strncpy(SSN, "\0", 10);
-    PhoneArea = 000;
-    Phone = 0000000;
+    strncpy(PhoneArea, "\0", 4);
+    strncpy(Phone, "\0", 8);
     Balance = 0.00;
     strncpy(Account, "\0", 6);
     strncpy(PassWd, "\0", 7);
 }
 
-database::database(const char* l, const char* f, char mi, char * ssn, unsigned int pa, unsigned int ph, float bal, const char * acount, const char * pass)
+database::database(const char* l, const char* f, char mi, char * ssn, char * pa, char * ph, float bal, const char * acount, const char * pass)
 {
 #if TRACE
     std::cout << "In Overloaded Constructor\n";
@@ -34,8 +34,8 @@ database::database(const char* l, const char* f, char mi, char * ssn, unsigned i
     strncpy(FName, f, strlen(f));
     MI = mi;
     strncpy(SSN, ssn, 10);
-    PhoneArea = pa;
-    Phone = ph;
+    strncpy(PhoneArea, pa, 3);
+    strncpy(Phone, ph, 7);
     Balance = bal;
     strncpy(Account, acount, 5);
     strncpy(PassWd, pass, 6);
@@ -86,12 +86,12 @@ void database::Set_SSN(char * s)
 
 void database::Set_PhoneArea(char * pa)
 {
-    PhoneArea = atoi(pa);//converts string to int
+    strncpy(PhoneArea, pa, 3);
 }
 
 void database::Set_Phone(char * phone)
 {
-    Phone = atoi(phone);//converts string to int
+    strncpy(Phone, phone, 7);
 }
 
 void database::Set_Balance(float *b)
@@ -133,12 +133,12 @@ char* database::Get_SSN()
     return SSN;
 }
 
-unsigned int database::Get_PhoneArea()
+char* database::Get_PhoneArea()
 {
     return PhoneArea;
 }
 
-unsigned int database::Get_Phone()
+char* database::Get_Phone()
 {
     return Phone;
 }

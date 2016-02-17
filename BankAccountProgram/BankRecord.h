@@ -22,8 +22,8 @@ class database{
     char FName[21];
     char MI;
     char SSN[10];
-    unsigned int PhoneArea;
-    unsigned int Phone;
+    char PhoneArea[4];
+    char Phone[8];
     float Balance;
     char Account[6];//length of 5 + 1
     char PassWd[7];//Length of 6+1
@@ -31,7 +31,7 @@ class database{
 public:
     //default functions
     database();
-    database(const char*, const char*, char, char *, unsigned int, unsigned int, float, const char*, const char*);
+    database(const char*, const char*, char, char *, char *, char *, float, const char*, const char*);
     ~database();
     
     //set var functions//
@@ -50,8 +50,8 @@ public:
     char* Get_FName();
     char Get_MI();
     char * Get_SSN();
-    unsigned int Get_PhoneArea();
-    unsigned int Get_Phone();
+    char * Get_PhoneArea();
+    char * Get_Phone();
     float Get_Balance();
     char* Get_Account();
     char* Get_PassWd();
