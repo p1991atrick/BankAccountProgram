@@ -21,7 +21,7 @@
  ----------------------------------------------------------------------------- */
 
 //trace output
-#define TRACE 1
+#define TRACE 0
 
 //testing block
 #define TEST_CODE 0

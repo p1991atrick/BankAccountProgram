@@ -46,20 +46,28 @@ using std::cin;
 using std::fstream;
 
 // Function Prototyes
-int Main_Menu(int *);
-void File_IO(char *);
-void Create_File(char *);
-void Open_File(char*);
-void Save_db(database *, char *);
-void Set_Info(char *);
-void Display_Database(char *);
-void Display_title();
-void Display_Body(database *);
-void Delete_Account(char *);
-void File_Write(fstream &, database *);
-void File_Recopy(fstream &, char*, unsigned int );
-void Class_Load(fstream &, database *);
-void Print_File(char *);
+//menu
+    int Main_Menu(int *);
+    void File_IO(char *);
+//file IO
+    void Create_File(char *);
+    void Open_File(char*);
+//management
+    void Set_Info(char *);
+    void Display_Database(char *);
+    void Delete_Account(char *);
+    void Print_File(char *);
+//account
+    void Funds_Transfer(char *);
+    void Funds_Add(char *);
+    void Funds_Remove(char *);
+//support functions
+    void Display_title();
+    void Display_Body(database *);
+    void File_Write(fstream &, database *);
+    void File_Recopy(fstream &, char*, unsigned int );
+    void Class_Load(fstream &, database *);
+
 
 /* -----------------------------------------------------------------------------
  FUNCTION NAME:     main()
@@ -358,13 +366,13 @@ void Display_Database(char * Filename)
 void Display_title()
 {
     //1st line
-     cout << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "-----------" << endl;
+     cout << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
     //2nd line
     cout << std::setw(12) << std::left << "Account" << std::setw(20) << "Last" << std::setw(20) << "First" << std::setw(6) << "MI" << std::setw(13) << "SSN"     << std::setw(16) << "Phone"  << std::setw(15) << "Account" << endl;
     //3rd line
     cout << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20) << "Name"  << std::setw(6) << "  " << std::setw(13) << "Number" << std::setw(16) << "Number" << std::setw(15) << "Balance" << endl;
     //4th line
-    cout << std::setw(12) << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "-----------" << endl;
+    cout << std::setw(12) << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
 }
 
 /* -----------------------------------------------------------------------------
@@ -377,7 +385,7 @@ void Display_Body(database *Record)
 {
     cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
     << std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
-    << std::setw(10) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
+    << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
 }
 
 /* -----------------------------------------------------------------------------
@@ -518,13 +526,13 @@ void Print_File(char *Filename)
     fstream reportfile(reportname, std::ios::out);
     //header
     //1st line
-    reportfile << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "-----------" << endl;
+    reportfile << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
     //2nd line
     reportfile << std::setw(12) << std::left << "Account"  << std::setw(20) << "Last" << std::setw(20)    << "First" << std::setw(6)    << "MI" << std::setw(13) << "SSN"       << std::setw(16) << "Phone"        << std::setw(15) << "Account"     << endl;
     //3rd line
     reportfile << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20)    << "Name"  << std::setw(6)    << "  " << std::setw(13) << "Number"    << std::setw(16) << "Number"       << std::setw(15) << "Balance"     << endl;
     //4th line
-    reportfile << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "-----------" << endl;
+    reportfile << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
     //loop for #of entries
     do{
         database Report;
@@ -532,7 +540,7 @@ void Print_File(char *Filename)
         //body
         reportfile << std::setw(12) << std::left << Report.Get_Account() << std::setw(20) << Report.Get_LName() << std::setw(20) << Report.Get_FName()
         << std::setw(6) << Report.Get_MI() << std::setw(13) << Report.Get_SSN() << "(" << Report.Get_PhoneArea() << ")" << std::setw(11) << Report.Get_Phone()
-        << std::setw(10) << std::right << std::setprecision(2) << std::fixed << Report.Get_Balance() << endl;
+        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Report.Get_Balance() << endl;
     }while (databasefile.eof() == 0);
 }
 
