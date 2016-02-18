@@ -182,12 +182,13 @@ int Main_Menu(int *pchoice)
     cout << "Remove funds from an account\n";
 
     //escape option
-    cout << std::setw(3) << "\n\n8.";
+    cout << endl << endl;
+    cout << std::setw(3) << "8.";
     cout << "Exit\n";
 
     cout << "\nWhat is your Choice: ";
     cin >> *pchoice;
-    while (*pchoice < 1 || *pchoice > 7)
+    while (*pchoice < 1 || *pchoice > 8)
     {
         cout << "\n Not A valid choice.\nPlease pick from the list above.\nWhat is your Choice: ";
         cin >> *pchoice;
