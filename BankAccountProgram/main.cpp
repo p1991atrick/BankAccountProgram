@@ -84,7 +84,6 @@ int main(/*int argc, const char * argv[]*/)
     int choice = -1;
     int *pchoice = &choice;
     char Filename[41] = "a";
-   // cout << sizeof(BankRecord);
 
     //choose what to do with the file
     File_IO(Filename);
@@ -398,9 +397,13 @@ void Display_Body(database *Record)
 void Delete_Account(char *Filename)
 {
     char accountnumber[6];
+    char accountpassword[7];
     cout << "What is the Account Number of the account you would like to delete: ";
     cin.ignore();
     cin.getline(accountnumber, 6);
+    cout << "What is the Account Password: ";
+    cin.ignore();
+    cin.getline(accountpassword, 7);
 
     //start looking for offending account
     //vars for function
@@ -413,7 +416,14 @@ void Delete_Account(char *Filename)
         Class_Load(databasefile, &Report);
         if (!strcmp(accountnumber, Report.Get_Account()))
         {
-            cout << "\nDeleting accout " << accountnumber << endl;
+            if (!strcmp(accountpassword, Report.Get_PassWd()))
+            {
+                cout << "\nDeleting accout " << accountnumber << endl;
+            }
+            else
+            {
+                cout << "Incorrect password!\n";
+            }
         }
         else
         {
@@ -516,12 +526,14 @@ void Print_File(char *Filename)
     cout << "Filename is \"BankAcct.Rpt\".\nDo you want to change it (y/n): ";
     char yesno = 'N';
     char reportname[26];
-    strncpy(reportname, "BankAcct.Rpt", 12);
+    strncpy(reportname, "BankAcct.Rpt", 13);
     cin >> yesno;
     if (yesno == 'Y' || yesno == 'y')
     {
         cout << "Enter new name: ";
+        cin.ignore();
         cin.getline(reportname, 20);
+        strncat(reportname, ".Rpt", 4);
     }
     fstream databasefile(Filename, std::ios::in);
     fstream reportfile(reportname, std::ios::out);
@@ -544,6 +556,140 @@ void Print_File(char *Filename)
         << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Report.Get_Balance() << endl;
     }while (databasefile.eof() == 0);
 }
+
+
+void Funds_Transfer(char *Filename)
+{
+    char *account1;
+    char *account2;
+    float amount;
+    int found = 0; //for account continuity.
+    float bal, *pbal = &bal;
+    unsigned int counter = 0; //to count how many acounts there are
+    database Record;
+
+    cout << "What account will the funds be comming from: ";
+    cin.ignore();
+    cin.getline(account1, 5);
+
+    fstream databasefile(Filename, std::ios::in);
+    fstream databasetemp("Tempcopyfile.db", std::ios::out | std::ios::trunc);
+
+    do{
+        char *passwd;
+        Class_Load(databasefile, &Record);
+        if (!strcmp(account1, Record.Get_Account()))//verify account number
+        {
+            cout << "Found Account. What is the password for the account: ";
+            cin.ignore();
+            cin.getline(passwd, 6);
+            if (!strcmp(passwd, Record.Get_PassWd()))//verify account password
+            {
+                found =1; //to allow function to continue.
+                cout << "You have $" << std::setprecision(2) << std::fixed << Record.Get_Balance();
+                cout << "How much will you be moving: ";
+                cin >> amount;
+                *pbal = Record.Get_Balance()-amount;
+                while (*pbal < 0)//if not enough money ask for amount again
+                {
+                    cout << "Funds not avalible!\n";
+                    cout << "Enter new amount: ";
+                    cin >> amount;
+                    *pbal = Record.Get_Balance()-amount;//
+                }
+                Record.Set_Balance(pbal);//save new funds to record
+                File_Write(databasetemp, &Record);
+                counter++;
+                Record.databaseclear();
+            }
+            else
+            {
+                cout << "Incorrect password!";
+            }
+        }
+        else
+        {
+            File_Write(databasetemp, &Record);
+            counter++;
+            Record.databaseclear();
+        }
+    }while (databasefile.eof() == 0);// loops until end of file.
+
+    databasefile.close();
+    databasetemp.close();
+    databasetemp.open("Tempcopyfile.db", std::ios::in);
+
+    if (found == 1)//only runs if primary account was found
+    {
+        cout << "What account will the funds be going to: ";
+        cin.ignore();
+        cin.getline(account2, 5);
+        do{////==================================================================
+            Class_Load(databasetemp, &Record);
+            if (!strcmp(account2, Record.Get_Account()))
+            {
+                found = 2;
+            }
+        }while (databasetemp.eof() == 0 || found != 2);// loops until end of file or until account is found.
+    }
+    else
+    {
+        cout << "Second account not found.\n returning to menu\n";
+    }
+
+    databasefile.close();
+    databasetemp.close();
+    databasetemp.open("Tempcopyfile.db", std::ios::in);
+
+    if (found == 2) //only runs if both accounts were found
+    {
+        cout << "Found second account\n";
+        //move files back to databasefile
+        databasefile.open(Filename, std::ios::out);
+        File_Recopy(databasetemp, Filename, counter);
+        databasetemp.close();
+        //reopen for destination account
+        databasefile.open (Filename, std::ios::in);
+        databasetemp.open("Tempcopyfile.db", std::ios::out | std::ios::trunc);
+
+        do {
+            //move the money
+            Class_Load(databasetemp, &Record);//load Record from file
+            if (!strcmp(account2, Record.Get_Account()))//verify find second account
+            {
+                float temp;
+                temp = Record.Get_Balance() + *pbal;
+                Record.Set_Balance(&temp);
+            }
+            File_Write(databasefile, &Record);
+            Record.databaseclear();
+        } while (databasefile.eof() == 0);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
