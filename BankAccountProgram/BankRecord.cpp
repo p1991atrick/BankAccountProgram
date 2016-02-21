@@ -307,8 +307,24 @@ char* database::Get_PassWd()
 }
 
 
-
-
+/* -----------------------------------------------------------------------------
+ FUNCTION:          void database::databaseclear()
+ DESCRIPTION:       clears varables
+ RETURNS:           void
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void database::databaseclear()
+{
+    *LName = NULL;
+    *FName = NULL;
+    MI = NULL;
+    *SSN = NULL;
+    *PhoneArea = NULL;
+    *Phone = NULL;
+    Balance = NULL;
+    *Account = NULL;
+    *PassWd = NULL;
+}
 
 
 
