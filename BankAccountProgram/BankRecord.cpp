@@ -68,9 +68,9 @@ database::database(char* l, char* f, char mi, char * ssn, char * pa, char * ph, 
     std::cout << "In Overloaded Constructor\n";
 #endif
     strncpy(LName, l, strlen(l));
-    LName[(strlen(l)+1)] = '\0';
+    LName[(strlen(l))] = '\0';
     strncpy(FName, f, strlen(f));
-    FName[(strlen(f)+1)] = '\0';
+    FName[(strlen(f))] = '\0';
     MI = mi;
     strncpy(SSN, ssn, 9);
     SSN[9] = '\0';
