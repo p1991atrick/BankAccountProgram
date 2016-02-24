@@ -62,20 +62,27 @@ database::database()
  RETURNS:           none
  NOTES:
  ----------------------------------------------------------------------------- */
-database::database(const char* l, const char* f, char mi, char * ssn, char * pa, char * ph, float bal, const char * acount, const char * pass)
+database::database(char* l, char* f, char mi, char * ssn, char * pa, char * ph, float bal, char * acount, char * pass)
 {
 #if TRACE
     std::cout << "In Overloaded Constructor\n";
 #endif
     strncpy(LName, l, strlen(l));
+    LName[(strlen(l)+1)] = '\0';
     strncpy(FName, f, strlen(f));
+    FName[(strlen(f)+1)] = '\0';
     MI = mi;
-    strncpy(SSN, ssn, 10);
+    strncpy(SSN, ssn, 9);
+    SSN[9] = '\0';
     strncpy(PhoneArea, pa, 3);
+    PhoneArea[3] = '\0';
     strncpy(Phone, ph, 7);
+    Phone[7] = '\0';
     Balance = bal;
     strncpy(Account, acount, 5);
+    Account[5] = '\0';
     strncpy(PassWd, pass, 6);
+    PassWd[6] = '\0';
 }
 
 /* -----------------------------------------------------------------------------

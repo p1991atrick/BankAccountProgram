@@ -59,7 +59,7 @@ class database{
 public:
     //default functions
     database();
-    database(const char*, const char*, char, char *, char *, char *, float, const char*, const char*);
+    database(char*, char*, char, char *, char *, char *, float, char*, char*);
     //~database();
     
     //set var functions//
