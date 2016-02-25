@@ -2,7 +2,7 @@
 //  BankRecord.cpp
 //  BankAccountProgram
 //
-//  Created by Gordon Freeman on 2/2/16.
+//  Created by Patrick Kelly on 2/2/16.
 //  Copyright © 2016 Patrick Kelly. All rights reserved.
 //
 /* -----------------------------------------------------------------------------
@@ -312,52 +312,3 @@ char* database::Get_PassWd()
 {
     return PassWd;
 }
-
-
-/* -----------------------------------------------------------------------------
- FUNCTION:          void database::databaseclear()
- DESCRIPTION:       clears varables
- RETURNS:           void
- NOTES:
- ----------------------------------------------------------------------------- */
-void database::databaseclear()
-{
-    *LName = NULL;
-    *FName = NULL;
-    MI = NULL;
-    *SSN = NULL;
-    *PhoneArea = NULL;
-    *Phone = NULL;
-    Balance = NULL;
-    *Account = NULL;
-    *PassWd = NULL;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

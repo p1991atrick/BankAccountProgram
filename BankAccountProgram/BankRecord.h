@@ -83,8 +83,6 @@ public:
     float Get_Balance();
     char* Get_Account();
     char* Get_PassWd();
-
-    void databaseclear();
 };
 
 
