@@ -44,6 +44,7 @@ using std::cout;
 using std::endl;
 using std::cin;
 using std::fstream;
+using std::ios;
 
 // Function Prototyes
 //menu
@@ -51,7 +52,7 @@ using std::fstream;
     void File_IO(char *);
 //file IO
     void Create_File(char *);
-    void Open_File(char*);
+    void Open_File(char *);
 //management
     void Set_Info(char *);
     void Display_Database(char *);
@@ -64,9 +65,9 @@ using std::fstream;
 //support functions
     void Display_title();
     void Display_Body(database *);
-    void File_Write(fstream &, database *);
-    void File_Recopy(fstream &, char*, unsigned int );
-    void Class_Load(fstream &, database *);
+    void File_Write(fstream *, database *);
+    void File_Recopy(fstream *, char*, fstream *);
+    void Class_Load(fstream *, database *);
 
 
 /* -----------------------------------------------------------------------------
@@ -77,19 +78,18 @@ using std::fstream;
  ----------------------------------------------------------------------------- */
 int main(/*int argc, const char * argv[]*/)
 {
-    
 #if TRACE
     cout << "In Main\n";
 #endif
-    int choice = -1;
+
+    int choice = -1; //initialize choice with imposible number
     int *pchoice = &choice;
-    char Filename[41] = "a";
+    char Filename[41] = "a"; //create and initialize Filename with 'a'
+    int x=0; //for infinate loop
 
     //choose what to do with the file
     File_IO(Filename);
-
-    int x=0;
-    do{
+    do{ //by this point file is open for both in and out functions in binary mode
         Main_Menu(pchoice);
         switch (choice)
         {
@@ -106,22 +106,22 @@ int main(/*int argc, const char * argv[]*/)
                 Print_File(Filename);
                 break;
             case 5:
-                //transfer funds
+                Funds_Transfer(Filename);
                 break;
             case 6:
-                //add funds
+                Funds_Add(Filename);
                 break;
             case 7:
-                //remove funds
+                Funds_Remove(Filename);
                 break;
             case 8:
                 exit(EXIT_CODE_SUCCESS);
                 break;
-            default:
+            default: //can't ever run
                 return EXIT_CODE_NO_SELECTION;
                 break;
         }
-        choice = -1;
+        choice = -1; //reset choice back to initialize option
     }while (x==0);
     return EXIT_CODE_NO_SELECTION;
 }
@@ -134,12 +134,12 @@ int main(/*int argc, const char * argv[]*/)
  ----------------------------------------------------------------------------- */
 void File_IO(char *Filename)
 {
-    cout << "1. Create Database File\n";
+    cout << "1. Create Database File\n"; //sub menu lines
     cout << "2. Open Database File\n";
     int choice;
     cout << "Enter Choice: ";
     cin >> choice;
-    while (choice < 1 || choice > 2)
+    while (choice < 1 || choice > 2) //verify that 1 or 2 has been entered, future proof
     {
         cout << "You must pick a valid choice\nEnter Choice: ";
         cin >> choice;
@@ -187,12 +187,12 @@ int Main_Menu(int *pchoice)
 
     cout << "\nWhat is your Choice: ";
     cin >> *pchoice;
-    while (*pchoice < 1 || *pchoice > 8)
+    while (*pchoice < 1 || *pchoice > 8) //verifys that an valid option has been selected
     {
         cout << "\n Not A valid choice.\nPlease pick from the list above.\nWhat is your Choice: ";
         cin >> *pchoice;
     }
-    return *pchoice;
+    return *pchoice; //sends the menu choice up to main for switch statement
 }
 
 /* -----------------------------------------------------------------------------
@@ -205,30 +205,35 @@ void Create_File(char *Filename)
 {
     cout << "What should the database be called: ";
     cin >> Filename;
-    if (strstr(Filename, ".db") == 0)
+    if (strstr(Filename, ".db") == 0) //if file name doesn't end with .db, add it
     {
         strncat(Filename, ".db", 3);
     }
-    fstream databasefile(Filename, std::ios::in);
-    if (databasefile.eof() != 0)
-    {
+    fstream databasefile;
+    databasefile.open(Filename, ios::in);
+    if (databasefile.fail())
+    { //if not already there, build
         cout << "Creating database file called \"" << Filename << "\"\n";
         databasefile.close();
+        databasefile.open(Filename, ios::out);
+        Set_Info(Filename);
     }
     else
-    {
+    { //if exists ask to open or replace
         databasefile.close();
         cout << "The database with name \"" << Filename << "\" exists, Would you like to overwrite it? (y/N) \n";
         char yesno = 'N';
         cin >> yesno;
-        if (yesno == 'y' || yesno == 'Y')
+        if (yesno == 'y' || yesno == 'Y') //if told to overwrie file
         {
-            databasefile.open(Filename, std::ios::out | std::ios::in | std::ios::trunc);
+            databasefile.open(Filename, ios::out | ios::trunc);
             cout << "Creating database file called \"" << Filename << "\"\n";
+            Set_Info(Filename);
         }
-        else
+        else //anything else opens the file
         {
             cout << "Opening File" << Filename << ".";
+            databasefile.open(Filename, ios::out | ios::app);
         }
     }
     databasefile.close();
@@ -243,23 +248,25 @@ void Create_File(char *Filename)
 void Open_File(char *Filename)
 {
     cout << "What is the name of the current database file: ";
-    fstream file;
     cin >> Filename;
-    if (strstr(Filename, ".db") == 0)
+    if (strstr(Filename, ".db") == 0) //if name given does't have .db , append it to the end
     {
         strncat(Filename, ".db", 3);
     }
-    file.open(Filename, std::ios::in);
-    if (file.fail())
+    fstream databasefile;
+    databasefile.open(Filename, ios::in);
+    if (databasefile.fail()) //checks if file was found
     {
         cout << "File Not Found\nExiting\n";
-        exit(EXIT_CODE_FILE_IO);
+        exit(EXIT_CODE_FILE_IO);    //exits program if file not found
     }
     else
     {
-        cout << Filename << " Opened\n\n";
+        databasefile.close();
+        cout << Filename << " Opened Sucsessfuly\n\n";
+        databasefile.open(Filename, ios::out | ios::app);
     }
-    file.close();
+    databasefile.close();
 }
 
 /* -----------------------------------------------------------------------------
@@ -277,16 +284,19 @@ void Set_Info(char *Filename)
     cout << std::setw(25) << std::right << "Enter First Name: ";
     char  FNAME[21];
     cin.ignore();
-    cin.getline(FNAME, 20);
+    cin.getline(FNAME, sizeof(FNAME), '\n');
     //set last name
     cout << std::setw(25) << "Enter Last Name: ";
     char LNAME[21];
-    cin.ignore();
-    cin.getline(LNAME, 20);
+    cin.getline(LNAME, sizeof(LNAME), '\n');
     //set middel initial
     cout << std::setw(25) << "Enter Middle Initial: ";
     char MI;
     cin >> MI;
+    if (islower(MI))
+    {
+        MI = toupper(MI);
+    }
     while (islower(MI) || isdigit(MI) || !isalpha(MI))
     {
         cout << std::setw(25) << "Uppercase Letter ONLY\n";
@@ -297,19 +307,15 @@ void Set_Info(char *Filename)
     char ssn[11];
     cout << std::setw(25) << "Enter SSN (no dashes): ";
     cin.ignore();
-    cin.getline(ssn, 10);//only takes the first 9 numbers. all others are discarded/
+    cin.getline(ssn, 11, '\n');//only takes the first 9 numbers. all others are discarded/
     //set phone area code
     char phonearea[4];
-    phonearea[3] = '\0';
     cout << std::setw(25) << "Enter Phone Area Code: ";
-    cin.ignore();
-    cin.getline(phonearea, 4);
+    cin.getline(phonearea, sizeof(phonearea), '\n');
     //set Phone base number
     char phone[8];
-    phone[7] = '\0';
     cout << std::setw(25) << "Enter Phone Number: ";
-    cin.ignore();
-    cin.getline(phone, 8);
+    cin.getline(phone, sizeof(phone), '\n');
     //set balance
     cout << std::setw(25) << "Enter Account Balance: ";
     float *bal;
@@ -319,18 +325,18 @@ void Set_Info(char *Filename)
     accout[5] = '\0';
     cout << std::setw(25) << "Enter Account Number: ";
     cin.ignore();
-    cin.getline(accout, 6);
+    cin.getline(accout, 6, '\n');
     //set account pasword
     char passwd[7];
     cout << std::setw(25) << "Enter Account Password: ";
-    cin.ignore();
-    cin.getline(passwd, 7);
+    cin.getline(passwd, 7, '\n');
 
     //write to class
     database Record(LNAME, FNAME, MI, ssn, phonearea, phone, *bal, accout, passwd);
-    fstream databasefile(Filename, std::ios::out | std::ios::app);
+    fstream databasefile;
     //save to file
-    File_Write(databasefile, &Record);
+    databasefile.open(Filename, ios::out | ios::app);
+    File_Write(&databasefile, &Record);
     databasefile.close();
 }
 
@@ -342,19 +348,20 @@ void Set_Info(char *Filename)
  ----------------------------------------------------------------------------- */
 void Display_Database(char * Filename)
 {
-    fstream databasefile(Filename, std::ios::in);//open file
+    fstream databasefile;
+    databasefile.open(Filename, ios::in);
     cout << std::setw(30) << std::right << "Current Bank Records\n\n";
 
     Display_title();//set up the header table
 
     //loop for amount of records
     do{
-        database Record;
-        Class_Load(databasefile, &Record);
-        Display_Body(&Record);
+        database *Record;
+        Class_Load(&databasefile, Record);
+        Display_Body(Record);
     }while (databasefile.eof() == 0);
     //white space at end of chart
-    cout << endl << endl << endl;
+    cout << endl << endl;
 }
 
 /* -----------------------------------------------------------------------------
@@ -383,9 +390,9 @@ void Display_title()
  ----------------------------------------------------------------------------- */
 void Display_Body(database *Record)
 {
-    cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
-    << std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
-    << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
+    cout << std::setw(12) << std::left << (*Record).Get_Account() << std::setw(20) << (*Record).Get_LName() << std::setw(20) << (*Record).Get_FName()
+    << std::setw(6) << (*Record).Get_MI() << std::setw(13) << (*Record).Get_SSN() << "(" << (*Record).Get_PhoneArea() << ")" << std::setw(11) << (*Record).Get_Phone()
+    << std::setw(12) << std::right << std::setprecision(2) << std::fixed << (*Record).Get_Balance() << endl;
 }
 
 /* -----------------------------------------------------------------------------
@@ -400,42 +407,53 @@ void Delete_Account(char *Filename)
     char accountpassword[7];
     cout << "What is the Account Number of the account you would like to delete: ";
     cin.ignore();
-    cin.getline(accountnumber, 6);
+    cin.getline(accountnumber, sizeof(accountnumber), '\n');//gets line until the point where enter was pressed
     cout << "What is the Account Password: ";
-    cin.ignore();
-    cin.getline(accountpassword, 7);
+    cin.getline(accountpassword, sizeof(accountpassword), '\n');//gets line until the point where enter was pressed
 
     //start looking for offending account
-    //vars for function
-    fstream databasefile(Filename, std::ios::in);//original file
-    fstream databasetempfile("Tempcopyfile.db", std::ios::out | std::ios::trunc);
-    unsigned int counter = 0;
+    fstream databasefile, databasetemp;
+    databasefile.open(Filename, ios::in);//load database
+    databasetemp.open("Tempcopyfile.db", ios::out | ios::trunc);//temp file for new information
+
     //the brains
     do{
-        database Report;
-        Class_Load(databasefile, &Report);
-        if (!strcmp(accountnumber, Report.Get_Account()))
+        database *Report; //create report class
+        Class_Load(&databasefile, Report); //load first report from file
+        if (!strcmp(accountnumber, (*Report).Get_Account())) //checks for matching account number
         {
-            if (!strcmp(accountpassword, Report.Get_PassWd()))
+            if (!strcmp(accountpassword, (*Report).Get_PassWd())) //check for matching account password
             {
-                cout << "\nDeleting accout " << accountnumber << endl;
+                cout << "\nDeleting accout " << accountnumber << endl; //if both are true, do nothing.
             }
-            else
+            else //if password is wrong ask for it again
             {
                 cout << "Incorrect password!\n";
+                cout << "What is the password for account " << accountnumber << ": ";
+                cin.getline(accountpassword, 7);
+                if (!strcmp(accountpassword, (*Report).Get_PassWd()))
+                {
+                    cout << "\nDeleting accout " << accountnumber << endl;
+                }
+                else
+                {
+                    cout << "To many wrong atempts, returning to menu";
+                    File_Write(&databasetemp, Report);
+                }
+
             }
         }
         else
         {
-            File_Write(databasetempfile, &Report);
-            counter++;
+            File_Write(&databasetemp, Report);
         }
     }while (databasefile.eof() == 0);
+    databasetemp.close();
     databasefile.close();
-    databasetempfile.close();
-    databasetempfile.open("Tempcopyfile.db", std::ios::in);
-    File_Recopy(databasetempfile, Filename, counter);
-    databasetempfile.close();
+    databasefile.open(Filename, ios::out | ios::trunc); //reopen database file and truncate it
+    databasetemp.open("Tempcopyfile.db", ios::in);
+    File_Recopy(&databasetemp, Filename, &databasefile);
+    databasetemp.close(); //closes the temp file.
 }
 
 /* -----------------------------------------------------------------------------
@@ -444,9 +462,9 @@ void Delete_Account(char *Filename)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void File_Write(fstream &file, database *Report)
+void File_Write(fstream *file, database *Report)
 {
-    file << Report->Get_LName() << endl
+    *file << Report->Get_LName() << endl
     << Report->Get_FName() << endl
     << Report->Get_MI() << endl
     << Report->Get_SSN() << endl
@@ -458,33 +476,28 @@ void File_Write(fstream &file, database *Report)
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          void File_Recopy(fstream &databasetempfile, char *Filename, unsigned int counter)
+ FUNCTION:          void File_Recopy(fstream &databasetempfile, char *Filename)
  DESCRIPTION:       moves information between two files
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void File_Recopy(fstream &databasetempfile, char *Filename, unsigned int counter)
+void File_Recopy(fstream *fromfile, char *Filename, fstream *tofile)
 {
-    fstream databasefile(Filename, std::ios::out | std::ios::trunc);
-    unsigned int x=1;
     do{
-        database Report;
-        Class_Load(databasetempfile, &Report);
-        File_Write(databasefile, &Report);
-    }while (x < counter);
-    
-    databasefile.close();
-
+        database *Report; //class structure for vars
+        Class_Load(fromfile, Report); //load in values from source file
+        File_Write(tofile, Report); //write out values to destination file
+    }while ((*fromfile).eof() == 0);   //do loop until end of file
 }
 
 /* -----------------------------------------------------------------------------
  FUNCTION:          void Class_Load(fstream &databasefile, database *Report)
  DESCRIPTION:       loads information from file to class
  RETURNS:           void function
- NOTES:
+ NOTES:             loads informaition from database into class
  ----------------------------------------------------------------------------- */
-void Class_Load(fstream &databasefile, database *Report)
-{
+void Class_Load(fstream *databasefile, database *Report)
+{   //vars for temp useage
     char Lname[21];
     char Fnmae[21];
     char MI;
@@ -494,15 +507,15 @@ void Class_Load(fstream &databasefile, database *Report)
     float Bal, *pbal = &Bal;
     char Account[6];
     char Password[7];
-    databasefile >> Lname;
-    databasefile >> Fnmae;
-    databasefile >> MI;
-    databasefile >> ssn;
-    databasefile >> Phonearea;
-    databasefile >> Phone;
-    databasefile >> *pbal;
-    databasefile >> Account;
-    databasefile >> Password;
+    (*databasefile) >> Lname;
+    (*databasefile) >> Fnmae;
+    (*databasefile) >> MI;
+    (*databasefile) >> ssn;
+    (*databasefile) >> Phonearea;
+    (*databasefile) >> Phone;
+    (*databasefile) >> *pbal;
+    (*databasefile) >> Account;
+    (*databasefile) >> Password;
     Report->Set_LName(Lname);
     Report->Set_FName(Fnmae);
     Report->Set_MI(MI);
@@ -535,7 +548,7 @@ void Print_File(char *Filename)
         cin.getline(reportname, 20);
         strncat(reportname, ".Rpt", 4);
     }
-    fstream databasefile(Filename, std::ios::in);
+    //report file
     fstream reportfile(reportname, std::ios::out);
     //header
     //1st line
@@ -546,61 +559,65 @@ void Print_File(char *Filename)
     reportfile << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20)    << "Name"  << std::setw(6)    << "  " << std::setw(13) << "Number"    << std::setw(16) << "Number"       << std::setw(15) << "Balance"     << endl;
     //4th line
     reportfile << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+
+    fstream databasefile(Filename, ios::in);
     //loop for #of entries
     do{
-        database Report;
-        Class_Load(databasefile, &Report);
+        database *Report;
+        Class_Load(&databasefile, Report);
         //body
-        reportfile << std::setw(12) << std::left << Report.Get_Account() << std::setw(20) << Report.Get_LName() << std::setw(20) << Report.Get_FName()
-        << std::setw(6) << Report.Get_MI() << std::setw(13) << Report.Get_SSN() << "(" << Report.Get_PhoneArea() << ")" << std::setw(11) << Report.Get_Phone()
-        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Report.Get_Balance() << endl;
+        reportfile << std::setw(12) << std::left << (*Report).Get_Account() << std::setw(20) << (*Report).Get_LName() << std::setw(20) << (*Report).Get_FName()
+        << std::setw(6) << (*Report).Get_MI() << std::setw(13) << (*Report).Get_SSN() << "(" << (*Report).Get_PhoneArea() << ")" << std::setw(11) << (*Report).Get_Phone()
+        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << (*Report).Get_Balance() << endl;
     }while (databasefile.eof() == 0);
 }
 
-
+/* -----------------------------------------------------------------------------
+ FUNCTION:          void Funds_Transfer(char *Filename)
+ DESCRIPTION:       moves funds from one account to the other.
+ RETURNS:           void function
+ NOTES:             has multiple points of verification.
+ ----------------------------------------------------------------------------- */
 void Funds_Transfer(char *Filename)
-{
-    char *account1;
-    char *account2;
+{   //vars
+    char account1[6];
+    char account2[6];
     float amount;
     int found = 0; //for account continuity.
     float bal, *pbal = &bal;
-    unsigned int counter = 0; //to count how many acounts there are
-    database Record;
 
     cout << "What account will the funds be comming from: ";
     cin.ignore();
-    cin.getline(account1, 5);
+    cin.getline(account1, 6, '\n');
+    //reset read write position to begining of file
+    fstream databasefile(Filename, ios::in);
+    fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);//temp file for new information
 
-    fstream databasefile(Filename, std::ios::in);
-    fstream databasetemp("Tempcopyfile.db", std::ios::out | std::ios::trunc);
-
-    do{
+    do{         //finds account that funds are coming from and removes them
+        database *Record;
         char *passwd;
-        Class_Load(databasefile, &Record);
-        if (!strcmp(account1, Record.Get_Account()))//verify account number
+        Class_Load(&databasefile, Record);
+        if (!strcmp(account1, (*Record).Get_Account()))//verify account number
         {
             cout << "Found Account. What is the password for the account: ";
             cin.ignore();
-            cin.getline(passwd, 6);
-            if (!strcmp(passwd, Record.Get_PassWd()))//verify account password
+            cin.getline(passwd, 6, '\n');
+            if (!strcmp(passwd, (*Record).Get_PassWd()))//verify account password
             {
-                found =1; //to allow function to continue.
-                cout << "You have $" << std::setprecision(2) << std::fixed << Record.Get_Balance();
+                found =1; //to allow function to continue for next if
+                cout << "You have $" << std::setprecision(2) << std::fixed << (*Record).Get_Balance();
                 cout << "How much will you be moving: ";
                 cin >> amount;
-                *pbal = Record.Get_Balance()-amount;
+                *pbal = (*Record).Get_Balance()-amount;
                 while (*pbal < 0)//if not enough money ask for amount again
                 {
                     cout << "Funds not avalible!\n";
                     cout << "Enter new amount: ";
                     cin >> amount;
-                    *pbal = Record.Get_Balance()-amount;//
+                    *pbal = (*Record).Get_Balance()-amount;//
                 }
-                Record.Set_Balance(pbal);//save new funds to record
-                File_Write(databasetemp, &Record);
-                counter++;
-                Record.databaseclear();
+                (*Record).Set_Balance(pbal);//save new funds to record
+                File_Write(&databasetemp, Record);
             }
             else
             {
@@ -609,24 +626,19 @@ void Funds_Transfer(char *Filename)
         }
         else
         {
-            File_Write(databasetemp, &Record);
-            counter++;
-            Record.databaseclear();
+            File_Write(&databasetemp, Record);
         }
     }while (databasefile.eof() == 0);// loops until end of file.
-
-    databasefile.close();
-    databasetemp.close();
-    databasetemp.open("Tempcopyfile.db", std::ios::in);
 
     if (found == 1)//only runs if primary account was found
     {
         cout << "What account will the funds be going to: ";
         cin.ignore();
-        cin.getline(account2, 5);
+        cin.getline(account2, 6, '\n');
         do{////==================================================================
-            Class_Load(databasetemp, &Record);
-            if (!strcmp(account2, Record.Get_Account()))
+            database *Record;
+            Class_Load(&databasetemp, Record);
+            if (!strcmp(account2, (*Record).Get_Account()))
             {
                 found = 2;
             }
@@ -637,41 +649,166 @@ void Funds_Transfer(char *Filename)
         cout << "Second account not found.\n returning to menu\n";
     }
 
-    databasefile.close();
-    databasetemp.close();
-    databasetemp.open("Tempcopyfile.db", std::ios::in);
+    databasetemp.seekg(0L, ios::beg); //set read position for temp file at begining.
 
-    if (found == 2) //only runs if both accounts were found
+    if (found == 2) //only runs if both accounts were found, until this point the database file has no changes
     {
         cout << "Found second account\n";
         //move files back to databasefile
-        databasefile.open(Filename, std::ios::out);
-        File_Recopy(databasetemp, Filename, counter);
-        databasetemp.close();
-        //reopen for destination account
-        databasefile.open (Filename, std::ios::in);
-        databasetemp.open("Tempcopyfile.db", std::ios::out | std::ios::trunc);
-
+        databasefile.close();
+        databasefile.open(Filename, ios::out | ios::trunc);//database file truncated for new information
         do {
+            database *Record;
             //move the money
-            Class_Load(databasetemp, &Record);//load Record from file
-            if (!strcmp(account2, Record.Get_Account()))//verify find second account
+            Class_Load(&databasetemp, Record);//load Record from file
+            if (!strcmp(account2, (*Record).Get_Account()))//verify find second account
             {
                 float temp;
-                temp = Record.Get_Balance() + *pbal;
-                Record.Set_Balance(&temp);
+                temp = (*Record).Get_Balance() + *pbal;
+                (*Record).Set_Balance(&temp);
             }
-            File_Write(databasefile, &Record);
-            Record.databaseclear();
-        } while (databasefile.eof() == 0);
+            File_Write(&databasefile, Record);
+        } while (databasetemp.eof() == 0);
+    }
+    databasetemp.close();
+    databasefile.close();
+}
+
+/* -----------------------------------------------------------------------------
+ FUNCTION:          void Funds_Remove(char *Filename)
+ DESCRIPTION:       removes funds from account
+ RETURNS:           void function
+ NOTES:             has multiple points of verification.
+ ----------------------------------------------------------------------------- */
+void Funds_Remove(char *Filename)
+{
+    char account[6];
+    account[5] = '\0'; //null char for end of cstring
+    char password[7];
+    password[6] = '\0'; //null char for end of cstring
+    float amount, *pamount = &amount;
+    int found = 0;
+
+    fstream databasefile(Filename, ios::in);
+    fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);
+
+    if (!databasefile.fail()) //only continue if file was found.
+    {
+        cout << "What account will funds be withdrawn from: ";
+        cin.ignore();
+        cin.getline(account, sizeof(account), '\n'); //
+        do{
+            database Report;
+            Class_Load(&databasefile, &Report);
+            if (!strncmp(account, Report.Get_Account(), sizeof(account))) //find account in question in the database file
+            {
+                cout << "What is the password for account " << Report.Get_Account() << ": ";
+                cin.getline(password, sizeof(password), '\n');
+                if (!strncmp(password, Report.Get_PassWd(), sizeof(password)))
+                {
+                    cout << "How much would you like to withdraw? You currently have "<< Report.Get_Balance() << endl;
+                    cout << "Amount: ";
+                    cin >> *pamount;
+                    do{     //verify that the funds are there
+                        cout << "Not enough funds!\nNew Amount: ";
+                        cin >> *pamount;
+                    }while (*pamount > Report.Get_Balance()); //loops until a valid number is found, 0 is valid
+                    //do the math
+                    if (*pamount > 0)
+                    {
+                        found = 1;
+                        *pamount = Report.Get_Balance() - *pamount;
+                        Report.Set_Balance(pamount);
+                        File_Write(&databasetemp, &Report);
+                    }
+                }
+                else
+                {
+                    cout << "Incorrect password, returning to Main Menu\n";
+                }
+            }
+            else
+            {
+                File_Write(&databasetemp, &Report);
+            }
+        }while (databasefile.eof() == 0);
+    }
+
+    databasefile.close();
+    databasetemp.close();
+    if (found == 1) //only overwrites accounts if it sucsessfuly compleated
+    {
+        databasefile.open(Filename, ios::out | ios::trunc);
+        databasetemp.open("Tempcopyfile.db", ios::in);
+        File_Recopy(&databasetemp, Filename, &databasefile);
+        databasefile.close();
+        databasetemp.close();
     }
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION:          void Funds_Add(char *Filename)
+ DESCRIPTION:       adds funds to an account
+ RETURNS:           void function
+ NOTES:             has multiple points of verification.
+ ----------------------------------------------------------------------------- */
+void Funds_Add(char *Filename)
+{
+    char account[6];
+    account[5] = '\0'; //null char for end of cstring
+    char password[7];
+    password[6] = '\0'; //null char for end of cstring
+    float amount, *pamount = &amount;
+    int found = 0;
 
+    fstream databasefile(Filename, ios::in);
+    fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);
 
+    if (!databasefile.fail()) //only continue if file was found.
+    {
+        cout << "What account will funds be added to: ";
+        cin.ignore();
+        cin.getline(account, sizeof(account), '\n'); //
+        do{
+            database Report;
+            Class_Load(&databasefile, &Report);
+            if (!strncmp(account, Report.Get_Account(), sizeof(account))) //find account in question in the database file
+            {
+                cout << "What is the password for account " << Report.Get_Account() << ": ";
+                cin.getline(password, sizeof(password), '\n');
+                if (!strncmp(password, Report.Get_PassWd(), sizeof(password)))
+                {
+                    cout << "How much would you like to Deposit?\n";
+                    cout << "Amount: ";
+                    cin >> *pamount;
+                    found = 1;
+                    *pamount = Report.Get_Balance() + *pamount;
+                    Report.Set_Balance(pamount);
+                    File_Write(&databasetemp, &Report);
+                }
+                else
+                {
+                    cout << "Incorrect password, returning to Main Menu\n";
+                }
+            }
+            else
+            {
+                File_Write(&databasetemp, &Report);
+            }
+        }while (databasefile.eof() == 0);
+    }
 
-
-
+    databasefile.close();
+    databasetemp.close();
+    if (found == 1) //only overwrites accounts if it sucsessfuly compleated
+    {
+        databasefile.open(Filename, ios::out | ios::trunc);
+        databasetemp.open("Tempcopyfile.db", ios::in);
+        File_Recopy(&databasetemp, Filename, &databasefile);
+        databasefile.close();
+        databasetemp.close();
+    }
+}
 
 
 

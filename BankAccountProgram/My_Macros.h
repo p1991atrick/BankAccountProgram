@@ -2,7 +2,7 @@
 //  My_Macros.h
 //  Personal #include file
 //
-//  Created by Gordon Freeman on 8/27/15.
+//  Created by Patrick Kelly on 8/27/15.
 //  Copyright © 2015 Patrick Kelly. All rights reserved.
 /* -----------------------------------------------------------------------------
  
