@@ -20,6 +20,8 @@
  
  ----------------------------------------------------------------------------- */
 
+#ifndef My_Macros_h
+
 //trace output
 #define TRACE 0
 
@@ -27,10 +29,10 @@
 #define TEST_CODE 0
 
 //clear screen for unix/linux
-#define CLEAR_SCREEN system("clear");
+#define CLEAR_SCREEN system("clear")
 
 //press anykey to continue POSIX
-#define AKTC system("read -p \"Press a key to continue...\" -n 1 -s");
+#define AKTC system("read -p \"Press a key to continue...\" -n 1 -s")
 
 
 
@@ -65,3 +67,5 @@
 #define EXIT_CODE_PROGRAM_HALT 9
 
 #define DEBUG_OUTPUT(x) std::cout << #x << " = " << x << std::endl;
+
+#endif /* My_Macros_h */
