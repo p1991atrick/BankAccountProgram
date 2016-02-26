@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BankAccountProgram/main.cpp"
-            timestampString = "478208432.652815"
+            timestampString = "478211973.813944"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "665"
-            endingLineNumber = "665"
+            startingLineNumber = "664"
+            endingLineNumber = "664"
             landmarkName = "Funds_Add(char *Filename, fstream *file)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BankAccountProgram/main.cpp"
-            timestampString = "478206976.327059"
+            timestampString = "478211973.813944"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "780"
-            endingLineNumber = "780"
+            startingLineNumber = "779"
+            endingLineNumber = "779"
             landmarkName = "File_Recopy(fstream *fromfile, fstream *tofile)"
             landmarkType = "7">
          </BreakpointContent>
@@ -177,22 +177,6 @@
             endingLineNumber = "182"
             landmarkName = "Main_Menu(int *pchoice)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BankAccountProgram/BankRecord.cpp"
-            timestampString = "478209857.856432"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "database::Set_Account(char * acount)"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
