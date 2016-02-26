@@ -530,7 +530,7 @@ void Funds_Transfer(char *Filename, fstream *file)
         cout << "What account will the funds be going to: ";
         cin.ignore();
         cin.getline(account2, 6, '\n');
-        do{////==================================================================
+        do{
             database *Record;
             Class_Load(&databasetemp, Record);
             if (!strcmp(account2, (*Record).Get_Account()))
@@ -604,10 +604,11 @@ void Funds_Remove(char *Filename, fstream *file)
                     cout << "How much would you like to withdraw? You currently have "<< Report.Get_Balance() << endl;
                     cout << "Amount: ";
                     cin >> *pamount;
-                    do{     //verify that the funds are there
+                    while (*pamount > Report.Get_Balance()) //loops until a valid number is found, 0 is valid
+                    {     //verify that the funds are there
                         cout << "Not enough funds!\nNew Amount: ";
                         cin >> *pamount;
-                    }while (*pamount > Report.Get_Balance()); //loops until a valid number is found, 0 is valid
+                    }
                     //do the math
                     if (*pamount > 0)
                     {
