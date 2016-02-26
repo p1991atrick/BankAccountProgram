@@ -23,7 +23,7 @@ FILE2=BankRecord
 #FILE5=
 
 
-.PHONY: build clean link all
+.PHONY: build clean all
 
 #
 # Compile ...
@@ -36,7 +36,7 @@ build:
 #4  g++ -o $(FILE4).o $(FILE4).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 #5  g++ -o $(FILE5).o $(FILE5).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 
-link:
+
 #   g++ $(FILE1).o -L /usr/local/lib -o $(PROGRAM_NAME)
     g++ $(FILE1).o $(FILE2).o -L /usr/local/lib -o $(PROGRAM_NAME)
 #3  g++ $(FILE1).o $(FILE2).o $(FILE3).o -L /usr/local/lib -o $(PROGRAM_NAME)
