@@ -25,6 +25,15 @@
 
 //testing block
 #define TEST_CODE 0
+
+//clear screen for unix/linux
+#define CLEAR_SCREEN system("clear");
+
+//press anykey to continue POSIX
+#define AKTC system("read -p \"Press a key to continue...\" -n 1 -s");
+
+
+
 //array size calculation    total bytes/bytes of 0 location
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
@@ -45,10 +54,10 @@
                                 }                                           \
                             } while (swap);                                 \
                             }
-
+//find the bigger value
 #define MAX(a,b) ((a) < (b) ? (b) : (a))
 
-
+//exit codes
 #define EXIT_CODE_SUCCESS 0
 #define EXIT_CODE_FILE_IO 1
 #define EXIT_CODE_ERROR_NO_MATCH_FOUND 2

@@ -86,6 +86,7 @@ int main(/*int argc, const char * argv[]*/)
     fstream databasefile, *file = &databasefile; //for database file
     File_IO(Filename, file);
     do{ //by this point file is verified or created
+		CLEAR_SCREEN;
         Main_Menu(pchoice);
         switch (*pchoice)
         {
@@ -129,6 +130,8 @@ int main(/*int argc, const char * argv[]*/)
  ----------------------------------------------------------------------------- */
 void File_IO(char *Filename, fstream *file)
 {
+	CLEAR_SCREEN;
+	cout << std::setw(30) << std::right << "\nBank Account Database\n";
     cout << "1. Create Database File\n"; //sub menu lines
     cout << "2. Open Database File\n";
     int choice;
@@ -157,7 +160,7 @@ void File_IO(char *Filename, fstream *file)
  ----------------------------------------------------------------------------- */
 int Main_Menu(int *pchoice)
 {
-    cout << std::setw(30) << std::right << "\n\n\n\n\nBank Account Database\n\n";
+    cout << std::setw(45) << std::right << "\nBank Account Database\n\n";
     cout << std::setw(22) << "Management Options\n" << "--|-----------------------\n";
     cout << std::setw(3) << std::left << "1.";
     cout << "Add Account to database\n";
@@ -187,6 +190,7 @@ int Main_Menu(int *pchoice)
         cout << "\n Not A valid choice.\nPlease pick from the list above.\nWhat is your Choice: ";
         cin >> *pchoice;
     }
+	CLEAR_SCREEN;
     return *pchoice; //sends the menu choice up to main for switch statement
 }
 
@@ -235,6 +239,7 @@ void Create_File(char *Filename, fstream *file)
         }
     }
     (*file).close();
+	AKTC;
 }
 
 /* -----------------------------------------------------------------------------
@@ -264,6 +269,7 @@ void Open_File(char *Filename, fstream *file)
         (*file).open(Filename, ios::out | ios::app);
     }
     (*file).close();
+	AKTC;
 }
 
 /* -----------------------------------------------------------------------------===Management options======================================================================================================================
@@ -361,6 +367,7 @@ void Display_Database(char * Filename, fstream *file)
     //white space at end of chart
     cout << endl << endl;
     (*file).close();
+	AKTC;
 }
 
 /* -----------------------------------------------------------------------------
