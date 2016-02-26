@@ -28,11 +28,11 @@
  
  Author          Date           Modification(s)
  -------------   -----------    ---------------
- Patrick Kelly   01-29-2016     Created (git source control)
+ Patrick Kelly   01-29-2016     Created (under git source control)
  
  ----------------------------------------------------------------------------- */
 
-#include "My_Macros.h"
+
 #include <fstream>
 #include <iomanip>
 #include <cstdlib>
@@ -64,7 +64,6 @@ using std::ios;
     void Funds_Remove(char *, fstream *);
 //support functions
     void Display_title();
-    void Display_Body(database *);
     void File_Write(fstream *, database *);
     void File_Recopy(fstream *, fstream *);
     void Class_Load(fstream *, database *);
@@ -86,7 +85,7 @@ int main(/*int argc, const char * argv[]*/)
     int x=0; //for infinate loop
     fstream databasefile, *file = &databasefile; //for database file
     File_IO(Filename, file);
-    do{ //by this point file is open for both in and out functions in binary mode
+    do{ //by this point file is verified or created
         Main_Menu(pchoice);
         switch (*pchoice)
         {
@@ -97,22 +96,22 @@ int main(/*int argc, const char * argv[]*/)
                 Delete_Account(Filename, file);
                 break;
             case 3:
-                Display_Database(Filename, file);
-                break;
-            case 4:
                 Print_File(Filename, file);
                 break;
-            case 5:
+            case 4:
                 Funds_Transfer(Filename, file);
                 break;
-            case 6:
+            case 5:
                 Funds_Add(Filename, file);
                 break;
-            case 7:
+            case 6:
                 Funds_Remove(Filename, file);
                 break;
-            case 8:
+            case 7:
                 exit(EXIT_CODE_SUCCESS);
+                break;
+            case 8:
+                Display_Database(Filename, file);
                 break;
             default: //can't ever run
                 return EXIT_CODE_NO_SELECTION;
@@ -120,10 +119,9 @@ int main(/*int argc, const char * argv[]*/)
         }
         choice = -1; //reset choice back to initialize option
     }while (x==0);
-    return EXIT_CODE_NO_SELECTION;
 }
 
-/* -----------------------------------------------------------------------------===Menu options===============================================
+/* -----------------------------------------------------------------------------===Menu options============================================================================================================================
  FUNCTION:          File_IO(char *Filename)
  DESCRIPTION:       asks about new or saved file
  RETURNS:           int of choice
@@ -159,32 +157,32 @@ void File_IO(char *Filename, fstream *file)
  ----------------------------------------------------------------------------- */
 int Main_Menu(int *pchoice)
 {
-    cout << std::setw(30) << std::right << "Bank Account Database\n\n";
+    cout << std::setw(30) << std::right << "\n\n\n\n\nBank Account Database\n\n";
     cout << std::setw(22) << "Management Options\n" << "--|-----------------------\n";
     cout << std::setw(3) << std::left << "1.";
     cout << "Add Account to database\n";
     cout << std::setw(3) << "2.";
     cout << "Remove account from database\n";
+//    cout << std::setw(3) << "3.";
+//    cout << "Display database\n";
     cout << std::setw(3) << "3.";
-    cout << "Display database\n";
-    cout << std::setw(3) << "4.";
     cout << "Print report file\n";
     cout << std::setw(20) << std::right << endl << "Account Options\n" << "--|-----------------------\n";
-    cout << std::setw(3) << std::left << "5.";
+    cout << std::setw(3) << std::left << "4.";
     cout << "Transfer funds between accounts\n";
-    cout << std::setw(3) << "6.";
+    cout << std::setw(3) << "5.";
     cout << "Add funds to an account\n";
-    cout << std::setw(3) << "7.";
+    cout << std::setw(3) << "6.";
     cout << "Remove funds from an account\n";
 
     //escape option
-    cout << endl << endl;
-    cout << std::setw(3) << "8.";
+    cout << endl;
+    cout << std::setw(3) << "7.";
     cout << "Exit\n";
 
     cout << "\nWhat is your Choice: ";
     cin >> *pchoice;
-    while (*pchoice < 1 || *pchoice > 8) //verifys that an valid option has been selected
+    while (*pchoice < 1 || *pchoice > 8 || *pchoice == 99) //verifies that an valid option has been selected
     {
         cout << "\n Not A valid choice.\nPlease pick from the list above.\nWhat is your Choice: ";
         cin >> *pchoice;
@@ -192,7 +190,7 @@ int Main_Menu(int *pchoice)
     return *pchoice; //sends the menu choice up to main for switch statement
 }
 
-/* -----------------------------------------------------------------------------===File IO=====================================================
+/* -----------------------------------------------------------------------------===File IO=================================================================================================================================
  FUNCTION:          Create_File(char *Filename)
  DESCRIPTION:       Creates a file with user defined name
  RETURNS:           void function
@@ -211,7 +209,9 @@ void Create_File(char *Filename, fstream *file)
     { //if not already there, build
         cout << "Creating database file called \"" << Filename << "\"\n";
         (*file).close();
-        (*file).open(Filename, ios::out);
+        (*file).open(Filename, ios::out | ios::trunc);
+        cout << "Enter the first record into the database.\n\n";
+        file->close();
         Set_Info(Filename, file);
     }
     else
@@ -224,6 +224,8 @@ void Create_File(char *Filename, fstream *file)
         {
             (*file).open(Filename, ios::out | ios::trunc);
             cout << "Creating database file called \"" << Filename << "\"\n";
+            file->close();
+            cout << "Enter the first record into the database.\n\n";
             Set_Info(Filename, file);
         }
         else //anything else opens the file
@@ -264,7 +266,7 @@ void Open_File(char *Filename, fstream *file)
     (*file).close();
 }
 
-/* -----------------------------------------------------------------------------===Management options===========================================
+/* -----------------------------------------------------------------------------===Management options======================================================================================================================
  FUNCTION:          Set_Info()
  DESCRIPTION:       Adds data to the class
  RETURNS:           void function
@@ -279,7 +281,7 @@ void Set_Info(char *Filename, fstream *file)
     cout << std::setw(25) << std::right << "Enter First Name: ";
     char  FNAME[21];
     cin.ignore();
-    cin.getline(FNAME, sizeof(FNAME), '\n');
+    cin.getline(FNAME, sizeof(FNAME), '\n'); //gets all char's until the next line char. (when enter was pressed)
     //set last name
     cout << std::setw(25) << "Enter Last Name: ";
     char LNAME[21];
@@ -302,7 +304,7 @@ void Set_Info(char *Filename, fstream *file)
     char ssn[11];
     cout << std::setw(25) << "Enter SSN (no dashes): ";
     cin.ignore();
-    cin.getline(ssn, 11, '\n');//only takes the first 9 numbers. all others are discarded/
+    cin.getline(ssn, sizeof(ssn), '\n');//only takes the first 9 numbers. all others are discarded/
     //set phone area code
     char phonearea[4];
     cout << std::setw(25) << "Enter Phone Area Code: ";
@@ -326,7 +328,7 @@ void Set_Info(char *Filename, fstream *file)
     cout << std::setw(25) << "Enter Account Password: ";
     cin.getline(passwd, 7, '\n');
 
-    //write to class
+    //write to class with overloaded constructor
     database Record(LNAME, FNAME, MI, ssn, phonearea, phone, *pbal, accout, passwd);
     //save to file
     (*file).open(Filename, ios::out | ios::app);
@@ -349,10 +351,13 @@ void Display_Database(char * Filename, fstream *file)
 
     //loop for amount of records
     do{
-        database Record;
-        Class_Load(file, &Record);
-        Display_Body(&Record);
-    }while ((*file).eof() == 0);
+        database *Record = new database;
+        Class_Load(file, Record);
+        cout << std::setw(12) << std::left << (*Record).Get_Account() << std::setw(20) << (*Record).Get_LName() << std::setw(20) << (*Record).Get_FName()
+        << std::setw(6) << (*Record).Get_MI() << std::setw(13) << (*Record).Get_SSN() << "(" << (*Record).Get_PhoneArea() << ")" << std::setw(11) << (*Record).Get_Phone()
+        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << (*Record).Get_Balance() << endl;
+        delete Record;
+    }while (!(*file).eof() != 0);
     //white space at end of chart
     cout << endl << endl;
     (*file).close();
@@ -368,6 +373,7 @@ void Delete_Account(char *Filename, fstream *file)
 {
     char accountnumber[6];
     char accountpassword[7];
+    int trace = 0; //continuity for function
     cout << "What is the Account Number of the account you would like to delete: ";
     cin.ignore();
     cin.getline(accountnumber, sizeof(accountnumber), '\n');//gets line until the point where enter was pressed
@@ -381,11 +387,11 @@ void Delete_Account(char *Filename, fstream *file)
 
     //the brains
     do{
-        database Report; //create report class
-        Class_Load(file, &Report); //load first report from file
-        if (!strcmp(accountnumber, Report.Get_Account())) //checks for matching account number
+        database *Record = new database; //create report class
+        Class_Load(file, Record); //load first report from file
+        if (!strcmp(accountnumber, (*Record).Get_Account())) //checks for matching account number
         {
-            if (!strcmp(accountpassword, Report.Get_PassWd())) //check for matching account password
+            if (!strcmp(accountpassword, (*Record).Get_PassWd())) //check for matching account password
             {
                 cout << "\nDeleting accout " << accountnumber << endl; //if both are true, do nothing.
             }
@@ -394,30 +400,35 @@ void Delete_Account(char *Filename, fstream *file)
                 cout << "Incorrect password!\n";
                 cout << "What is the password for account " << accountnumber << ": ";
                 cin.getline(accountpassword, 7);
-                if (!strcmp(accountpassword, Report.Get_PassWd()))
+                if (!strcmp(accountpassword, (*Record).Get_PassWd()))
                 {
                     cout << "\nDeleting accout " << accountnumber << endl;
+                    trace = 1;
                 }
                 else
                 {
                     cout << "To many wrong atempts, returning to menu";
-                    File_Write(&databasetemp, &Report);
+                    File_Write(&databasetemp, Record);
                 }
 
             }
         }
         else
         {
-            File_Write(&databasetemp, &Report);
+            File_Write(&databasetemp, Record);
         }
+        delete Record;
     }while ((*file).eof() == 0);
     databasetemp.close();
     (*file).close();
-    (*file).open(Filename, ios::out | ios::trunc); //reopen database file and truncate it
-    databasetemp.open("Tempcopyfile.db", ios::in);
-    File_Recopy(&databasetemp, file);
-    databasetemp.close(); //closes the temp file.
-    (*file).close();
+    if (trace == 1)
+    {
+        (*file).open(Filename, ios::out | ios::trunc); //reopen database file and truncate it
+        databasetemp.open("Tempcopyfile.db", ios::in);
+        File_Recopy(&databasetemp, file);
+        databasetemp.close(); //closes the temp file.
+        (*file).close();
+    }
 }
 
 /* -----------------------------------------------------------------------------
@@ -456,18 +467,19 @@ void Print_File(char *Filename, fstream *file)
     (*file).open(Filename, ios::in);
     //loop for #of entries
     do{
-        database Record;
-        Class_Load(file, &Record);
+        database *Record = new database;
+        Class_Load(file, Record);
         //body
-        reportfile << std::setw(12) << std::left << Record.Get_Account() << std::setw(20) << Record.Get_LName() << std::setw(20) << Record.Get_FName()
-        << std::setw(6) << Record.Get_MI() << std::setw(13) << Record.Get_SSN() << "(" << Record.Get_PhoneArea() << ")" << std::setw(11) << Record.Get_Phone()
-        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record.Get_Balance() << endl;
+        reportfile << std::setw(12) << std::left << (*Record).Get_Account() << std::setw(20) << (*Record).Get_LName() << std::setw(20) << (*Record).Get_FName()
+        << std::setw(6) << (*Record).Get_MI() << std::setw(13) << (*Record).Get_SSN() << "(" << (*Record).Get_PhoneArea() << ")" << std::setw(11) << (*Record).Get_Phone()
+        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << (*Record).Get_Balance() << endl;
+        delete Record;
     }while ((*file).eof() == 0);
     reportfile.close();
     (*file).close();
 }
 
-/* -----------------------------------------------------------------------------===Account options==============================================
+/* -----------------------------------------------------------------------------===Account options=========================================================================================================================
  FUNCTION:          void Funds_Transfer(char *Filename)
  DESCRIPTION:       moves funds from one account to the other.
  RETURNS:           void function
@@ -489,30 +501,30 @@ void Funds_Transfer(char *Filename, fstream *file)
     fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);//temp file for new information
 
     do{         //finds account that funds are coming from and removes them
-        database Record;
+        database *Record = new database;
         char passwd[7];
-        Class_Load(file, &Record);
-        if (!strcmp(account1, Record.Get_Account()))//verify account number
+        Class_Load(file, Record);
+        if (!strcmp(account1, (*Record).Get_Account()))//verify account number
         {
             cout << "Found Account. What is the password for the account: ";
             cin.ignore();
             cin.getline(passwd, 6, '\n');
-            if (!strcmp(passwd, Record.Get_PassWd()))//verify account password
+            if (!strcmp(passwd, (*Record).Get_PassWd()))//verify account password
             {
                 found =1; //to allow function to continue for next if
-                cout << "You have $" << std::setprecision(2) << std::fixed << Record.Get_Balance();
+                cout << "You have $" << std::setprecision(2) << std::fixed << (*Record).Get_Balance();
                 cout << "How much will you be moving: ";
                 cin >> amount;
-                *pbal = Record.Get_Balance()-amount;
+                *pbal = (*Record).Get_Balance()-amount;
                 while (*pbal < 0)//if not enough money ask for amount again
                 {
                     cout << "Funds not avalible!\n";
                     cout << "Enter new amount: ";
                     cin >> amount;
-                    *pbal = Record.Get_Balance()-amount;//
+                    *pbal = Record->Get_Balance()-amount;//
                 }
-                Record.Set_Balance(pbal);//save new funds to record
-                File_Write(file, &Record);
+                Record->Set_Balance(pbal);//save new funds to record
+                File_Write(&databasetemp, Record);
             }
             else
             {
@@ -521,8 +533,9 @@ void Funds_Transfer(char *Filename, fstream *file)
         }
         else
         {
-            File_Write(file, &Record);
+            File_Write(&databasetemp, Record);
         }
+        delete Record;
     }while ((*file).eof() == 0);// loops until end of file.
 
     if (found == 1)//only runs if primary account was found
@@ -584,6 +597,7 @@ void Funds_Remove(char *Filename, fstream *file)
     float amount, *pamount = &amount;
     int found = 0;
 
+
     (*file).open(Filename, ios::in);
     fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);
 
@@ -593,18 +607,17 @@ void Funds_Remove(char *Filename, fstream *file)
         cin.ignore();
         cin.getline(account, sizeof(account), '\n'); //
         do{
-            database Report;
-            Class_Load(&(*file), &Report);
-            if (!strncmp(account, Report.Get_Account(), sizeof(account))) //find account in question in the database file
+            database *Report = new database;
+            Class_Load(&(*file), Report);
+            if (!strncmp(account, (*Report).Get_Account(), sizeof(account))) //find account in question in the database file
             {
-                cout << "What is the password for account " << Report.Get_Account() << ": ";
+                cout << "What is the password for account " << (*Report).Get_Account() << ": ";
                 cin.getline(password, sizeof(password), '\n');
-                if (!strncmp(password, Report.Get_PassWd(), sizeof(password)))
+                if (!strncmp(password, (*Report).Get_PassWd(), sizeof(password)))
                 {
-                    cout << "How much would you like to withdraw? You currently have "<< Report.Get_Balance() << endl;
-                    cout << "Amount: ";
+                    cout << "How much would you like to withdraw? You currently have "<< std::setprecision(2) << std::fixed << (*Report).Get_Balance() << ": ";
                     cin >> *pamount;
-                    while (*pamount > Report.Get_Balance()) //loops until a valid number is found, 0 is valid
+                    while (*pamount > (*Report).Get_Balance()) //loops until a valid number is found, 0 is valid
                     {     //verify that the funds are there
                         cout << "Not enough funds!\nNew Amount: ";
                         cin >> *pamount;
@@ -613,9 +626,9 @@ void Funds_Remove(char *Filename, fstream *file)
                     if (*pamount > 0)
                     {
                         found = 1;
-                        *pamount = Report.Get_Balance() - *pamount;
-                        Report.Set_Balance(pamount);
-                        File_Write(&databasetemp, &Report);
+                        *pamount = (*Report).Get_Balance() - *pamount;
+                        (*Report).Set_Balance(pamount);
+                        File_Write(&databasetemp, Report);
                     }
                 }
                 else
@@ -625,8 +638,9 @@ void Funds_Remove(char *Filename, fstream *file)
             }
             else
             {
-                File_Write(&databasetemp, &Report);
+                File_Write(&databasetemp, Report);
             }
+            delete Report;
         }while ((*file).eof() == 0);
     }
 
@@ -666,21 +680,21 @@ void Funds_Add(char *Filename, fstream *file)
         cin.ignore();
         cin.getline(account, sizeof(account), '\n'); //
         do{
-            database Report;
-            Class_Load(file, &Report);
-            if (!strncmp(account, Report.Get_Account(), sizeof(account))) //find account in question in the database file
+            database *Report = new database;
+            Class_Load(file, Report);
+            if (!strncmp(account, Report->Get_Account(), sizeof(account))) //find account in question in the database file
             {
-                cout << "What is the password for account " << Report.Get_Account() << ": ";
+                cout << "What is the password for account " << Report->Get_Account() << ": ";
                 cin.getline(password, sizeof(password), '\n');
-                if (!strncmp(password, Report.Get_PassWd(), sizeof(password)))
+                if (!strncmp(password, Report->Get_PassWd(), sizeof(password)))
                 {
                     cout << "How much would you like to Deposit?\n";
                     cout << "Amount: ";
                     cin >> *pamount;
                     found = 1;
-                    *pamount = Report.Get_Balance() + *pamount;
-                    Report.Set_Balance(pamount);
-                    File_Write(&databasetemp, &Report);
+                    *pamount = Report->Get_Balance() + *pamount;
+                    Report->Set_Balance(pamount);
+                    File_Write(&databasetemp, Report);
                 }
                 else
                 {
@@ -689,7 +703,7 @@ void Funds_Add(char *Filename, fstream *file)
             }
             else
             {
-                File_Write(&databasetemp, &Report);
+                File_Write(&databasetemp, Report);
             }
         }while ((*file).eof() == 0);
     }
@@ -706,7 +720,7 @@ void Funds_Add(char *Filename, fstream *file)
     }
 }
 
-/* -----------------------------------------------------------------------------===Support Functions===========================================
+/* -----------------------------------------------------------------------------===Support Functions=======================================================================================================================
  FUNCTION:          void Display_title()
  DESCRIPTION:       Write coulum labels to screen
  RETURNS:           void function
@@ -732,21 +746,20 @@ void Display_title()
  ----------------------------------------------------------------------------- */
 void Display_Body(database *Record)
 {
-    cout << std::setw(12) << std::left << (*Record).Get_Account() << std::setw(20) << (*Record).Get_LName() << std::setw(20) << (*Record).Get_FName()
-    << std::setw(6) << (*Record).Get_MI() << std::setw(13) << (*Record).Get_SSN() << "(" << (*Record).Get_PhoneArea() << ")" << std::setw(11) << (*Record).Get_Phone()
-    << std::setw(12) << std::right << std::setprecision(2) << std::fixed << (*Record).Get_Balance() << endl;
+
 }
 
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          File_Write(fstream &file, database *Report)
+ FUNCTION:          void File_Write(fstream *file, database *Report)
  DESCRIPTION:       saves class to file
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
 void File_Write(fstream *file, database *Report)
 {
-    (*file) << Report->Get_LName() << endl
+    (*file) << endl
+    << Report->Get_LName() << endl
     << Report->Get_FName() << endl
     << Report->Get_MI() << endl
     << Report->Get_SSN() << endl
@@ -754,11 +767,11 @@ void File_Write(fstream *file, database *Report)
     << Report->Get_Phone() << endl
     << Report->Get_Balance() << endl
     << Report->Get_Account() << endl
-    << Report->Get_PassWd() << endl << endl;
+    << Report->Get_PassWd();
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          void File_Recopy(fstream &databasetempfile, char *Filename)
+ FUNCTION:          void File_Recopy(fstream *fromfile, fstream *tofile, int *count)
  DESCRIPTION:       moves information between two files
  RETURNS:           void function
  NOTES:
@@ -766,10 +779,11 @@ void File_Write(fstream *file, database *Report)
 void File_Recopy(fstream *fromfile, fstream *tofile)
 {
     do{
-        database Report; //class structure for vars
-        Class_Load(fromfile, &Report); //load in values from source file
-        File_Write(tofile, &Report); //write out values to destination file
-    }while ((*fromfile).eof() == 0);   //do loop until end of file
+        database *Report = new database; //class structure for vars
+        Class_Load(fromfile, Report); //load in values from source file
+        File_Write(tofile, Report); //write out values to destination file
+        delete Report;
+    }while ((*fromfile).eof() == 0);   //do loop until end of entries
 }
 
 /* -----------------------------------------------------------------------------
