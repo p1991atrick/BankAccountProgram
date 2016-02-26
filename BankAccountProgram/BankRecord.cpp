@@ -94,7 +94,7 @@ void database::Set_LName(char * l)
     if (strlen(l) > 1 && strlen(l) < 21)//check for char count to prevent overflow
     {
         strncpy(LName, l, strlen(l));
-        LName[20]= '\0';
+        LName[strlen(l)]= '\0';
     }
     else
     {
@@ -114,7 +114,7 @@ void database::Set_FName(char * f)
     if (strlen(f) > 1 && strlen(f) < 21)//check for char count to prevent overflow
     {
         strncpy(FName, f, strlen(f));
-        FName[20] = '\0';
+        FName[strlen(f)] = '\0';
     }
     else
     {
@@ -175,7 +175,6 @@ void database::Set_Phone(char * phone)
  ----------------------------------------------------------------------------- */
 void database::Set_Balance(float *b)
 {
-    *b = *b+.00;
     Balance = *b;
 }
 
