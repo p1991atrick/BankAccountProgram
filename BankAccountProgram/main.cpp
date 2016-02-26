@@ -412,11 +412,11 @@ void Delete_Account(char *Filename, fstream *file)
 
     //the brains
     do{
-        database *Report; //create report class
-        Class_Load(file, Report); //load first report from file
-        if (!strcmp(accountnumber, (*Report).Get_Account())) //checks for matching account number
+        database Report; //create report class
+        Class_Load(file, &Report); //load first report from file
+        if (!strcmp(accountnumber, Report.Get_Account())) //checks for matching account number
         {
-            if (!strcmp(accountpassword, (*Report).Get_PassWd())) //check for matching account password
+            if (!strcmp(accountpassword, Report.Get_PassWd())) //check for matching account password
             {
                 cout << "\nDeleting accout " << accountnumber << endl; //if both are true, do nothing.
             }
@@ -425,21 +425,21 @@ void Delete_Account(char *Filename, fstream *file)
                 cout << "Incorrect password!\n";
                 cout << "What is the password for account " << accountnumber << ": ";
                 cin.getline(accountpassword, 7);
-                if (!strcmp(accountpassword, (*Report).Get_PassWd()))
+                if (!strcmp(accountpassword, Report.Get_PassWd()))
                 {
                     cout << "\nDeleting accout " << accountnumber << endl;
                 }
                 else
                 {
                     cout << "To many wrong atempts, returning to menu";
-                    File_Write(&databasetemp, Report);
+                    File_Write(&databasetemp, &Report);
                 }
 
             }
         }
         else
         {
-            File_Write(&databasetemp, Report);
+            File_Write(&databasetemp, &Report);
         }
     }while ((*file).eof() == 0);
     databasetemp.close();
@@ -479,9 +479,9 @@ void File_Write(fstream *file, database *Report)
 void File_Recopy(fstream *fromfile, char *Filename, fstream *tofile)
 {
     do{
-        database *Report; //class structure for vars
-        Class_Load(fromfile, Report); //load in values from source file
-        File_Write(tofile, Report); //write out values to destination file
+        database Report; //class structure for vars
+        Class_Load(fromfile, &Report); //load in values from source file
+        File_Write(tofile, &Report); //write out values to destination file
     }while ((*fromfile).eof() == 0);   //do loop until end of file
 }
 
