@@ -123,7 +123,7 @@ int main(/*int argc, const char * argv[]*/)
     return EXIT_CODE_NO_SELECTION;
 }
 
-/* -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------===Menu options===============================================
  FUNCTION:          File_IO(char *Filename)
  DESCRIPTION:       asks about new or saved file
  RETURNS:           int of choice
@@ -192,7 +192,7 @@ int Main_Menu(int *pchoice)
     return *pchoice; //sends the menu choice up to main for switch statement
 }
 
-/* -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------===File IO=====================================================
  FUNCTION:          Create_File(char *Filename)
  DESCRIPTION:       Creates a file with user defined name
  RETURNS:           void function
@@ -264,7 +264,7 @@ void Open_File(char *Filename, fstream *file)
     (*file).close();
 }
 
-/* -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------===Management options===========================================
  FUNCTION:          Set_Info()
  DESCRIPTION:       Adds data to the class
  RETURNS:           void function
@@ -359,37 +359,6 @@ void Display_Database(char * Filename, fstream *file)
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          void Display_title()
- DESCRIPTION:       Write coulum labels to screen
- RETURNS:           void function
- NOTES:
- ----------------------------------------------------------------------------- */
-void Display_title()
-{
-    //1st line
-     cout << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
-    //2nd line
-    cout << std::setw(12) << std::left << "Account" << std::setw(20) << "Last" << std::setw(20) << "First" << std::setw(6) << "MI" << std::setw(13) << "SSN"     << std::setw(16) << "Phone"  << std::setw(15) << "Account" << endl;
-    //3rd line
-    cout << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20) << "Name"  << std::setw(6) << "  " << std::setw(13) << "Number" << std::setw(16) << "Number" << std::setw(15) << "Balance" << endl;
-    //4th line
-    cout << std::setw(12) << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
-}
-
-/* -----------------------------------------------------------------------------
- FUNCTION:          void Display_Body(database *Record)
- DESCRIPTION:       write the account informatoin to the screen
- RETURNS:           void function
- NOTES:
- ----------------------------------------------------------------------------- */
-void Display_Body(database *Record)
-{
-    cout << std::setw(12) << std::left << (*Record).Get_Account() << std::setw(20) << (*Record).Get_LName() << std::setw(20) << (*Record).Get_FName()
-    << std::setw(6) << (*Record).Get_MI() << std::setw(13) << (*Record).Get_SSN() << "(" << (*Record).Get_PhoneArea() << ")" << std::setw(11) << (*Record).Get_Phone()
-    << std::setw(12) << std::right << std::setprecision(2) << std::fixed << (*Record).Get_Balance() << endl;
-}
-
-/* -----------------------------------------------------------------------------
  FUNCTION:          Delete_Account(char *Filename)
  DESCRIPTION:       write the account informatoin to the screen
  RETURNS:           void function
@@ -452,77 +421,6 @@ void Delete_Account(char *Filename, fstream *file)
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          File_Write(fstream &file, database *Report)
- DESCRIPTION:       saves class to file
- RETURNS:           void function
- NOTES:
- ----------------------------------------------------------------------------- */
-void File_Write(fstream *file, database *Report)
-{
-    (*file) << Report->Get_LName() << endl
-    << Report->Get_FName() << endl
-    << Report->Get_MI() << endl
-    << Report->Get_SSN() << endl
-    << Report->Get_PhoneArea() << endl
-    << Report->Get_Phone() << endl
-    << Report->Get_Balance() << endl
-    << Report->Get_Account() << endl
-    << Report->Get_PassWd() << endl << endl;
-}
-
-/* -----------------------------------------------------------------------------
- FUNCTION:          void File_Recopy(fstream &databasetempfile, char *Filename)
- DESCRIPTION:       moves information between two files
- RETURNS:           void function
- NOTES:
- ----------------------------------------------------------------------------- */
-void File_Recopy(fstream *fromfile, char *Filename, fstream *tofile)
-{
-    do{
-        database Report; //class structure for vars
-        Class_Load(fromfile, &Report); //load in values from source file
-        File_Write(tofile, &Report); //write out values to destination file
-    }while ((*fromfile).eof() == 0);   //do loop until end of file
-}
-
-/* -----------------------------------------------------------------------------
- FUNCTION:          void Class_Load(fstream &databasefile, database *Report)
- DESCRIPTION:       loads information from file to class
- RETURNS:           void function
- NOTES:             loads informaition from database into class
- ----------------------------------------------------------------------------- */
-void Class_Load(fstream *databasefile, database *Report)
-{   //vars for temp useage
-    char Lname[21];
-    char Fnmae[21];
-    char MI;
-    char ssn[10];
-    char Phonearea[4];
-    char Phone[8];
-    float Bal, *pbal = &Bal;
-    char Account[6];
-    char Password[7];
-    (*databasefile) >> Lname;
-    (*databasefile) >> Fnmae;
-    (*databasefile) >> MI;
-    (*databasefile) >> ssn;
-    (*databasefile) >> Phonearea;
-    (*databasefile) >> Phone;
-    (*databasefile) >> *pbal;
-    (*databasefile) >> Account;
-    (*databasefile) >> Password;
-    Report->Set_LName(Lname);
-    Report->Set_FName(Fnmae);
-    Report->Set_MI(MI);
-    Report->Set_SSN(ssn);
-    Report->Set_PhoneArea(Phonearea);
-    Report->Set_Phone(Phone);
-    Report->Set_Balance(pbal);
-    Report->Set_Account(Account);
-    Report->Set_PassWD(Password);
-}
-
-/* -----------------------------------------------------------------------------
  FUNCTION:          void Print_File(char *Filename)
  DESCRIPTION:       prints database to report file
  RETURNS:           void function
@@ -569,7 +467,7 @@ void Print_File(char *Filename, fstream *file)
     (*file).close();
 }
 
-/* -----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------===Account options==============================================
  FUNCTION:          void Funds_Transfer(char *Filename)
  DESCRIPTION:       moves funds from one account to the other.
  RETURNS:           void function
@@ -806,6 +704,110 @@ void Funds_Add(char *Filename, fstream *file)
         databasetemp.close();
     }
 }
+
+/* -----------------------------------------------------------------------------===Support Functions===========================================
+ FUNCTION:          void Display_title()
+ DESCRIPTION:       Write coulum labels to screen
+ RETURNS:           void function
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void Display_title()
+{
+    //1st line
+     cout << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+    //2nd line
+    cout << std::setw(12) << std::left << "Account" << std::setw(20) << "Last" << std::setw(20) << "First" << std::setw(6) << "MI" << std::setw(13) << "SSN"     << std::setw(16) << "Phone"  << std::setw(15) << "Account" << endl;
+    //3rd line
+    cout << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20) << "Name"  << std::setw(6) << "  " << std::setw(13) << "Number" << std::setw(16) << "Number" << std::setw(15) << "Balance" << endl;
+    //4th line
+    cout << std::setw(12) << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+}
+
+/* -----------------------------------------------------------------------------
+ FUNCTION:          void Display_Body(database *Record)
+ DESCRIPTION:       write the account informatoin to the screen
+ RETURNS:           void function
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void Display_Body(database *Record)
+{
+    cout << std::setw(12) << std::left << (*Record).Get_Account() << std::setw(20) << (*Record).Get_LName() << std::setw(20) << (*Record).Get_FName()
+    << std::setw(6) << (*Record).Get_MI() << std::setw(13) << (*Record).Get_SSN() << "(" << (*Record).Get_PhoneArea() << ")" << std::setw(11) << (*Record).Get_Phone()
+    << std::setw(12) << std::right << std::setprecision(2) << std::fixed << (*Record).Get_Balance() << endl;
+}
+
+
+/* -----------------------------------------------------------------------------
+ FUNCTION:          File_Write(fstream &file, database *Report)
+ DESCRIPTION:       saves class to file
+ RETURNS:           void function
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void File_Write(fstream *file, database *Report)
+{
+    (*file) << Report->Get_LName() << endl
+    << Report->Get_FName() << endl
+    << Report->Get_MI() << endl
+    << Report->Get_SSN() << endl
+    << Report->Get_PhoneArea() << endl
+    << Report->Get_Phone() << endl
+    << Report->Get_Balance() << endl
+    << Report->Get_Account() << endl
+    << Report->Get_PassWd() << endl << endl;
+}
+
+/* -----------------------------------------------------------------------------
+ FUNCTION:          void File_Recopy(fstream &databasetempfile, char *Filename)
+ DESCRIPTION:       moves information between two files
+ RETURNS:           void function
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void File_Recopy(fstream *fromfile, char *Filename, fstream *tofile)
+{
+    do{
+        database Report; //class structure for vars
+        Class_Load(fromfile, &Report); //load in values from source file
+        File_Write(tofile, &Report); //write out values to destination file
+    }while ((*fromfile).eof() == 0);   //do loop until end of file
+}
+
+/* -----------------------------------------------------------------------------
+ FUNCTION:          void Class_Load(fstream &databasefile, database *Report)
+ DESCRIPTION:       loads information from file to class
+ RETURNS:           void function
+ NOTES:             loads informaition from database into class
+ ----------------------------------------------------------------------------- */
+void Class_Load(fstream *databasefile, database *Report)
+{   //vars for temp useage
+    char Lname[21];
+    char Fnmae[21];
+    char MI;
+    char ssn[10];
+    char Phonearea[4];
+    char Phone[8];
+    float Bal, *pbal = &Bal;
+    char Account[6];
+    char Password[7];
+    (*databasefile) >> Lname;
+    (*databasefile) >> Fnmae;
+    (*databasefile) >> MI;
+    (*databasefile) >> ssn;
+    (*databasefile) >> Phonearea;
+    (*databasefile) >> Phone;
+    (*databasefile) >> *pbal;
+    (*databasefile) >> Account;
+    (*databasefile) >> Password;
+    Report->Set_LName(Lname);
+    Report->Set_FName(Fnmae);
+    Report->Set_MI(MI);
+    Report->Set_SSN(ssn);
+    Report->Set_PhoneArea(Phonearea);
+    Report->Set_Phone(Phone);
+    Report->Set_Balance(pbal);
+    Report->Set_Account(Account);
+    Report->Set_PassWD(Password);
+}
+
 
 
 
