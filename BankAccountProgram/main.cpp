@@ -507,12 +507,11 @@ void Funds_Transfer(char *Filename, fstream *file)
         if (!strcmp(account1, Record.Get_Account()))//verify account number
         {
             cout << "Found Account. What is the password for the account: ";
-            cin.ignore();
-            cin.getline(passwd, 6, '\n');
+            cin.getline(passwd, 7, '\n');
             if (!strcmp(passwd, Record.Get_PassWd()))//verify account password
             {
                 found =1; //to allow function to continue for next if
-                cout << "You have $" << std::setprecision(2) << std::fixed << Record.Get_Balance();
+                cout << "You have $" << std::setprecision(2) << std::fixed << Record.Get_Balance() << endl;
                 cout << "How much will you be moving: ";
                 cin >> amount;
                 *pbal = Record.Get_Balance()-amount;
@@ -537,7 +536,8 @@ void Funds_Transfer(char *Filename, fstream *file)
         }
         
     }while ((*file).eof() == 0);// loops until end of file.
-
+	databasetemp.close();
+	databasetemp.open("Tempcopyfile.db", ios::in);
     if (found == 1)//only runs if primary account was found
     {
         cout << "What account will the funds be going to: ";
@@ -557,7 +557,8 @@ void Funds_Transfer(char *Filename, fstream *file)
         cout << "\nSecond account not found.\n    Returning to menu\n";
     }
 
-    databasetemp.seekg(0L, ios::beg); //set read position for temp file at begining.
+	databasetemp.close();
+	databasetemp.open("Tempcopyfile.db", ios::in); //set read position for temp file at begining.
 
     if (found == 2) //only runs if both accounts were found, until this point the database file has no changes
     {
@@ -728,13 +729,13 @@ void Funds_Add(char *Filename, fstream *file)
 void Display_title()
 {
     //1st line
-     cout << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+	cout << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
     //2nd line
     cout << std::setw(12) << std::left << "Account" << std::setw(20) << "Last" << std::setw(20) << "First" << std::setw(6) << "MI" << std::setw(13) << "SSN"     << std::setw(16) << "Phone"  << std::setw(15) << "Account" << endl;
     //3rd line
     cout << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20) << "Name"  << std::setw(6) << "  " << std::setw(13) << "Number" << std::setw(16) << "Number" << std::setw(15) << "Balance" << endl;
     //4th line
-    cout << std::setw(12) << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+    cout << std::setw(12) <<              "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
 }
 
 /* -----------------------------------------------------------------------------
@@ -745,7 +746,7 @@ void Display_title()
  ----------------------------------------------------------------------------- */
 void File_Write(fstream *file, database *Report)
 {
-    (*file) << endl
+    (*file) << endl << endl
     << Report->Get_LName() << endl
     << Report->Get_FName() << endl
     << Report->Get_MI() << endl
