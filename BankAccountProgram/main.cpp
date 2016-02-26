@@ -738,18 +738,6 @@ void Display_title()
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          void Display_Body(database *Record)
- DESCRIPTION:       write the account informatoin to the screen
- RETURNS:           void function
- NOTES:
- ----------------------------------------------------------------------------- */
-void Display_Body(database *Record)
-{
-
-}
-
-
-/* -----------------------------------------------------------------------------
  FUNCTION:          void File_Write(fstream *file, database *Report)
  DESCRIPTION:       saves class to file
  RETURNS:           void function
