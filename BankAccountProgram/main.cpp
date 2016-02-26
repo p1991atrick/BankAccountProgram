@@ -66,7 +66,7 @@ using std::ios;
     void Display_title();
     void Display_Body(database *);
     void File_Write(fstream *, database *);
-    void File_Recopy(fstream *, char*, fstream *);
+    void File_Recopy(fstream *, fstream *);
     void Class_Load(fstream *, database *);
 
 
@@ -313,8 +313,8 @@ void Set_Info(char *Filename, fstream *file)
     cin.getline(phone, sizeof(phone), '\n');
     //set balance
     cout << std::setw(25) << "Enter Account Balance: ";
-    float *bal;
-    cin >> *bal;
+    float bal, *pbal = &bal;
+    cin >> *pbal;
     //set account number
     char accout[6];
     accout[5] = '\0';
@@ -327,7 +327,7 @@ void Set_Info(char *Filename, fstream *file)
     cin.getline(passwd, 7, '\n');
 
     //write to class
-    database Record(LNAME, FNAME, MI, ssn, phonearea, phone, *bal, accout, passwd);
+    database Record(LNAME, FNAME, MI, ssn, phonearea, phone, *pbal, accout, passwd);
     //save to file
     (*file).open(Filename, ios::out | ios::app);
     File_Write(file, &Record);
@@ -415,7 +415,7 @@ void Delete_Account(char *Filename, fstream *file)
     (*file).close();
     (*file).open(Filename, ios::out | ios::trunc); //reopen database file and truncate it
     databasetemp.open("Tempcopyfile.db", ios::in);
-    File_Recopy(&databasetemp, Filename, file);
+    File_Recopy(&databasetemp, file);
     databasetemp.close(); //closes the temp file.
     (*file).close();
 }
@@ -490,7 +490,7 @@ void Funds_Transfer(char *Filename, fstream *file)
 
     do{         //finds account that funds are coming from and removes them
         database Record;
-        char *passwd;
+        char passwd[7];
         Class_Load(file, &Record);
         if (!strcmp(account1, Record.Get_Account()))//verify account number
         {
@@ -531,9 +531,9 @@ void Funds_Transfer(char *Filename, fstream *file)
         cin.ignore();
         cin.getline(account2, 6, '\n');
         do{
-            database *Record;
-            Class_Load(&databasetemp, Record);
-            if (!strcmp(account2, (*Record).Get_Account()))
+            database Record;
+            Class_Load(&databasetemp, &Record);
+            if (!strcmp(account2, Record.Get_Account()))
             {
                 found = 2;
             }
@@ -636,7 +636,7 @@ void Funds_Remove(char *Filename, fstream *file)
     {
         (*file).open(Filename, ios::out | ios::trunc);
         databasetemp.open("Tempcopyfile.db", ios::in);
-        File_Recopy(&databasetemp, Filename, file);
+        File_Recopy(&databasetemp, file);
         (*file).close();
         databasetemp.close();
     }
@@ -700,7 +700,7 @@ void Funds_Add(char *Filename, fstream *file)
     {
         (*file).open(Filename, ios::out | ios::trunc);
         databasetemp.open("Tempcopyfile.db", ios::in);
-        File_Recopy(&databasetemp, Filename, file);
+        File_Recopy(&databasetemp, file);
         (*file).close();
         databasetemp.close();
     }
@@ -763,7 +763,7 @@ void File_Write(fstream *file, database *Report)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void File_Recopy(fstream *fromfile, char *Filename, fstream *tofile)
+void File_Recopy(fstream *fromfile, fstream *tofile)
 {
     do{
         database Report; //class structure for vars
