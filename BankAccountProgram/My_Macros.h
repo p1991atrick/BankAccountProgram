@@ -54,4 +54,5 @@
 #define EXIT_CODE_ERROR_NO_MATCH_FOUND 2
 #define EXIT_CODE_NO_SELECTION 3
 #define EXIT_CODE_PROGRAM_HALT 9
+
 #define DEBUG_OUTPUT(x) std::cout << #x << " = " << x << std::endl;

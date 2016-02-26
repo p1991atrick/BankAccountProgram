@@ -78,7 +78,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "780"
-            endingLineNumber = "780">
+            endingLineNumber = "780"
+            landmarkName = "File_Recopy(fstream *fromfile, fstream *tofile)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -108,7 +110,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "200"
-            endingLineNumber = "200">
+            endingLineNumber = "200"
+            landmarkName = "Create_File(char *Filename, fstream *file)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
