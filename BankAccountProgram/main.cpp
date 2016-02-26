@@ -239,7 +239,7 @@ void Create_File(char *Filename, fstream *file)
         }
     }
     (*file).close();
-	AKTC;
+	system("read -p \"Press a key to continue...\" -n 1 -s");
 }
 
 /* -----------------------------------------------------------------------------
@@ -269,7 +269,7 @@ void Open_File(char *Filename, fstream *file)
         (*file).open(Filename, ios::out | ios::app);
     }
     (*file).close();
-	AKTC;
+	system("read -p \"Press a key to continue...\" -n 1 -s");
 }
 
 /* -----------------------------------------------------------------------------===Management options======================================================================================================================
@@ -367,7 +367,7 @@ void Display_Database(char * Filename, fstream *file)
     //white space at end of chart
     cout << endl << endl;
     (*file).close();
-	AKTC;
+	system("read -p \"Press a key to continue...\" -n 1 -s");
 }
 
 /* -----------------------------------------------------------------------------
@@ -484,6 +484,8 @@ void Print_File(char *Filename, fstream *file)
     }while ((*file).eof() == 0);
     reportfile.close();
     (*file).close();
+	cout << "Printed report file\n";
+	system("read -p \"Press a key to continue...\" -n 1 -s");
 }
 
 /* -----------------------------------------------------------------------------===Account options=========================================================================================================================
@@ -585,6 +587,8 @@ void Funds_Transfer(char *Filename, fstream *file)
             }
             File_Write(file, &Record);
         } while (databasetemp.eof() == 0);
+		cout << "Funds transfered\n";
+		system("read -p \"Press a key to continue...\" -n 1 -s");
     }
     databasetemp.close();
     (*file).close();
