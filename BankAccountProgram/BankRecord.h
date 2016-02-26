@@ -27,7 +27,7 @@
 
  Author          Date           Modification(s)
  -------------   -----------    ---------------
- Patrick Kelly   01-29-2016     Created (git source control)
+ Patrick Kelly   01-29-2016     Created (under git source control)
 
  ----------------------------------------------------------------------------- */
 
@@ -60,7 +60,6 @@ public:
     //default functions
     database();
     database(char*, char*, char, char *, char *, char *, float, char*, char*);
-    //~database();
     
     //set var functions//
     void Set_LName(char *);
@@ -84,8 +83,6 @@ public:
     char* Get_Account();
     char* Get_PassWd();
 };
-
-
 
 
 #endif /* BankRecord_h */

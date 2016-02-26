@@ -27,7 +27,7 @@
 
  Author          Date           Modification(s)
  -------------   -----------    ---------------
- Patrick Kelly   01-29-2016     Created (git source control)
+ Patrick Kelly   01-29-2016     Created (under git source control)
 
  ----------------------------------------------------------------------------- */
 
@@ -45,15 +45,15 @@ database::database()
 #if TRACE
     std::cout << "In Constructor\n";
 #endif
-    strncpy(LName, "\0", 21);
-    strncpy(FName, "\0", 21);
+    memset(LName, '\0', 21);
+    memset(FName, '\0', 21);
     MI = '\0';
-    strncpy(SSN, "\0", 10);
-    strncpy(PhoneArea, "\0", 4);
-    strncpy(Phone, "\0", 8);
+    memset(SSN, '\0', 10);
+    memset(PhoneArea, '\0', 4);
+    memset(Phone, '\0', 8);
     Balance = 0.00;
-    strncpy(Account, "\0", 6);
-    strncpy(PassWd, "\0", 7);
+    memset(Account, '\0', 6);
+    memset(PassWd, '\0', 7);
 }
 
 /* -----------------------------------------------------------------------------
@@ -68,35 +68,20 @@ database::database(char* l, char* f, char mi, char * ssn, char * pa, char * ph, 
     std::cout << "In Overloaded Constructor\n";
 #endif
     strncpy(LName, l, strlen(l));
-    LName[(strlen(l))] = '\0';
+    LName[(strlen(l))] = '\0'; //add null to last char in cstring
     strncpy(FName, f, strlen(f));
-    FName[(strlen(f))] = '\0';
+    FName[(strlen(f))] = '\0'; //add null to last char in cstring
     MI = mi;
     strncpy(SSN, ssn, 9);
-    SSN[9] = '\0';
+    SSN[9] = '\0'; //add null to last char in cstring
     strncpy(PhoneArea, pa, 3);
-    PhoneArea[3] = '\0';
+    PhoneArea[3] = '\0'; //add null to last char in cstring
     strncpy(Phone, ph, 7);
-    Phone[7] = '\0';
+    Phone[7] = '\0'; //add null to last char in cstring
     Balance = bal;
-    strncpy(Account, acount, 5);
-    Account[5] = '\0';
-    strncpy(PassWd, pass, 6);
-    PassWd[6] = '\0';
+    database::Set_Account(acount);
+    database::Set_PassWD(pass);
 }
-
-/* -----------------------------------------------------------------------------
- FUNCTION:          Destructor
- DESCRIPTION:       remove content after use
- RETURNS:           none
- NOTES:
-// ----------------------------------------------------------------------------- */
-//database::~database()
-//{
-//#if TRACE
-//    std::cout << "In Destructor\n";
-//#endif  
-//}
 
 /* -----------------------------------------------------------------------------
  FUNCTION:          database::Set_LName(char * l)
@@ -109,10 +94,12 @@ void database::Set_LName(char * l)
     if (strlen(l) > 1 && strlen(l) < 21)//check for char count to prevent overflow
     {
         strncpy(LName, l, strlen(l));
+        LName[20]= '\0';
     }
     else
     {
         strncpy(LName, l, 20);
+        LName[20]= '\0';
     }
 }
 
@@ -127,10 +114,12 @@ void database::Set_FName(char * f)
     if (strlen(f) > 1 && strlen(f) < 21)//check for char count to prevent overflow
     {
         strncpy(FName, f, strlen(f));
+        FName[20] = '\0';
     }
     else
     {
         strncpy(FName, f, 20);
+        FName[20] = '\0';
     }
 }
 
@@ -186,7 +175,7 @@ void database::Set_Phone(char * phone)
  ----------------------------------------------------------------------------- */
 void database::Set_Balance(float *b)
 {
-    *b += .00;
+    *b = *b+.00;
     Balance = *b;
 }
 
@@ -199,6 +188,13 @@ void database::Set_Balance(float *b)
 void database::Set_Account(char * acount)
 {
     strncpy(Account, acount, 5);
+    for (int n = 0; n < 5; n++)//forces all alpha char's to upper case
+    {
+        if ((isalpha(Account[n])) && (islower(Account[n])))
+        {
+            Account[n] = toupper(Account[n]);
+        }
+    }
 }
 
 /* -----------------------------------------------------------------------------
@@ -210,6 +206,13 @@ void database::Set_Account(char * acount)
 void database::Set_PassWD(char * pass)
 {
     strncpy(PassWd, pass, 6);
+    for (int n = 0; n < 6; n++) //forces all alpha char's to upper case
+    {
+        if ((isalpha(PassWd[n]) == 0) && (islower(PassWd[n] == 0)))
+        {
+            PassWd[n] = toupper(PassWd[n]);
+        }
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -231,7 +234,7 @@ char* database::Get_LName()
  RETURNS:           char *
  NOTES:
  ----------------------------------------------------------------------------- */
-char* database::Get_FName()
+char* database::Get_FName() 
 {
     return FName;
 }
