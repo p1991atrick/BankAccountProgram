@@ -86,7 +86,7 @@ int main(/*int argc, const char * argv[]*/)
     fstream databasefile, *file = &databasefile; //for database file
     File_IO(Filename, file);
     do{ //by this point file is verified or created
-		CLEAR_SCREEN;
+		
         Main_Menu(pchoice);
         switch (*pchoice)
         {
@@ -239,7 +239,7 @@ void Create_File(char *Filename, fstream *file)
         }
     }
     (*file).close();
-	system("read -p \"Press any key to continue...\"");
+	AKTC;
 }
 
 /* -----------------------------------------------------------------------------
@@ -269,7 +269,7 @@ void Open_File(char *Filename, fstream *file)
         (*file).open(Filename, ios::out | ios::app);
     }
     (*file).close();
-	system("read -p \"Press any key to continue...\"");
+	AKTC;
 }
 
 /* -----------------------------------------------------------------------------===Management options======================================================================================================================
@@ -367,7 +367,7 @@ void Display_Database(char * Filename, fstream *file)
     //white space at end of chart
     cout << endl << endl;
     (*file).close();
-	system("read -p \"Press any key to continue...\"");
+	AKTC;
 }
 
 /* -----------------------------------------------------------------------------
@@ -485,7 +485,7 @@ void Print_File(char *Filename, fstream *file)
     reportfile.close();
     (*file).close();
 	cout << "Printed report file\n";
-	system("read -p \"Press any key to continue...\"");
+	AKTC;
 }
 
 /* -----------------------------------------------------------------------------===Account options=========================================================================================================================

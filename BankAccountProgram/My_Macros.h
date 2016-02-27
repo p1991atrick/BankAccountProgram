@@ -32,7 +32,7 @@
 #define CLEAR_SCREEN system("clear")
 
 //press anykey to continue POSIX
-#define AKTC system("read -p \"Press a key to continue...\" -n 1 -s")
+#define AKTC system("read -p \"Press any key to continue...\"")
 
 
 
