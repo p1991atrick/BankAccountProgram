@@ -29,12 +29,11 @@
 #define TEST_CODE 0
 
 //clear screen for unix/linux
-#define CLEAR_SCREEN system("clear")
+#define CLEAR_SCREEN system("clear");
 
 //press anykey to continue POSIX
-#define AKTC system("read -p \"Press any key to continue...\"")
-
-
+#define AKTC  std::cout << "Press any key to continue..."; \
+				system("read");
 
 //array size calculation    total bytes/bytes of 0 location
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
