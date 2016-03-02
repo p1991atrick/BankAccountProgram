@@ -65,8 +65,8 @@
 			children = (
 				CD9577BD1C5EBBB50052A835 /* My_Macros.h */,
 				CD9577B51C5EB95C0052A835 /* main.cpp */,
-				CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */,
 				CD3B6BC11C61A4CE0052A835 /* BankRecord.h */,
+				CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */,
 			);
 			path = BankAccountProgram;
 			sourceTree = "<group>";

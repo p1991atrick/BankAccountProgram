@@ -45,11 +45,14 @@ using std::endl;
 using std::cin;
 using std::fstream;
 using std::ios;
+using std::setw;
 
 // Function Prototyes
 //menu
     void File_IO(char *, fstream *);
     int Main_Menu(int *);
+	void CLI_Args(int, char *argv[], char *, fstream *);
+	void CLI_Help();
 //file IO
     void Create_File(char *, fstream *);
     void Open_File(char *, fstream *);
@@ -75,54 +78,89 @@ using std::ios;
  RETURNS:           0, or error
  NOTES:
  ----------------------------------------------------------------------------- */
-int main(/*int argc, const char * argv[]*/)
+int main(int argc, char * argv[])
 {
-#if TRACE
-    cout << "In Main\n";
-#endif
-    int choice = -1, *pchoice = &choice; //initialize choice with imposible number
     char Filename[41] = "a"; //create and initialize Filename with 'a'
-    int x=0; //for infinate loop
-    fstream databasefile, *file = &databasefile; //for database file
-    File_IO(Filename, file);
-    do{ //by this point file is verified or created
-		
-        Main_Menu(pchoice);
-        switch (*pchoice)
-        {
-            case 1:
-                Set_Info(Filename, file);
-                break;
-            case 2:
-                Delete_Account(Filename, file);
-                break;
-            case 3:
-                Print_File(Filename, file);
-                break;
-            case 4:
-                Funds_Transfer(Filename, file);
-                break;
-            case 5:
-                Funds_Add(Filename, file);
-                break;
-            case 6:
-                Funds_Remove(Filename, file);
-                break;
-            case 7:
-                exit(EXIT_CODE_SUCCESS);
-                break;
-            case 8:
-                Display_Database(Filename, file);
-                break;
-            default: //can't ever run
-                return EXIT_CODE_NO_SELECTION;
-                break;
-        }
-        choice = -1; //reset choice back to initialize option
-    }while (x==0);
+    fstream databasefile; //for database file
+
+	if (argc < 2)
+	{
+		CLI_Help();
+		exit (EXIT_CODE_NO_SELECTION);
+	}
+	CLI_Args(argc, argv, Filename, &databasefile);
+
+	return EXIT_CODE_SUCCESS;
 }
 
-/* -----------------------------------------------------------------------------===Menu options============================================================================================================================
+void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile)
+{
+	//vars for functions
+	char *FirstName;
+	char *LastName;
+	char MI;
+	char *SSN;
+	char *PhoneArea;
+	char *Phone;
+	float *Balance;
+	char *Account;
+	char *Password;
+
+	//true false checks
+
+
+	//find cli vars
+	for (int i = 0; i < argc; i++)
+	{
+		char *arg = argv[i]; //set the next argument in line to be tested
+#ifdef WIN32 //will only run on windows
+		if (arg[0] != '/')
+		{
+			CLI_Help();
+			exit (EXIT_CODE_NO_SELECTION);
+		}
+#else  // every other OS runs this
+		if (arg[0] != '-')
+		{
+			CLI_Help();
+			exit (EXIT_CODE_NO_SELECTION);
+		}
+#endif
+		int return_code; //for string compare
+		return_code = strcmp(arg+1, "?"); //find if help is called
+		if (return_code == 0)
+		{
+			CLI_Help();
+			exit(EXIT_CODE_SUCCESS); //displaying Help always quits program
+		}
+		return_code = strcmp(arg+1, "A"); //find if Account number is called
+		if (return_code == 0)
+		{
+			i++;
+			strcpy(Account, argv[i]);
+		}
+	}
+}
+
+
+void CLI_Help()
+{
+	cout << setw(40) << std::right << "Bank Account Database Help\n\n";
+#ifdef WIN32
+	cout << setw(5) << std::left << "/?" << "Shows this help menu.\n";
+	cout << setw(5) << "/A" << "Sets the account number to use.\n";
+	cout << setw(5) << "/D" << "The name of the database file to open.\n";
+	cout << setw(5) << "/F" << "Set the First Name.\n";
+	cout << setw(5) << "/H" << "Sets the Phone Number.\n";
+	cout << setw(5) << "/I" << "Unknown.\n";
+
+#else
+
+#endif
+}
+
+
+/* ----------------------------------------------------------------------------===Menuoptions==========================================================================================================================
  FUNCTION:          File_IO(char *Filename)
  DESCRIPTION:       asks about new or saved file
  RETURNS:           int of choice
@@ -166,8 +204,6 @@ int Main_Menu(int *pchoice)
     cout << "Add Account to database\n";
     cout << std::setw(3) << "2.";
     cout << "Remove account from database\n";
-//    cout << std::setw(3) << "3.";
-//    cout << "Display database\n";
     cout << std::setw(3) << "3.";
     cout << "Print report file\n";
     cout << std::setw(20) << std::right << endl << "Account Options\n" << "--|-----------------------\n";
@@ -194,7 +230,7 @@ int Main_Menu(int *pchoice)
     return *pchoice; //sends the menu choice up to main for switch statement
 }
 
-/* -----------------------------------------------------------------------------===File IO=================================================================================================================================
+/* -----------------------------------------------------------------------------===File IO=============================================================================================================================
  FUNCTION:          Create_File(char *Filename)
  DESCRIPTION:       Creates a file with user defined name
  RETURNS:           void function
@@ -270,7 +306,7 @@ void Open_File(char *Filename, fstream *file)
     (*file).close();
 }
 
-/* -----------------------------------------------------------------------------===Management options======================================================================================================================
+/* -----------------------------------------------------------------------------===Management options==================================================================================================================
  FUNCTION:          Set_Info()
  DESCRIPTION:       Adds data to the class
  RETURNS:           void function
@@ -484,7 +520,7 @@ void Print_File(char *Filename, fstream *file)
 	cout << "Printed report file\n";
 }
 
-/* -----------------------------------------------------------------------------===Account options=========================================================================================================================
+/* -----------------------------------------------------------------------------===Account options=====================================================================================================================
  FUNCTION:          void Funds_Transfer(char *Filename)
  DESCRIPTION:       moves funds from one account to the other.
  RETURNS:           void function
