@@ -96,48 +96,48 @@ int main(int argc, char * argv[])
 void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile)
 {
 	//vars for functions
-	char *FirstName;
-	char *LastName;
+	char FirstName[21];
+	char LastName[21];
 	char MI;
-	char *SSN;
+	char SSN[10];
 	char *PhoneArea;
 	char *Phone;
 	float *Balance;
-	char *Account;
+	char Account[6];
 	char *Password;
 
 	//true false checks
-
+	bool Bphonearea = false;
+	bool Bfilename = false;
 
 	//find cli vars
-	for (int i = 0; i < argc; i++)
+	for (int i = 1; i < argc; i++)
 	{
 		char *arg = argv[i]; //set the next argument in line to be tested
-#ifdef WIN32 //will only run on windows
+
 		if (arg[0] != '/')
 		{
 			CLI_Help();
 			exit (EXIT_CODE_NO_SELECTION);
 		}
-#else  // every other OS runs this
-		if (arg[0] != '-')
-		{
-			CLI_Help();
-			exit (EXIT_CODE_NO_SELECTION);
-		}
-#endif
-		int return_code; //for string compare
-		return_code = strcmp(arg+1, "?"); //find if help is called
-		if (return_code == 0)
+		if (strcmp(&arg[1], "?") == 0)//find if help is called
 		{
 			CLI_Help();
 			exit(EXIT_CODE_SUCCESS); //displaying Help always quits program
 		}
-		return_code = strcmp(arg+1, "A"); //find if Account number is called
-		if (return_code == 0)
+		if (strncmp(arg+1, "A", 1) == 0) //find if phone number area code is called
 		{
-			i++;
-			strcpy(Account, argv[i]);
+			strncpy(Account, &arg[2], 5);
+			if(sizeof(Account) != 6) //5+1 for null
+				break;
+			Bphonearea = true;
+		}
+		if (strncmp(arg+1, "D", 1) == 0)//find if database file is called
+		{
+			strncpy(Filename, &arg[2], sizeof(arg)-1);
+			if(!(sizeof(Filename) > 1))
+				break;
+			Bfilename = true;
 		}
 	}
 }
@@ -146,17 +146,20 @@ void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile)
 void CLI_Help()
 {
 	cout << setw(40) << std::right << "Bank Account Database Help\n\n";
-#ifdef WIN32
 	cout << setw(5) << std::left << "/?" << "Shows this help menu.\n";
-	cout << setw(5) << "/A" << "Sets the account number to use.\n";
+	cout << setw(5) << "/A" << "Sets the phone number area code.\n";
 	cout << setw(5) << "/D" << "The name of the database file to open.\n";
 	cout << setw(5) << "/F" << "Set the First Name.\n";
 	cout << setw(5) << "/H" << "Sets the Phone Number.\n";
-	cout << setw(5) << "/I" << "Unknown.\n";
-
-#else
-
-#endif
+	cout << setw(5) << "/I" << "give information to user.\n";
+	cout << setw(5) << "/L" << "Sets the Last Name.\n";
+	cout << setw(5) << "/M" << "Sets Middle Inital.\n";
+	cout << setw(5) << "/N" << "Account number.\n";
+	cout << setw(5) << "/P" << "Account Password.\n";
+	cout << setw(5) << "/R" << "Some other filename.\n";
+	cout << setw(5) << "/S" << "Social Security Number.\n";
+	cout << setw(5) << "/T" << "Amount ???.\n";
+	cout << setw(5) << "/W" << "Sets the new password for the account.\n";
 }
 
 
