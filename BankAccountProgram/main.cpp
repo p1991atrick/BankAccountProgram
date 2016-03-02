@@ -109,6 +109,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile)
 	//true false checks
 	bool Bphonearea = false;
 	bool Bfilename = false;
+	bool BFirstName = false;
 
 	//find cli vars
 	for (int i = 1; i < argc; i++)
@@ -120,24 +121,31 @@ void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile)
 			CLI_Help();
 			exit (EXIT_CODE_NO_SELECTION);
 		}
-		if (strcmp(&arg[1], "?") == 0)//find if help is called
+		if (strcmp(arg+1, "?") == 0)//find if help is called
 		{
 			CLI_Help();
 			exit(EXIT_CODE_SUCCESS); //displaying Help always quits program
 		}
 		if (strncmp(arg+1, "A", 1) == 0) //find if phone number area code is called
 		{
-			strncpy(Account, &arg[2], 5);
+			strncpy(Account, arg+2, 5);
 			if(sizeof(Account) != 6) //5+1 for null
 				break;
 			Bphonearea = true;
 		}
 		if (strncmp(arg+1, "D", 1) == 0)//find if database file is called
 		{
-			strncpy(Filename, &arg[2], sizeof(arg)-1);
+			strncpy(Filename, arg+2, sizeof(arg)-1);
 			if(!(sizeof(Filename) > 1))
 				break;
 			Bfilename = true;
+		}
+		if (strncmp(arg+1, "F", 1) == 0)//find if first name is called
+		{
+			strncpy(FirstName, arg+2, sizeof(arg)-1);
+			if(!(sizeof(Filename) > 1))
+				break;
+			BFirstName = true;
 		}
 	}
 }
