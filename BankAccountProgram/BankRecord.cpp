@@ -131,6 +131,8 @@ void database::Set_FName(char * f)
  ----------------------------------------------------------------------------- */
 void database::Set_MI(char M)
 {
+	if (islower(M) == true)
+		M = toupper(M);
     MI = M;
 }
 

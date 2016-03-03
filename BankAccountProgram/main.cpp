@@ -38,6 +38,7 @@
 #include <cstdlib>
 #include <cstring>
 #include "BankRecord.h"
+#include "CLI_Bool.h"
 
 //namespace callouts
 using std::cout;
@@ -51,8 +52,9 @@ using std::setw;
 //menu
     void File_IO(char *, fstream *);
     int Main_Menu(int *);
-	void CLI_Args(int, char *argv[], char *, fstream *);
+	void CLI_Args(int, char *argv[], char *, fstream *, database *, CLI *);
 	void CLI_Help();
+	void CLI_Sort(bool *, bool *, bool *,bool *, bool *, bool *);
 //file IO
     void Create_File(char *, fstream *);
     void Open_File(char *, fstream *);
@@ -82,44 +84,30 @@ int main(int argc, char * argv[])
 {
     char Filename[41] = "a"; //create and initialize Filename with 'a'
     fstream databasefile; //for database file
+	database *CLI_Record = new database;	//for getting CLI arg's
+	CLI *bools = new CLI;	//for the true/false bool checks
 
 	if (argc < 2)
 	{
 		CLI_Help();
 		exit (EXIT_CODE_NO_SELECTION);
 	}
-	CLI_Args(argc, argv, Filename, &databasefile);
+	CLI_Args(argc, argv, Filename, &databasefile, CLI_Record, bools);
 
 	return EXIT_CODE_SUCCESS;
 }
 
-void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile)
+void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile, database *CLI_Record, CLI *bools)
 {
-	//vars for functions
-	char FirstName[21];
-	char LastName[21];
-	char MI;
-	char SSN[10];
-	char *PhoneArea;
-	char *Phone;
-	float *Balance;
-	char Account[6];
-	char *Password;
-
-	//true false checks
-	bool Bphonearea = false;
-	bool Bfilename = false;
-	bool BFirstName = false;
-
 	//find cli vars
 	for (int i = 1; i < argc; i++)
 	{
 		char *arg = argv[i]; //set the next argument in line to be tested
 
-		if (arg[0] != '/')
+		if (arg[0] != '/') //verifies that the initilize arg was called
 		{
 			CLI_Help();
-			exit (EXIT_CODE_NO_SELECTION);
+			exit (EXIT_CODE_CLI_ERROR);
 		}
 		if (strcmp(arg+1, "?") == 0)//find if help is called
 		{
@@ -128,25 +116,50 @@ void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile)
 		}
 		if (strncmp(arg+1, "A", 1) == 0) //find if phone number area code is called
 		{
-			strncpy(Account, arg+2, 5);
-			if(sizeof(Account) != 6) //5+1 for null
-				break;
-			Bphonearea = true;
+			if(strlen(arg+2) == 4) //lenght of the area code passed in, if not 3 fail
+			{
+				CLI_Record->Set_PhoneArea(arg+2);
+				bools->phonearea = true;
+			}
+			cout << "Area code for phone number is not given, or not enough numbers.\n";
+			exit(EXIT_CODE_CLI_ERROR);
 		}
 		if (strncmp(arg+1, "D", 1) == 0)//find if database file is called
 		{
-			strncpy(Filename, arg+2, sizeof(arg)-1);
-			if(!(sizeof(Filename) > 1))
-				break;
-			Bfilename = true;
+			strncpy(Filename, arg+2, strlen(arg));
+			if(!(sizeof(Filename) > 1)) // if string is not greater then 1 == fail
+				exit(EXIT_CODE_CLI_ERROR);
+			bools->filename = true;
 		}
 		if (strncmp(arg+1, "F", 1) == 0)//find if first name is called
 		{
-			strncpy(FirstName, arg+2, sizeof(arg)-1);
-			if(!(sizeof(Filename) > 1))
-				break;
+			if (strlen(arg+2) >1)
+			{
+				CLI_Record->Set_FName(arg+2);
+				bools->firstName = true;
+			}
+
 			BFirstName = true;
 		}
+		if (strncmp(arg+1, "H", 1) == 0)//find if Phone Number is called
+		{
+			strncpy(Phone, arg+2, sizeof(arg)-1);
+			if(!(sizeof(Phone) > 1)) // if the name is not greater then 1, then fail
+				break;
+			Bphonenumber = true;
+		}
+		if (strncmp(arg+1, "I", 1) == 0)// print info to screen
+		{
+			Binfo = true;
+		}
+		if (strncmp(arg+1, "L", 1) == 0)//find if Last Name is called
+		{
+			strncpy(LastName, arg+2, sizeof(arg)-1);
+			if(!(sizeof(LastName) > 1)) // if the name is not greater then 1, then fail
+				break;
+			Blastname = true;
+		}
+
 	}
 }
 

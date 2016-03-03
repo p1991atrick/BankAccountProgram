@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CD3B6BC21C61A4CE0052A835 /* BankRecord.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */; };
+		CD870CF41C88F0F00052A835 /* CLI_Bool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD870CF21C88F0F00052A835 /* CLI_Bool.cpp */; };
 		CD9577B61C5EB95C0052A835 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD9577B51C5EB95C0052A835 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -26,6 +27,8 @@
 /* Begin PBXFileReference section */
 		CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BankRecord.cpp; sourceTree = "<group>"; };
 		CD3B6BC11C61A4CE0052A835 /* BankRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankRecord.h; sourceTree = "<group>"; };
+		CD870CF21C88F0F00052A835 /* CLI_Bool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CLI_Bool.cpp; sourceTree = "<group>"; };
+		CD870CF31C88F0F00052A835 /* CLI_Bool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLI_Bool.h; sourceTree = "<group>"; };
 		CD9577B21C5EB95C0052A835 /* BankAccountProgram */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BankAccountProgram; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD9577B51C5EB95C0052A835 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		CD9577BD1C5EBBB50052A835 /* My_Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = My_Macros.h; sourceTree = "<group>"; };
@@ -67,6 +70,8 @@
 				CD9577B51C5EB95C0052A835 /* main.cpp */,
 				CD3B6BC11C61A4CE0052A835 /* BankRecord.h */,
 				CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */,
+				CD870CF31C88F0F00052A835 /* CLI_Bool.h */,
+				CD870CF21C88F0F00052A835 /* CLI_Bool.cpp */,
 			);
 			path = BankAccountProgram;
 			sourceTree = "<group>";
@@ -129,6 +134,7 @@
 			files = (
 				CD3B6BC21C61A4CE0052A835 /* BankRecord.cpp in Sources */,
 				CD9577B61C5EB95C0052A835 /* main.cpp in Sources */,
+				CD870CF41C88F0F00052A835 /* CLI_Bool.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
