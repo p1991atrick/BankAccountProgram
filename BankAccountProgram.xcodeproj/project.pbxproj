@@ -29,6 +29,7 @@
 		CD3B6BC11C61A4CE0052A835 /* BankRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankRecord.h; sourceTree = "<group>"; };
 		CD870CF21C88F0F00052A835 /* CLI_Bool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CLI_Bool.cpp; sourceTree = "<group>"; };
 		CD870CF31C88F0F00052A835 /* CLI_Bool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLI_Bool.h; sourceTree = "<group>"; };
+		CD9386C81C8A47A40052A835 /* CS202P1Test.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = CS202P1Test.sh; path = BankAccountProgram/CS202P1Test.sh; sourceTree = "<group>"; };
 		CD9577B21C5EB95C0052A835 /* BankAccountProgram */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BankAccountProgram; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD9577B51C5EB95C0052A835 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		CD9577BD1C5EBBB50052A835 /* My_Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = My_Macros.h; sourceTree = "<group>"; };
@@ -50,6 +51,7 @@
 			isa = PBXGroup;
 			children = (
 				CD9577BE1C5EC6720052A835 /* makefile */,
+				CD9386C81C8A47A40052A835 /* CS202P1Test.sh */,
 				CD9577B41C5EB95C0052A835 /* BankAccountProgram */,
 				CD9577B31C5EB95C0052A835 /* Products */,
 			);
