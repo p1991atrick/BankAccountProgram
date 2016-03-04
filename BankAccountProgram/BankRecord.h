@@ -77,11 +77,11 @@ public:
     //get var functions//
     char* Get_LName();
     char* Get_FName();
-    char Get_MI();
+    char Get_MI() const;
     char * Get_SSN();
     char * Get_PhoneArea();
     char * Get_Phone();
-    float Get_Balance();
+    float Get_Balance() const;
     char* Get_Account();
     char* Get_PassWd();
 	char* Get_NewPasswd();

@@ -265,7 +265,7 @@ char* database::Get_FName()
  RETURNS:           char *
  NOTES:
  ----------------------------------------------------------------------------- */
-char database::Get_MI()
+char database::Get_MI() const
 {
     return MI;
 }
@@ -309,7 +309,7 @@ char* database::Get_Phone()
  RETURNS:           float
  NOTES:
  ----------------------------------------------------------------------------- */
-float database::Get_Balance()
+float database::Get_Balance() const
 {
     return Balance;
 }
