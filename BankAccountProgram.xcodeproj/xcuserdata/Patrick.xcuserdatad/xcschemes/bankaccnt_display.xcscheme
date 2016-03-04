@@ -63,7 +63,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/DTest.db"
+            argument = "/I"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/V"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -71,11 +75,11 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/PPOIU03"
+            argument = "/DTest.db"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/I"
+            argument = "/PPOIU03"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

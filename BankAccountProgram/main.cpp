@@ -50,8 +50,6 @@ using std::setw;
 
 // Function Prototyes
 //menu
-    void File_IO(char *, fstream *);
-    int Main_Menu(int *);
 	void CLI_Args(int, char *argv[], char *, char *, fstream *, database *, CLI *);
 	void CLI_Help();
 	void CLI_Sort(CLI *, database *, fstream *, char *, char *);
@@ -73,6 +71,15 @@ using std::setw;
     void File_Recopy(fstream *, fstream *);
     void Class_Load(fstream *, database *);
 
+//verbose define
+int threshold = 4;
+class mystreambuf: public std::streambuf
+{
+};
+mystreambuf nostreambuf;
+std::ostream nocout(&nostreambuf);
+#define log(x) ((x >= threshold)? std::cout : nocout)
+
 
 /* -----------------------------------------------------------------------------
  FUNCTION NAME:     main()
@@ -86,7 +93,7 @@ int main(int argc, char * argv[])
     fstream databasefile; //for database file
 	database *CLI_Record = new database;	//for getting CLI arg's
 	CLI *bools = new CLI;	//for the true/false bool checks
-
+	log(3) << "Verbose Test\n";
 	if (argc < 2)
 	{
 		CLI_Help();
@@ -128,7 +135,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "Area code for phone number is not given, or not enough numbers.\n";
+				log(5) << "Area code for phone number is not given, or not enough numbers.\n";
 				exit(EXIT_CODE_CLI_ERROR);
 			}
 		}
@@ -148,7 +155,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "Invalid name given.\n";
+				log(5) << "Invalid name given.\n";
 				exit(EXIT_CODE_CLI_ERROR+2);
 			}
 		}
@@ -161,7 +168,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "Invalid phone number given.\n";
+				log(5) << "Invalid phone number given.\n";
 				exit(EXIT_CODE_CLI_ERROR+3);
 			}
 
@@ -179,7 +186,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "No vaild last name found.\n";
+				log(5) << "No vaild last name found.\n";
 				exit(EXIT_CODE_CLI_ERROR+4);
 			}
 		}
@@ -194,13 +201,13 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 				}
 				else
 				{
-					cout << "No valid Middle initial given.\n";
+					log(5) << "No valid Middle initial given.\n";
 					exit(EXIT_CODE_CLI_ERROR+5);
 				}
 			}
 			else
 			{
-				cout << "No valid Middle initial given.\n";
+				log(5) << "No valid Middle initial given.\n";
 				exit(EXIT_CODE_CLI_ERROR+5);
 			}
 		}
@@ -213,7 +220,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "No vaild account number given.\n";
+				log(5) << "No vaild account number given.\n";
 				exit(EXIT_CODE_CLI_ERROR+6);
 			}
 		}
@@ -226,7 +233,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "No vaild password given.\n";
+				log(5) << "No vaild password given.\n";
 				exit(EXIT_CODE_CLI_ERROR+7);
 			}
 		}
@@ -244,7 +251,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "No valid report name given.\n";
+				log(5) << "No valid report name given.\n";
 				exit(EXIT_CODE_CLI_ERROR+8);	//this should never be able to run
 			}
 		}
@@ -257,7 +264,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "No valid SSN given.\n";
+				log(5) << "No valid SSN given.\n";
 				exit(EXIT_CODE_CLI_ERROR+9);
 			}
 		}
@@ -271,7 +278,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "No valid balance given.\n";
+				log(5) << "No valid balance given.\n";
 				exit(EXIT_CODE_CLI_ERROR+10);
 			}
 		}
@@ -284,14 +291,13 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 			}
 			else
 			{
-				cout << "No valid new password given.\n";
+				log(5) << "No valid new password given.\n";
 				exit(EXIT_CODE_CLI_ERROR+11);
 			}
 		}
 		if (strncmp(arg+1, "V", 1) == 0)
 		{
-			#undef TRACE
-			#define TRACE 1
+			threshold = 3;
 		}
 	}
 }
@@ -304,22 +310,22 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
  ----------------------------------------------------------------------------- */
 void CLI_Help()
 {
-	cout << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
-	cout << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//--
-	cout << setw(5) << "/A" << "Sets the phone number area code.\n";		//20
-	cout << setw(5) << "/D" << "The name of the database file to open.\n";	//21
-	cout << setw(5) << "/F" << "Set the First Name.\n";						//22
-	cout << setw(5) << "/H" << "Sets the Phone Number.\n";					//23
-	cout << setw(5) << "/I" << "give information to user.\n";				//--
-	cout << setw(5) << "/L" << "Sets the Last Name.\n";						//24
-	cout << setw(5) << "/M" << "Sets Middle Inital.\n";						//25
-	cout << setw(5) << "/N" << "Account number.\n";							//26
-	cout << setw(5) << "/P" << "Account Password.\n";						//27
-	cout << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28
-	cout << setw(5) << "/S" << "Social Security Number.\n";					//29
-	cout << setw(5) << "/T" << "Amount ???.\n";								//30
-	cout << setw(5) << "/W" << "Sets the new password for the account.\n";	//31
-	cout << setw(5) << "/V" << "turns on verbose level 1.\n";				//32
+	log(5) << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
+	log(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//--
+	log(5) << setw(5) << "/A" << "Sets the phone number area code.\n";			//20
+	log(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21
+	log(5) << setw(5) << "/F" << "Set the First Name.\n";						//22
+	log(5) << setw(5) << "/H" << "Sets the Phone Number.\n";					//23
+	log(5) << setw(5) << "/I" << "give information to user.\n";					//--
+	log(5) << setw(5) << "/L" << "Sets the Last Name.\n";						//24
+	log(5) << setw(5) << "/M" << "Sets Middle Inital.\n";						//25
+	log(5) << setw(5) << "/N" << "Account number.\n";							//26
+	log(5) << setw(5) << "/P" << "Account Password.\n";							//27
+	log(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28
+	log(5) << setw(5) << "/S" << "Social Security Number.\n";					//29
+	log(5) << setw(5) << "/T" << "Amount ???.\n";								//30
+	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31
+	log(5) << setw(5) << "/V" << "turns on verbose mode.\n";					//32
 }
 
 /* -----------------------------------------------------------------------------
@@ -330,80 +336,13 @@ void CLI_Help()
  ----------------------------------------------------------------------------- */
 void CLI_Sort(CLI * bools, database * CLI_Record, fstream * databasefile, char *Filename, char *Reportname)
 {
+	Open_File(Filename, databasefile); //all functions require that this file is opened.
 	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
 	{
 		Display_Database(Filename, databasefile, CLI_Record);
 	}
 }
 
-/* ----------------------------------------------------------------------------===Menuoptions==========================================================================================================================
- FUNCTION:          File_IO(char *Filename)
- DESCRIPTION:       asks about new or saved file
- RETURNS:           int of choice
- NOTES:
- ----------------------------------------------------------------------------- */
-void File_IO(char *Filename, fstream *file)
-{
-	cout << std::setw(30) << std::right << "\nBank Account Database\n";
-    cout << "1. Create Database File\n"; //sub menu lines
-    cout << "2. Open Database File\n";
-    int choice;
-    cout << "Enter Choice: ";
-    cin >> choice;
-    while (choice < 1 || choice > 2) //verify that 1 or 2 has been entered, future proof
-    {
-        cout << "You must pick a valid choice\nEnter Choice: ";
-        cin >> choice;
-    }
-    if (choice == 1)
-    {
-        Create_File(Filename, file);
-    }
-    else
-    {
-        Open_File(Filename, file);
-    }
-}
-
-/* -----------------------------------------------------------------------------
- FUNCTION:          menu()
- DESCRIPTION:       displays options and lets user choose
- RETURNS:           int of choice
- NOTES:
- ----------------------------------------------------------------------------- */
-int Main_Menu(int *pchoice)
-{
-    cout << std::setw(45) << std::right << "\nBank Account Database\n\n";
-    cout << std::setw(22) << "Management Options\n" << "--|-----------------------\n";
-    cout << std::setw(3) << std::left << "1.";
-    cout << "Add Account to database\n";
-    cout << std::setw(3) << "2.";
-    cout << "Remove account from database\n";
-    cout << std::setw(3) << "3.";
-    cout << "Print report file\n";
-    cout << std::setw(20) << std::right << endl << "Account Options\n" << "--|-----------------------\n";
-    cout << std::setw(3) << std::left << "4.";
-    cout << "Transfer funds between accounts\n";
-    cout << std::setw(3) << "5.";
-    cout << "Add funds to an account\n";
-    cout << std::setw(3) << "6.";
-    cout << "Remove funds from an account\n";
-
-    //escape option
-    cout << endl;
-    cout << std::setw(3) << "7.";
-    cout << "Exit\n";
-
-    cout << "\nWhat is your Choice: ";
-    cin >> *pchoice;
-    while (*pchoice < 1 || *pchoice > 8 || *pchoice == 99) //verifies that an valid option has been selected
-    {
-        cout << "\n Not A valid choice.\nPlease pick from the list above.\nWhat is your Choice: ";
-        cin >> *pchoice;
-    }
-	CLEAR_SCREEN;
-    return *pchoice; //sends the menu choice up to main for switch statement
-}
 
 /* -----------------------------------------------------------------------------===File IO=============================================================================================================================
  FUNCTION:          Create_File(char *Filename)
@@ -413,7 +352,7 @@ int Main_Menu(int *pchoice)
  ----------------------------------------------------------------------------- */
 void Create_File(char *Filename, fstream *file)
 {
-    cout << "What should the database be called: ";
+    log(5) << "What should the database be called: ";
     cin >> Filename;
     if (strstr(Filename, ".db") == 0) //if file name doesn't end with .db, add it
     {
@@ -422,30 +361,30 @@ void Create_File(char *Filename, fstream *file)
     (*file).open(Filename, ios::in); //open for in ops
     if ((*file).fail())
     { //if not already there, build
-        cout << "Creating database file called \"" << Filename << "\"\n";
+        log(5) << "Creating database file called \"" << Filename << "\"\n";
         (*file).close();
         (*file).open(Filename, ios::out | ios::trunc);
-        cout << "Enter the first record into the database.\n\n";
+        log(5) << "Enter the first record into the database.\n\n";
         file->close();
         Set_Info(Filename, file);
     }
     else
     { //if exists ask to open or replace
         (*file).close();
-        cout << "The database with name \"" << Filename << "\" exists, Would you like to overwrite it? (y/N) \n";
+        log(5) << "The database with name \"" << Filename << "\" exists, Would you like to overwrite it? (y/N) \n";
         char yesno = 'N';
         cin >> yesno;
         if (yesno == 'y' || yesno == 'Y') //if told to overwrie file
         {
             (*file).open(Filename, ios::out | ios::trunc);
-            cout << "Creating database file called \"" << Filename << "\"\n";
+            log(5) << "Creating database file called \"" << Filename << "\"\n";
             file->close();
-            cout << "Enter the first record into the database.\n\n";
+            log(5) << "Enter the first record into the database.\n\n";
             Set_Info(Filename, file);
         }
         else //anything else opens the file
         {
-            cout << "Opening File" << Filename << ".";
+            log(5) << "Opening File" << Filename << ".";
             (*file).open(Filename, ios::out | ios::app);
         }
     }
@@ -460,8 +399,6 @@ void Create_File(char *Filename, fstream *file)
  ----------------------------------------------------------------------------- */
 void Open_File(char *Filename, fstream *file)
 {
-    cout << "What is the name of the current database file: ";
-    cin >> Filename;
     if (strstr(Filename, ".db") == 0) //if name given does't have .db , append it to the end
     {
         strncat(Filename, ".db", 3);
@@ -469,13 +406,13 @@ void Open_File(char *Filename, fstream *file)
     (*file).open(Filename, ios::in);
     if ((*file).fail()) //checks if file was found
     {
-        cout << "File Not Found\nExiting\n";
-        exit(EXIT_CODE_FILE_IO);    //exits program if file not found
+        log(3) << "File Not Found\nExiting\n";
+		exit(EXIT_CODE_FILE_IO);    //exits program if file not found
     }
     else
     {
         (*file).close();
-        cout << Filename << " Opened Sucsessfuly\n\n";
+        log(3) << Filename << " Opened Sucsessfuly\n\n";
         (*file).open(Filename, ios::out | ios::app);
     }
     (*file).close();
@@ -490,7 +427,7 @@ void Open_File(char *Filename, fstream *file)
 void Set_Info(char *Filename, fstream *file)
 {
 #if TRACE
-    cout << "In Set_Info\n";
+    log(3) << "In Set_Info\n";
 #endif
     //set first name
     cout << std::setw(25) << std::right << "Enter First Name: ";
