@@ -19,8 +19,8 @@ PROGRAM_NAME=bankacct
 FILE1=main
 FILE2=BankRecord
 FILE3=CLI_Bool
-#FILE4=
-#FILE5=
+FILE4=
+FILE5=
 
 
 .PHONY: build link clean all
