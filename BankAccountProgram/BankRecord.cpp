@@ -216,6 +216,25 @@ void database::Set_PassWD(char * pass)
     }
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION:          database::Set_NewPasswd(char * pass)
+ DESCRIPTION:       resets the password to the new value
+ RETURNS:           void funtion
+ NOTES:             contains overflow verification
+ ----------------------------------------------------------------------------- */
+void database::Set_NewPasswd(char * pass)
+{
+	strncpy(NewPasswd, pass, 6);
+	for (int n = 0; n < 6; n++) //forces all alpha char's to upper case
+	{
+		if ((isalpha(NewPasswd[n]) == 0) && (islower(NewPasswd[n] == 0)))
+		{
+			NewPasswd[n] = toupper(NewPasswd[n]);
+		}
+	}
+}
+
+
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
 /* -----------------------------------------------------------------------------
@@ -316,3 +335,16 @@ char* database::Get_PassWd()
 {
     return PassWd;
 }
+
+/* -----------------------------------------------------------------------------
+ FUNCTION:          char* database::Get_NewPasswd()
+ DESCRIPTION:       returns the account password
+ RETURNS:           char *
+ NOTES:
+ ----------------------------------------------------------------------------- */
+char* database::Get_NewPasswd()
+{
+	return NewPasswd;
+}
+
+
