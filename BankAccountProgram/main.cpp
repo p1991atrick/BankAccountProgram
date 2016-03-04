@@ -52,7 +52,7 @@ using std::setw;
 //menu
     void File_IO(char *, fstream *);
     int Main_Menu(int *);
-	void CLI_Args(int, char *argv[], char *, fstream *, database *, CLI *);
+	void CLI_Args(int, char *argv[], char *, char *, fstream *, database *, CLI *);
 	void CLI_Help();
 	void CLI_Sort(bool *, bool *, bool *,bool *, bool *, bool *);
 //file IO
@@ -82,7 +82,7 @@ using std::setw;
  ----------------------------------------------------------------------------- */
 int main(int argc, char * argv[])
 {
-    char Filename[41] = "a"; //create and initialize Filename with 'a'
+    char Filename[41] = "a"; char Reportname[41] = "a"; //create and initialize Filenames with 'a'
     fstream databasefile; //for database file
 	database *CLI_Record = new database;	//for getting CLI arg's
 	CLI *bools = new CLI;	//for the true/false bool checks
@@ -92,12 +92,12 @@ int main(int argc, char * argv[])
 		CLI_Help();
 		exit (EXIT_CODE_NO_SELECTION);
 	}
-	CLI_Args(argc, argv, Filename, &databasefile, CLI_Record, bools);
+	CLI_Args(argc, argv, Filename, Reportname, &databasefile, CLI_Record, bools);
 
 	return EXIT_CODE_SUCCESS;
 }
 
-void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile, database *CLI_Record, CLI *bools)
+void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream *databasefile, database *CLI_Record, CLI *bools)
 {
 	//find cli vars
 	for (int i = 1; i < argc; i++)
@@ -116,19 +116,22 @@ void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile, dat
 		}
 		if (strncmp(arg+1, "A", 1) == 0) //find if phone number area code is called
 		{
-			if(strlen(arg+2) == 4) //lenght of the area code passed in, if not 3 fail
+			if(strlen(arg+2) == 3) //lenght of the area code passed in, if not 3 fail
 			{
 				CLI_Record->Set_PhoneArea(arg+2);
 				bools->phonearea = true;
 			}
-			cout << "Area code for phone number is not given, or not enough numbers.\n";
-			exit(EXIT_CODE_CLI_ERROR);
+			else
+			{
+				cout << "Area code for phone number is not given, or not enough numbers.\n";
+				exit(EXIT_CODE_CLI_ERROR);
+			}
 		}
 		if (strncmp(arg+1, "D", 1) == 0)//find if database file is called
 		{
 			strncpy(Filename, arg+2, strlen(arg));
 			if(!(sizeof(Filename) > 1)) // if string is not greater then 1 == fail
-				exit(EXIT_CODE_CLI_ERROR);
+				exit(EXIT_CODE_CLI_ERROR+1);
 			bools->filename = true;
 		}
 		if (strncmp(arg+1, "F", 1) == 0)//find if first name is called
@@ -138,49 +141,169 @@ void CLI_Args(int argc, char *argv[], char *Filename, fstream *databasefile, dat
 				CLI_Record->Set_FName(arg+2);
 				bools->firstName = true;
 			}
-
-			BFirstName = true;
+			else
+			{
+				cout << "Invalid name given.\n";
+				exit(EXIT_CODE_CLI_ERROR+2);
+			}
 		}
 		if (strncmp(arg+1, "H", 1) == 0)//find if Phone Number is called
 		{
-			strncpy(Phone, arg+2, sizeof(arg)-1);
-			if(!(sizeof(Phone) > 1)) // if the name is not greater then 1, then fail
-				break;
-			Bphonenumber = true;
+			if(strlen(arg+2) == 7)
+			{
+				CLI_Record->Set_Phone(arg+2);
+				bools->phonenumber = true;
+			}
+			else
+			{
+				cout << "Invalid phone number given.\n";
+				exit(EXIT_CODE_CLI_ERROR+3);
+			}
+
 		}
 		if (strncmp(arg+1, "I", 1) == 0)// print info to screen
 		{
-			Binfo = true;
+			bools->info = true;
 		}
 		if (strncmp(arg+1, "L", 1) == 0)//find if Last Name is called
 		{
-			strncpy(LastName, arg+2, sizeof(arg)-1);
-			if(!(sizeof(LastName) > 1)) // if the name is not greater then 1, then fail
-				break;
-			Blastname = true;
+			if (strlen(arg+2) >1)
+			{
+				CLI_Record->Set_LName(arg+2);
+				bools->lastname = true;
+			}
+			else
+			{
+				cout << "No vaild last name found.\n";
+				exit(EXIT_CODE_CLI_ERROR+4);
+			}
 		}
-
+		if (strncmp(arg+1, "M", 1) == 0)//find if Middle initial is called
+		{
+			if (strlen(arg+2) >= 1) //check for length
+			{
+				if (isalpha(*arg+2) == true) //check for letter
+				{
+					CLI_Record->Set_MI(char(*arg+2));
+					bools->middleinitial = true;
+				}
+				else
+				{
+					cout << "No valid Middle initial given.\n";
+					exit(EXIT_CODE_CLI_ERROR+5);
+				}
+			}
+			else
+			{
+				cout << "No valid Middle initial given.\n";
+				exit(EXIT_CODE_CLI_ERROR+5);
+			}
+		}
+		if (strncmp(arg+1, "N", 1) == 0)//find if account number is called
+		{
+			if (strlen(arg+2) == 5) //check for correct lenght
+			{
+				CLI_Record->Set_Account(arg+2);
+				bools->account = true;
+			}
+			else
+			{
+				cout << "No vaild account number given.\n";
+				exit(EXIT_CODE_CLI_ERROR+6);
+			}
+		}
+		if (strncmp(arg+1, "P", 1) == 0) // find if password is called
+		{
+			if (strlen(arg+2) == 6) //check for correct lenght
+			{
+				CLI_Record->Set_PassWD(arg+2);
+				bools->password = true;
+			}
+			else
+			{
+				cout << "No vaild password given.\n";
+				exit(EXIT_CODE_CLI_ERROR+7);
+			}
+		}
+		if (strncmp(arg+1, "R", 1) == 0) // find if report file is called
+		{
+			if (strlen(arg+2) == 0)
+			{
+				strncpy(Reportname, "BankAcct.Rpt", 13);
+				bools->reportfile = true;
+			}
+			else if (strlen(arg+2) >= 1)
+			{
+				strncpy(Reportname, (arg+2), strlen(arg+2));
+				bools->reportfile = true;
+			}
+			else
+			{
+				cout << "No valid report name given.\n";
+				exit(EXIT_CODE_CLI_ERROR+8);	//this should never be able to run
+			}
+		}
+		if (strncmp(arg+1, "S", 1) == 0)
+		{
+			if (strlen(arg+2) == 9)
+			{
+				CLI_Record->Set_SSN(arg+2);
+				bools->ssn = true;
+			}
+			else
+			{
+				cout << "No valid SSN given.\n";
+				exit(EXIT_CODE_CLI_ERROR+9);
+			}
+		}
+		if (strncmp(arg+1, "T", 1) == 0)
+		{
+			if (strlen(arg+2) >= 1)
+			{
+				float num = atof(arg+2);
+				CLI_Record->Set_Balance(&num);
+				bools->balance = true;
+			}
+			else
+			{
+				cout << "No valid balance given.\n";
+				exit(EXIT_CODE_CLI_ERROR+10);
+			}
+		}
+		if (strncmp(arg+1, "W", 1) == 0)
+		{
+			if (strlen(arg+2) == 6)
+			{
+				CLI_Record->Set_NewPasswd(arg+2);
+				bools->newpassword = true;
+			}
+			else
+			{
+				cout << "No valid new password given.\n";
+				exit(EXIT_CODE_CLI_ERROR+11);
+			}
+		}
 	}
 }
 
 
 void CLI_Help()
 {
-	cout << setw(40) << std::right << "Bank Account Database Help\n\n";
-	cout << setw(5) << std::left << "/?" << "Shows this help menu.\n";
-	cout << setw(5) << "/A" << "Sets the phone number area code.\n";
-	cout << setw(5) << "/D" << "The name of the database file to open.\n";
-	cout << setw(5) << "/F" << "Set the First Name.\n";
-	cout << setw(5) << "/H" << "Sets the Phone Number.\n";
-	cout << setw(5) << "/I" << "give information to user.\n";
-	cout << setw(5) << "/L" << "Sets the Last Name.\n";
-	cout << setw(5) << "/M" << "Sets Middle Inital.\n";
-	cout << setw(5) << "/N" << "Account number.\n";
-	cout << setw(5) << "/P" << "Account Password.\n";
-	cout << setw(5) << "/R" << "Some other filename.\n";
-	cout << setw(5) << "/S" << "Social Security Number.\n";
-	cout << setw(5) << "/T" << "Amount ???.\n";
-	cout << setw(5) << "/W" << "Sets the new password for the account.\n";
+	cout << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's
+	cout << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//--
+	cout << setw(5) << "/A" << "Sets the phone number area code.\n";		//20
+	cout << setw(5) << "/D" << "The name of the database file to open.\n";	//21
+	cout << setw(5) << "/F" << "Set the First Name.\n";						//22
+	cout << setw(5) << "/H" << "Sets the Phone Number.\n";					//23
+	cout << setw(5) << "/I" << "give information to user.\n";				//--
+	cout << setw(5) << "/L" << "Sets the Last Name.\n";						//24
+	cout << setw(5) << "/M" << "Sets Middle Inital.\n";						//25
+	cout << setw(5) << "/N" << "Account number.\n";							//26
+	cout << setw(5) << "/P" << "Account Password.\n";						//27
+	cout << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28
+	cout << setw(5) << "/S" << "Social Security Number.\n";					//29
+	cout << setw(5) << "/T" << "Amount ???.\n";								//30
+	cout << setw(5) << "/W" << "Sets the new password for the account.\n";	//31
 }
 
 

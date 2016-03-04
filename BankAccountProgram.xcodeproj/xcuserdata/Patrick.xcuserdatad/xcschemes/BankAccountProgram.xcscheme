@@ -63,7 +63,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "/AAA001"
+            argument = "/A775"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
