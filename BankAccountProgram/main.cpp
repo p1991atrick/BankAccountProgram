@@ -32,7 +32,7 @@
  
  ----------------------------------------------------------------------------- */
 
-
+#include <vector>
 #include <fstream>
 #include <iomanip>
 #include <cstdlib>
@@ -47,18 +47,19 @@ using std::cin;
 using std::fstream;
 using std::ios;
 using std::setw;
+using std::vector;
 
 // Function Prototyes
 //menu
-	void CLI_Args(int, char *argv[], char *, char *, database *, CLI *);
+	void CLI_Args(int, char *argv[], char *, char *, CLI *);
 	void CLI_Help();
-	void CLI_Sort(CLI *, database *, fstream *, char *, char *);
+	void CLI_Sort(CLI *, fstream *, char *, char *);
 //file IO
     void Create_File(char *, fstream *);
-    void Open_File(char *, fstream *);
+    void Open_File(char *, fstream *, int *);
 //management
     void Set_Info(char *, fstream *);
-    void Display_Database(char *, fstream *, database *);
+    void Display_Database(CLI *, database *Report[], int *);
     void Delete_Account(char *, fstream *);
     void Print_File(char *, fstream *);
 //account
@@ -69,7 +70,7 @@ using std::setw;
     void Display_title();
     void File_Write(fstream *, database *);
     void File_Recopy(fstream *, fstream *);
-    void Class_Load(fstream *, database *);
+    void Class_Load(fstream *, database *Report[], int *);
 
 //verbose define
 int threshold = 4;
@@ -91,16 +92,14 @@ int main(int argc, char * argv[])
 {
     char Filename[41] = "a"; char Reportname[41] = "a"; //create and initialize Filenames with 'a'
     fstream databasefile; //for database file
-	database *CLI_Record = new database;	//for getting CLI arg's
-	CLI *bools = new CLI;	//for the true/false bool checks
-	log(3) << "Verbose Test\n";
+	CLI *bools = new CLI;	//for the true/false bool checks and CLI char*'s
 	if (argc < 2)
 	{
 		CLI_Help();
 		exit (EXIT_CODE_NO_SELECTION);
 	}
-	CLI_Args(argc, argv, Filename, Reportname, CLI_Record, bools);
-	CLI_Sort(bools, CLI_Record, &databasefile, Filename, Reportname);
+	CLI_Args(argc, argv, Filename, Reportname, bools);
+	CLI_Sort(bools, &databasefile, Filename, Reportname);
 	return EXIT_CODE_SUCCESS;
 }
 
@@ -110,7 +109,7 @@ int main(int argc, char * argv[])
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database *CLI_Record, CLI *bools)
+void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *bools)
 {//find cli vars
 	for (int i = 1; i < argc; i++)
 	{
@@ -119,7 +118,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		if (arg[0] != '/') //verifies that the initilize arg was called
 		{
 			CLI_Help();
-			exit (EXIT_CODE_CLI_ERROR);
+			exit (EXIT_CODE_CLI_ERROR+19);
 		}
 		if (strcmp(arg+1, "?") == 0)//find if help is called
 		{
@@ -130,12 +129,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		{
 			if(strlen(arg+2) == 3) //lenght of the area code passed in, if not 3 fail
 			{
-				CLI_Record->Set_PhoneArea(arg+2);
 				bools->phonearea = true;
+				bools->Set_PhoneArea(arg+2);
 			}
 			else
 			{
-				log(5) << "Area code for phone number is not given, or not enough numbers.\n";
+				log(3) << "No valid area code for phone number is not given, or not enough numbers.\n";
 				exit(EXIT_CODE_CLI_ERROR);
 			}
 		}
@@ -150,12 +149,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		{
 			if (strlen(arg+2) >1)
 			{
-				CLI_Record->Set_FName(arg+2);
+				bools->Set_FName(arg+2);
 				bools->firstName = true;
 			}
 			else
 			{
-				log(5) << "Invalid name given.\n";
+				log(3) << "No valid name given.\n";
 				exit(EXIT_CODE_CLI_ERROR+2);
 			}
 		}
@@ -163,12 +162,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		{
 			if(strlen(arg+2) == 7)
 			{
-				CLI_Record->Set_Phone(arg+2);
+				bools->Set_Phone(arg+2);
 				bools->phonenumber = true;
 			}
 			else
 			{
-				log(5) << "Invalid phone number given.\n";
+				log(3) << "No valid phone number given.\n";
 				exit(EXIT_CODE_CLI_ERROR+3);
 			}
 
@@ -181,33 +180,25 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		{
 			if (strlen(arg+2) >1)
 			{
-				CLI_Record->Set_LName(arg+2);
+				bools->Set_LName(arg+2);
 				bools->lastname = true;
 			}
 			else
 			{
-				log(5) << "No vaild last name found.\n";
+				log(3) << "No vaild last name given.\n";
 				exit(EXIT_CODE_CLI_ERROR+4);
 			}
 		}
 		if (strncmp(arg+1, "M", 1) == 0)//find if Middle initial is called
 		{
-			if (strlen(arg+2) >= 1) //check for length
+			if (strlen(arg+2) == 1 && isalpha(*arg+2)) //check for length
 			{
-				if (isalpha(*arg+2) == true) //check for letter
-				{
-					CLI_Record->Set_MI(char(*arg+2));
-					bools->middleinitial = true;
-				}
-				else
-				{
-					log(5) << "No valid Middle initial given.\n";
-					exit(EXIT_CODE_CLI_ERROR+5);
-				}
+				bools->Set_MI(char(*arg+2));
+				bools->middleinitial = true;
 			}
 			else
 			{
-				log(5) << "No valid Middle initial given.\n";
+				log(3) << "No valid Middle initial given.\n";
 				exit(EXIT_CODE_CLI_ERROR+5);
 			}
 		}
@@ -215,12 +206,20 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		{
 			if (strlen(arg+2) == 5) //check for correct lenght
 			{
-				CLI_Record->Set_Account(arg+2);
-				bools->account = true;
+				if (bools->account == false)
+				{
+					bools->Set_Account(arg+2);
+					bools->account = true;
+				}
+				else
+				{
+					bools->Set_sndAccount(arg+2);
+					bools->sndaccount = true;
+				}
 			}
 			else
 			{
-				log(5) << "No vaild account number given.\n";
+				log(3) << "No vaild account number given.\n";
 				exit(EXIT_CODE_CLI_ERROR+6);
 			}
 		}
@@ -228,12 +227,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		{
 			if (strlen(arg+2) == 6) //check for correct lenght
 			{
-				CLI_Record->Set_PassWD(arg+2);
+				bools->Set_PassWD(arg+2);
 				bools->password = true;
 			}
 			else
 			{
-				log(5) << "No vaild password given.\n";
+				log(3) << "No vaild password given.\n";
 				exit(EXIT_CODE_CLI_ERROR+7);
 			}
 		}
@@ -251,7 +250,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 			}
 			else
 			{
-				log(5) << "No valid report name given.\n";
+				log(3) << "No valid report name given.\n";
 				exit(EXIT_CODE_CLI_ERROR+8);	//this should never be able to run
 			}
 		}
@@ -259,12 +258,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		{
 			if (strlen(arg+2) == 9)
 			{
-				CLI_Record->Set_SSN(arg+2);
+				bools->Set_SSN(arg+2);
 				bools->ssn = true;
 			}
 			else
 			{
-				log(5) << "No valid SSN given.\n";
+				log(3) << "No valid SSN given.\n";
 				exit(EXIT_CODE_CLI_ERROR+9);
 			}
 		}
@@ -273,12 +272,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 			if (strlen(arg+2) >= 1)
 			{
 				float num = atof(arg+2);
-				CLI_Record->Set_Balance(&num);
+				bools->Set_Balance(&num);
 				bools->balance = true;
 			}
 			else
 			{
-				log(5) << "No valid balance given.\n";
+				log(3) << "No valid balance given.\n";
 				exit(EXIT_CODE_CLI_ERROR+10);
 			}
 		}
@@ -286,12 +285,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 		{
 			if (strlen(arg+2) == 6)
 			{
-				CLI_Record->Set_NewPasswd(arg+2);
+				bools->Set_NewPasswd(arg+2);
 				bools->newpassword = true;
 			}
 			else
 			{
-				log(5) << "No valid new password given.\n";
+				log(3) << "No valid new password given.\n";
 				exit(EXIT_CODE_CLI_ERROR+11);
 			}
 		}
@@ -311,7 +310,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database
 void CLI_Help()
 {
 	log(5) << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
-	log(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//--
+	log(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//39
 	log(5) << setw(5) << "/A" << "Sets the phone number area code.\n";			//20
 	log(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21
 	log(5) << setw(5) << "/F" << "Set the First Name.\n";						//22
@@ -334,12 +333,21 @@ void CLI_Help()
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void CLI_Sort(CLI * bools, database * CLI_Record, fstream * databasefile, char *Filename, char *Reportname)
+void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)
 {
-	Open_File(Filename, databasefile); //all functions require that this file is opened.
+	int num_of_records = 0, counter = 0;
+	Open_File(Filename, databasefile, &num_of_records); //all functions require that this file is opened.
+	counter = counter + num_of_records;
+	database *Report[counter];
+	databasefile->open(Filename, ios::in);
+	for (int n = 0; n<num_of_records; n++) {
+		*Report[n] = *new database;
+		Class_Load(databasefile, &Report[n], &num_of_records);
+	}
+	//Class_Load(databasefile, Records);
 	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
 	{
-		Display_Database(Filename, databasefile, CLI_Record);
+		Display_Database(bools, &Report[num_of_records], &num_of_records);
 	}
 }
 
@@ -397,7 +405,7 @@ void Create_File(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:             Creates file with record count of 0
  ----------------------------------------------------------------------------- */
-void Open_File(char *Filename, fstream *file)
+void Open_File(char *Filename, fstream *file, int *x)
 {
     if (strstr(Filename, ".db") == 0) //if name given does't have .db , append it to the end
     {
@@ -411,10 +419,12 @@ void Open_File(char *Filename, fstream *file)
     }
     else
     {
-        (*file).close();
         log(3) << Filename << " Opened Sucsessfuly\n\n";
-        (*file).open(Filename, ios::out | ios::app);
     }
+	(*file).close();
+	(*file).open(Filename, ios::in | ios::ate);
+	*x = int(file->tellg());
+	*x = (*x/56.875);
     (*file).close();
 }
 
@@ -426,9 +436,7 @@ void Open_File(char *Filename, fstream *file)
  ----------------------------------------------------------------------------- */
 void Set_Info(char *Filename, fstream *file)
 {
-#if TRACE
     log(3) << "In Set_Info\n";
-#endif
     //set first name
     cout << std::setw(25) << std::right << "Enter First Name: ";
     char  FNAME[21];
@@ -494,28 +502,24 @@ void Set_Info(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Display_Database(char * Filename, fstream *file, database *CLI_Record)
+void Display_Database(CLI *CLI_Record, database *Record[], int *n)
 {
-    (*file).open(Filename, ios::in);
     cout << std::setw(30) << std::right << "Current Bank Records\n\n";
 
     Display_title();//set up the header table
 
     //loop for amount of records
-    do{
-        database *Record = new database;
-        Class_Load(file, Record);
-			if (!strncmp(CLI_Record->Get_Account(), Record->Get_Account(), 5))
+	for (int i=0; i < *n; i++)
+	{
+			if (!strncmp(CLI_Record->Get_Account(), Record[i]->Get_Account(), 5))
 			{
-				cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
-				<< std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
-				<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
+				cout << std::setw(12) << std::left << Record[i]->Get_Account() << std::setw(20) << Record[i]->Get_LName() << std::setw(20) << Record[i]->Get_FName()
+				<< std::setw(6) << Record[i]->Get_MI() << std::setw(13) << Record[i]->Get_SSN() << "(" << Record[i]->Get_PhoneArea() << ")" << std::setw(11) << Record[i]->Get_Phone()
+				<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record[i]->Get_Balance() << endl;
 			}
-		delete Record;
-    }while (!(*file).eof() != 0);
+	}
     //white space at end of chart
     cout << endl << endl;
-    (*file).close();
 }
 
 /* -----------------------------------------------------------------------------
@@ -543,7 +547,7 @@ void Delete_Account(char *Filename, fstream *file)
     //the brains
     do{
         database Record; //create report class
-        Class_Load(file, &Record); //load first report from file
+						 //       Class_Load(file, &Record); //load first report from file
         if (!strcmp(accountnumber, Record.Get_Account())) //checks for matching account number
         {
             if (!strcmp(accountpassword, Record.Get_PassWd())) //check for matching account password
@@ -623,7 +627,7 @@ void Print_File(char *Filename, fstream *file)
     //loop for #of entries
     do{
         database Record;
-        Class_Load(file, &Record);
+		//        Class_Load(file, &Record);
         //body
         reportfile << std::setw(12) << std::left << Record.Get_Account() << std::setw(20) << Record.Get_LName() << std::setw(20) << Record.Get_FName()
         << std::setw(6) << Record.Get_MI() << std::setw(13) << Record.Get_SSN() << "(" << Record.Get_PhoneArea() << ")" << std::setw(11) << Record.Get_Phone()
@@ -659,7 +663,7 @@ void Funds_Transfer(char *Filename, fstream *file)
     do{         //finds account that funds are coming from and removes them
         database Record;
         char passwd[7];
-        Class_Load(file, &Record);
+		//       Class_Load(file, &Record);
         if (!strcmp(account1, Record.Get_Account()))//verify account number
         {
             cout << "Found Account. What is the password for the account: ";
@@ -701,7 +705,7 @@ void Funds_Transfer(char *Filename, fstream *file)
         cin.getline(account2, 6, '\n');
         do{
             database Record;
-            Class_Load(&databasetemp, &Record);
+			//          Class_Load(&databasetemp, &Record);
             if (!strcmp(account2, Record.Get_Account()))
             {
                 found = 2;
@@ -725,7 +729,7 @@ void Funds_Transfer(char *Filename, fstream *file)
         do {
             database Record;
             //move the money
-            Class_Load(&databasetemp, &Record);//load Record from file
+			//          Class_Load(&databasetemp, &Record);//load Record from file
             if (!strcmp(account2, Record.Get_Account()))//verify find second account
             {
                 float temp;
@@ -766,7 +770,7 @@ void Funds_Remove(char *Filename, fstream *file)
         cin.getline(account, sizeof(account), '\n'); //
         do{
             database Report;
-            Class_Load(&(*file), &Report);
+			//          Class_Load(&(*file), &Report);
             if (!strncmp(account, Report.Get_Account(), sizeof(account))) //find account in question in the database file
             {
                 cout << "What is the password for account " << Report.Get_Account() << ": ";
@@ -838,7 +842,7 @@ void Funds_Add(char *Filename, fstream *file)
         cin.getline(account, sizeof(account), '\n'); //
         do{
             database *Report = new database;
-            Class_Load(file, Report);
+			//           Class_Load(file, Report);
             if (!strncmp(account, Report->Get_Account(), sizeof(account))) //find account in question in the database file
             {
                 cout << "What is the password for account " << Report->Get_Account() << ": ";
@@ -925,7 +929,7 @@ void File_Recopy(fstream *fromfile, fstream *tofile)
 {
     do{
         database Report; //class structure for vars
-        Class_Load(fromfile, &Report); //load in values from source file
+						 //      Class_Load(fromfile, &Report); //load in values from source file
         File_Write(tofile, &Report); //write out values to destination file
     }while ((*fromfile).eof() == 0);   //do loop until end of entries
 }
@@ -936,7 +940,7 @@ void File_Recopy(fstream *fromfile, fstream *tofile)
  RETURNS:           void function
  NOTES:             loads informaition from database into class
  ----------------------------------------------------------------------------- */
-void Class_Load(fstream *databasefile, database *Report)
+void Class_Load(fstream *databasefile, database *Report[], int *n)
 {   //vars for temp useage
     char Lname[21];
     char Fnmae[21];
@@ -956,15 +960,15 @@ void Class_Load(fstream *databasefile, database *Report)
     (*databasefile) >> *pbal;
     (*databasefile) >> Account;
     (*databasefile) >> Password;
-    Report->Set_LName(Lname);
-    Report->Set_FName(Fnmae);
-    Report->Set_MI(MI);
-    Report->Set_SSN(ssn);
-    Report->Set_PhoneArea(Phonearea);
-    Report->Set_Phone(Phone);
-    Report->Set_Balance(pbal);
-    Report->Set_Account(Account);
-    Report->Set_PassWD(Password);
+    Report[*n]->Set_LName(Lname);
+    Report[*n]->Set_FName(Fnmae);
+    Report[*n]->Set_MI(MI);
+    Report[*n]->Set_SSN(ssn);
+    Report[*n]->Set_PhoneArea(Phonearea);
+    Report[*n]->Set_Phone(Phone);
+    Report[*n]->Set_Balance(pbal);
+    Report[*n]->Set_Account(Account);
+    Report[*n]->Set_PassWD(Password);
 }
 
 

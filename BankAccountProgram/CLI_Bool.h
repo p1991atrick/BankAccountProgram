@@ -10,8 +10,12 @@
 #define CLI_Bool_h
 
 #include <stdio.h>
-class CLI {
-
+#include "BankRecord.h"
+class CLI : public database
+{
+	char sndpass[6];
+	char sndacct[7];
+	
 public:		//this in intentional
 	bool phonearea;
 	bool filename;
@@ -26,9 +30,14 @@ public:		//this in intentional
 	bool ssn;
 	bool newpassword;
 	bool reportfile;
-
+	bool sndaccount;
+	bool sndpasswd;
+	
 	//constructor is needed
 	CLI();
-	
+	//functions
+	void Set_sndAccount(char *);
+	void Set_sndPassWD(char *);
 };
 #endif /* CLI_Bool_h */
+
