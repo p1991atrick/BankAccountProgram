@@ -50,7 +50,7 @@ using std::setw;
 
 // Function Prototyes
 //menu
-	void CLI_Args(int, char *argv[], char *, char *, fstream *, database *, CLI *);
+	void CLI_Args(int, char *argv[], char *, char *, database *, CLI *);
 	void CLI_Help();
 	void CLI_Sort(CLI *, database *, fstream *, char *, char *);
 //file IO
@@ -99,7 +99,7 @@ int main(int argc, char * argv[])
 		CLI_Help();
 		exit (EXIT_CODE_NO_SELECTION);
 	}
-	CLI_Args(argc, argv, Filename, Reportname, &databasefile, CLI_Record, bools);
+	CLI_Args(argc, argv, Filename, Reportname, CLI_Record, bools);
 	CLI_Sort(bools, CLI_Record, &databasefile, Filename, Reportname);
 	return EXIT_CODE_SUCCESS;
 }
@@ -110,7 +110,7 @@ int main(int argc, char * argv[])
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream *databasefile, database *CLI_Record, CLI *bools)
+void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, database *CLI_Record, CLI *bools)
 {//find cli vars
 	for (int i = 1; i < argc; i++)
 	{
