@@ -32,7 +32,7 @@
 #define CLEAR_SCREEN system("clear");
 
 //press anykey to continue POSIX
-#define AKTC  system("read -p \"Press any key to continue...\"")
+#define AKTC  system("read -p \"Press Enter to continue...\"")
 
 //array size calculation    total bytes/bytes of 0 location
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
@@ -63,7 +63,7 @@
 #define EXIT_CODE_ERROR_NO_MATCH_FOUND 2
 #define EXIT_CODE_NO_SELECTION 3
 #define EXIT_CODE_PROGRAM_HALT 9
-#define EXIT_CODE_CLI_ERROR 4
+#define EXIT_CODE_CLI_ERROR 20 //20-40 are reserved for CLI argumnets
 
 #define DEBUG_OUTPUT(x) std::cout << #x << " = " << x << std::endl;
 
