@@ -22,6 +22,7 @@ FILE3=CLI_Bool
 FILE4=
 FILE5=
 
+ARGS=-c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 
 .PHONY: build link clean all
 
@@ -30,18 +31,18 @@ FILE5=
 #
 
 build:
-	g++ -o $(FILE1).o $(FILE1).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -o $(FILE1).o $(FILE1).cpp $(ARGS)
 ifdef FILE2
-	g++ -o $(FILE2).o $(FILE2).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -o $(FILE2).o $(FILE2).cpp $(ARGS)
 endif
 ifdef FILE3
-	g++ -o $(FILE3).o $(FILE3).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -o $(FILE3).o $(FILE3).cpp $(ARGS)
 endif
 ifdef FILE4
-	g++ -o $(FILE4).o $(FILE4).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -o $(FILE4).o $(FILE4).cpp $(ARGS)
 endif
 ifdef FILE5
-	g++ -o $(FILE5).o $(FILE5).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
+	g++ -o $(FILE5).o $(FILE5).cpp $(ARGS)
 endif
 
 
