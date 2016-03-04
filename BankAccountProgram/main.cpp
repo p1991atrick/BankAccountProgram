@@ -54,13 +54,13 @@ using std::setw;
     int Main_Menu(int *);
 	void CLI_Args(int, char *argv[], char *, char *, fstream *, database *, CLI *);
 	void CLI_Help();
-	void CLI_Sort(bool *, bool *, bool *,bool *, bool *, bool *);
+	void CLI_Sort(CLI *, database *, fstream *, char *, char *);
 //file IO
     void Create_File(char *, fstream *);
     void Open_File(char *, fstream *);
 //management
     void Set_Info(char *, fstream *);
-    void Display_Database(char *, fstream *);
+    void Display_Database(char *, fstream *, database *);
     void Delete_Account(char *, fstream *);
     void Print_File(char *, fstream *);
 //account
@@ -93,13 +93,18 @@ int main(int argc, char * argv[])
 		exit (EXIT_CODE_NO_SELECTION);
 	}
 	CLI_Args(argc, argv, Filename, Reportname, &databasefile, CLI_Record, bools);
-
+	CLI_Sort(bools, CLI_Record, &databasefile, Filename, Reportname);
 	return EXIT_CODE_SUCCESS;
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION NAME:     void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream *databasefile, database *CLI_Record, CLI *bools)
+ PURPOSE:           controls how the cli's are processed
+ RETURNS:           void
+ NOTES:
+ ----------------------------------------------------------------------------- */
 void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream *databasefile, database *CLI_Record, CLI *bools)
-{
-	//find cli vars
+{//find cli vars
 	for (int i = 1; i < argc; i++)
 	{
 		char *arg = argv[i]; //set the next argument in line to be tested
@@ -283,13 +288,23 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, fstream 
 				exit(EXIT_CODE_CLI_ERROR+11);
 			}
 		}
+		if (strncmp(arg+1, "V", 1) == 0)
+		{
+			#undef TRACE
+			#define TRACE 1
+		}
 	}
 }
 
-
+/* -----------------------------------------------------------------------------
+ FUNCTION NAME:     void CLI_Help()
+ PURPOSE:           displays the help screen for command line functions
+ RETURNS:           void
+ NOTES:
+ ----------------------------------------------------------------------------- */
 void CLI_Help()
 {
-	cout << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's
+	cout << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
 	cout << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//--
 	cout << setw(5) << "/A" << "Sets the phone number area code.\n";		//20
 	cout << setw(5) << "/D" << "The name of the database file to open.\n";	//21
@@ -304,8 +319,22 @@ void CLI_Help()
 	cout << setw(5) << "/S" << "Social Security Number.\n";					//29
 	cout << setw(5) << "/T" << "Amount ???.\n";								//30
 	cout << setw(5) << "/W" << "Sets the new password for the account.\n";	//31
+	cout << setw(5) << "/V" << "turns on verbose level 1.\n";				//32
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION NAME:		void CLI_Sort(CLI *, database *, fstream *, char *, char *)
+ PURPOSE:           dictates what functions run
+ RETURNS:           void
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void CLI_Sort(CLI * bools, database * CLI_Record, fstream * databasefile, char *Filename, char *Reportname)
+{
+	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
+	{
+		Display_Database(Filename, databasefile, CLI_Record);
+	}
+}
 
 /* ----------------------------------------------------------------------------===Menuoptions==========================================================================================================================
  FUNCTION:          File_IO(char *Filename)
@@ -315,7 +344,6 @@ void CLI_Help()
  ----------------------------------------------------------------------------- */
 void File_IO(char *Filename, fstream *file)
 {
-	CLEAR_SCREEN;
 	cout << std::setw(30) << std::right << "\nBank Account Database\n";
     cout << "1. Create Database File\n"; //sub menu lines
     cout << "2. Open Database File\n";
@@ -529,7 +557,7 @@ void Set_Info(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Display_Database(char * Filename, fstream *file)
+void Display_Database(char * Filename, fstream *file, database *CLI_Record)
 {
     (*file).open(Filename, ios::in);
     cout << std::setw(30) << std::right << "Current Bank Records\n\n";
@@ -538,12 +566,15 @@ void Display_Database(char * Filename, fstream *file)
 
     //loop for amount of records
     do{
-        database Record;
-        Class_Load(file, &Record);
-        cout << std::setw(12) << std::left << Record.Get_Account() << std::setw(20) << Record.Get_LName() << std::setw(20) << Record.Get_FName()
-        << std::setw(6) << Record.Get_MI() << std::setw(13) << Record.Get_SSN() << "(" << Record.Get_PhoneArea() << ")" << std::setw(11) << Record.Get_Phone()
-        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record.Get_Balance() << endl;
-        
+        database *Record = new database;
+        Class_Load(file, Record);
+			if (!strncmp(CLI_Record->Get_Account(), Record->Get_Account(), 5))
+			{
+				cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
+				<< std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
+				<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
+			}
+		delete Record;
     }while (!(*file).eof() != 0);
     //white space at end of chart
     cout << endl << endl;
