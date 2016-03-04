@@ -8,6 +8,7 @@
 
 #vars
 FILE=
+RFILE=
 FNAME=
 LNAME=
 MIDDLE=
@@ -15,6 +16,8 @@ SSN=
 AREA=
 PHONE=
 AMMT=
+NEWPASS=
+
 ACC1=
 PAS1=
 ACC2=
@@ -31,10 +34,10 @@ PAS3=
 ./bankacct /D$(FILE) /N$(ACC1) /P$(PAS1) /F$(FNAME)
 
 # Change Last name
-./bankacct /D$(FILE) /N$(ACC1) /P$(PAS1) /L$(LNAME)
+./bankacct /D$(FILE) /N$(ACC2) /P$(PAS2) /L$(LNAME)
 
 # Change Middle initial
-./bankacct /D$(FILE) /N$(ACC1) /P$(PAS1) /M$(MIDDLE)
+./bankacct /D$(FILE) /N$(ACC3) /P$(PAS3 ) /M$(MIDDLE)
 
 # Change ssn
 ./bankacct /D$(FILE) /N$(ACC1) /P$(PAS1) /S$(SSN)
@@ -47,3 +50,9 @@ PAS3=
 
 # Transfer money
 ./bankacct /D$(FILE) /N$(ACC1) /P$(PAS1) /N$(ACC2) /P$(PAS2) /T$(AMMT)
+
+# Change password
+./bankacct /D$(FILE) /N$(ACC1) /P$(PAS1) /W$(NEWPASS)
+
+# Print Report file
+./bankacct /R$(RFILE) /D$(FILE)
