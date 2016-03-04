@@ -18,7 +18,7 @@ PROGRAM_NAME=bankacct
 # source files without extention
 FILE1=main
 FILE2=BankRecord
-#FILE3=CLI_Bool
+FILE3=CLI_Bool
 #FILE4=
 #FILE5=
 
