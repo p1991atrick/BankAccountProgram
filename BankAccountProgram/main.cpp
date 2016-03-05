@@ -39,6 +39,7 @@
 #include <cstring>
 #include "BankRecord.h"
 #include "CLI_Bool.h"
+#include "main.h"
 
 //namespace callouts
 using std::cout;
@@ -56,10 +57,10 @@ using std::vector;
 	void CLI_Sort(CLI *, fstream *, char *, char *);
 //file IO
     void Create_File(char *, fstream *);
-    void Open_File(char *, fstream *, int *);
+    void Open_File(char *, fstream *);
 //management
     void Set_Info(char *, fstream *);
-    void Display_Database(CLI *, database *Report[], int *);
+    void Display_Database(CLI *, vector<database> *, int *);
     void Delete_Account(char *, fstream *);
     void Print_File(char *, fstream *);
 //account
@@ -70,16 +71,12 @@ using std::vector;
     void Display_title();
     void File_Write(fstream *, database *);
     void File_Recopy(fstream *, fstream *);
-    void Class_Load(fstream *, database *Report[], int *);
+    void Class_Load(fstream *, database *);
 
 //verbose define
 int threshold = 4;
-class mystreambuf: public std::streambuf
-{
-};
 mystreambuf nostreambuf;
 std::ostream nocout(&nostreambuf);
-#define log(x) ((x >= threshold)? std::cout : nocout)
 
 
 /* -----------------------------------------------------------------------------
@@ -227,8 +224,16 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		{
 			if (strlen(arg+2) == 6) //check for correct lenght
 			{
-				bools->Set_PassWD(arg+2);
-				bools->password = true;
+				if (bools->password == false)
+				{
+					bools->Set_PassWD(arg+2);
+					bools->password = true;
+				}
+				else
+				{
+					bools->Set_sndPassWD(arg+2);
+					bools->sndpasswd = true;
+				}
 			}
 			else
 			{
@@ -335,22 +340,22 @@ void CLI_Help()
  ----------------------------------------------------------------------------- */
 void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)
 {
-	int num_of_records = 0, counter = 0;
-	Open_File(Filename, databasefile, &num_of_records); //all functions require that this file is opened.
-	counter = counter + num_of_records;
-	database *Report[counter];
-	databasefile->open(Filename, ios::in);
-	for (int n = 0; n<num_of_records; n++) {
-		*Report[n] = *new database;
-		Class_Load(databasefile, &Report[n], &num_of_records);
-	}
-	//Class_Load(databasefile, Records);
+	Open_File(Filename, databasefile); //all functions require that this file is opened.
+	vector<database> Records(1);
+	int n=-1, i = 0;
+	do{
+		i++;
+		Records.resize(i);
+		n++;
+		Class_Load(databasefile, &Records[n]);
+	}while ((*databasefile).eof() == 0);
+	databasefile->close();
+	//Class_Load(databasefile, rec);
 	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
 	{
-		Display_Database(bools, &Report[num_of_records], &num_of_records);
+		Display_Database(bools, &Records, &n);
 	}
 }
-
 
 /* -----------------------------------------------------------------------------===File IO=============================================================================================================================
  FUNCTION:          Create_File(char *Filename)
@@ -405,7 +410,7 @@ void Create_File(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:             Creates file with record count of 0
  ----------------------------------------------------------------------------- */
-void Open_File(char *Filename, fstream *file, int *x)
+void Open_File(char *Filename, fstream *file)
 {
     if (strstr(Filename, ".db") == 0) //if name given does't have .db , append it to the end
     {
@@ -421,11 +426,6 @@ void Open_File(char *Filename, fstream *file, int *x)
     {
         log(3) << Filename << " Opened Sucsessfuly\n\n";
     }
-	(*file).close();
-	(*file).open(Filename, ios::in | ios::ate);
-	*x = int(file->tellg());
-	*x = (*x/56.875);
-    (*file).close();
 }
 
 /* -----------------------------------------------------------------------------===Management options==================================================================================================================
@@ -502,20 +502,21 @@ void Set_Info(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Display_Database(CLI *CLI_Record, database *Record[], int *n)
+void Display_Database(CLI *CLI_Record, vector<database> *Records, int *n)
 {
-    cout << std::setw(30) << std::right << "Current Bank Records\n\n";
+    cout << std::setw(30) << std::right << "Current Bank rec\n\n";
 
     Display_title();//set up the header table
 
-    //loop for amount of records
+    //loop for amount of rec
 	for (int i=0; i < *n; i++)
 	{
-			if (!strncmp(CLI_Record->Get_Account(), Record[i]->Get_Account(), 5))
+		database *rec = (database*)&Records[i];
+			if (!strncmp(CLI_Record->Get_Account(), rec->Get_Account(), 5))
 			{
-				cout << std::setw(12) << std::left << Record[i]->Get_Account() << std::setw(20) << Record[i]->Get_LName() << std::setw(20) << Record[i]->Get_FName()
-				<< std::setw(6) << Record[i]->Get_MI() << std::setw(13) << Record[i]->Get_SSN() << "(" << Record[i]->Get_PhoneArea() << ")" << std::setw(11) << Record[i]->Get_Phone()
-				<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record[i]->Get_Balance() << endl;
+				cout << std::setw(12) << std::left << rec->Get_Account() << std::setw(20) << rec->Get_LName() << std::setw(20) << rec->Get_FName()
+				<< std::setw(6) << rec->Get_MI() << std::setw(13) << rec->Get_SSN() << "(" << rec->Get_PhoneArea() << ")" << std::setw(11) << rec->Get_Phone()
+				<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << rec->Get_Balance() << endl;
 			}
 	}
     //white space at end of chart
@@ -940,7 +941,7 @@ void File_Recopy(fstream *fromfile, fstream *tofile)
  RETURNS:           void function
  NOTES:             loads informaition from database into class
  ----------------------------------------------------------------------------- */
-void Class_Load(fstream *databasefile, database *Report[], int *n)
+void Class_Load(fstream *databasefile, database *rec)
 {   //vars for temp useage
     char Lname[21];
     char Fnmae[21];
@@ -960,15 +961,15 @@ void Class_Load(fstream *databasefile, database *Report[], int *n)
     (*databasefile) >> *pbal;
     (*databasefile) >> Account;
     (*databasefile) >> Password;
-    Report[*n]->Set_LName(Lname);
-    Report[*n]->Set_FName(Fnmae);
-    Report[*n]->Set_MI(MI);
-    Report[*n]->Set_SSN(ssn);
-    Report[*n]->Set_PhoneArea(Phonearea);
-    Report[*n]->Set_Phone(Phone);
-    Report[*n]->Set_Balance(pbal);
-    Report[*n]->Set_Account(Account);
-    Report[*n]->Set_PassWD(Password);
+    rec->Set_LName(Lname);
+    rec->Set_FName(Fnmae);
+	rec->Set_MI(MI);
+    rec->Set_SSN(ssn);
+    rec->Set_PhoneArea(Phonearea);
+    rec->Set_Phone(Phone);
+    rec->Set_Balance(pbal);
+    rec->Set_Account(Account);
+    rec->Set_PassWD(Password);
 }
 
 

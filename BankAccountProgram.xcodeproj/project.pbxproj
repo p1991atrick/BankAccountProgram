@@ -34,6 +34,7 @@
 		CD9577B51C5EB95C0052A835 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		CD9577BD1C5EBBB50052A835 /* My_Macros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = My_Macros.h; sourceTree = "<group>"; };
 		CD9577BE1C5EC6720052A835 /* makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; name = makefile; path = BankAccountProgram/makefile; sourceTree = "<group>"; };
+		CDCD40E61C8B72D20052A835 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +71,7 @@
 			children = (
 				CD9577BD1C5EBBB50052A835 /* My_Macros.h */,
 				CD9577B51C5EB95C0052A835 /* main.cpp */,
+				CDCD40E61C8B72D20052A835 /* main.h */,
 				CD3B6BC11C61A4CE0052A835 /* BankRecord.h */,
 				CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */,
 				CD870CF31C88F0F00052A835 /* CLI_Bool.h */,
