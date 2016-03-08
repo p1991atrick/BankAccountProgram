@@ -56,22 +56,22 @@ using std::vector;
 	void CLI_Help();
 	void CLI_Sort(CLI *, fstream *, char *, char *);
 //file IO
-    void Create_File(char *, fstream *);
     void Open_File(char *, fstream *);
 //management
     void Set_Info(char *, fstream *);
-    void Display_Database(CLI *, vector<database> *, int *);
+    void Display_Database(CLI *, database *, int *);
     void Delete_Account(char *, fstream *);
     void Print_File(char *, fstream *);
 //account
     void Funds_Transfer(char *, fstream *);
     void Funds_Add(char *,fstream *);
     void Funds_Remove(char *, fstream *);
+	void Change_First_Name(CLI *, database *, int *);
+	void Change_Last_Name(CLI *, database *, int *);
 //support functions
     void Display_title();
     void File_Write(fstream *, database *);
-    void File_Recopy(fstream *, fstream *);
-    void Class_Load(fstream *, database *);
+	void Class_Load(fstream *, database *);
 
 //verbose define
 int threshold = 4;
@@ -290,7 +290,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		{
 			if (strlen(arg+2) == 6)
 			{
-				bools->Set_NewPasswd(arg+2);
+				bools->Set_PassWD(arg+2);
 				bools->newpassword = true;
 			}
 			else
@@ -350,61 +350,33 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 		Class_Load(databasefile, &Records[n]);
 	}while ((*databasefile).eof() == 0);
 	databasefile->close();
-	//Class_Load(databasefile, rec);
-	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
+	for (int x=0; x < i; x++)
 	{
-		Display_Database(bools, &Records, &n);
+		database *rec = &Records[i];
+		if (!strncmp(bools->Get_Account(), rec->Get_Account(), 5))
+		{
+			if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
+			{
+				Display_Database(bools, rec, &i);
+			}
+			if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true)
+			{
+				Change_First_Name(bools, rec, &i);
+			}
+			if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true)
+			{
+
+			}
+		}
 	}
+	for (int x=0; x<i;i++)
+	{
+		File_Write(databasefile, &Records[x]);
+	}
+
 }
 
 /* -----------------------------------------------------------------------------===File IO=============================================================================================================================
- FUNCTION:          Create_File(char *Filename)
- DESCRIPTION:       Creates a file with user defined name
- RETURNS:           void function
- NOTES:             Creates file with record count of 0
- ----------------------------------------------------------------------------- */
-void Create_File(char *Filename, fstream *file)
-{
-    log(5) << "What should the database be called: ";
-    cin >> Filename;
-    if (strstr(Filename, ".db") == 0) //if file name doesn't end with .db, add it
-    {
-        strncat(Filename, ".db", 3);
-    }
-    (*file).open(Filename, ios::in); //open for in ops
-    if ((*file).fail())
-    { //if not already there, build
-        log(5) << "Creating database file called \"" << Filename << "\"\n";
-        (*file).close();
-        (*file).open(Filename, ios::out | ios::trunc);
-        log(5) << "Enter the first record into the database.\n\n";
-        file->close();
-        Set_Info(Filename, file);
-    }
-    else
-    { //if exists ask to open or replace
-        (*file).close();
-        log(5) << "The database with name \"" << Filename << "\" exists, Would you like to overwrite it? (y/N) \n";
-        char yesno = 'N';
-        cin >> yesno;
-        if (yesno == 'y' || yesno == 'Y') //if told to overwrie file
-        {
-            (*file).open(Filename, ios::out | ios::trunc);
-            log(5) << "Creating database file called \"" << Filename << "\"\n";
-            file->close();
-            log(5) << "Enter the first record into the database.\n\n";
-            Set_Info(Filename, file);
-        }
-        else //anything else opens the file
-        {
-            log(5) << "Opening File" << Filename << ".";
-            (*file).open(Filename, ios::out | ios::app);
-        }
-    }
-    (*file).close();
-}
-
-/* -----------------------------------------------------------------------------
  FUNCTION:          Open_File(char *Filename)
  DESCRIPTION:       opens the file for both in and out
  RETURNS:           void function
@@ -502,23 +474,16 @@ void Set_Info(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Display_Database(CLI *CLI_Record, vector<database> *Records, int *n)
+void Display_Database(CLI *CLI_Record, database *Record, int *n)
 {
     cout << std::setw(30) << std::right << "Current Bank rec\n\n";
 
     Display_title();//set up the header table
 
-    //loop for amount of rec
-	for (int i=0; i < *n; i++)
-	{
-		database *rec = (database*)&Records[i];
-			if (!strncmp(CLI_Record->Get_Account(), rec->Get_Account(), 5))
-			{
-				cout << std::setw(12) << std::left << rec->Get_Account() << std::setw(20) << rec->Get_LName() << std::setw(20) << rec->Get_FName()
-				<< std::setw(6) << rec->Get_MI() << std::setw(13) << rec->Get_SSN() << "(" << rec->Get_PhoneArea() << ")" << std::setw(11) << rec->Get_Phone()
-				<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << rec->Get_Balance() << endl;
-			}
-	}
+	cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
+	<< std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
+	<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
+
     //white space at end of chart
     cout << endl << endl;
 }
@@ -585,7 +550,6 @@ void Delete_Account(char *Filename, fstream *file)
     {
         (*file).open(Filename, ios::out | ios::trunc); //reopen database file and truncate it
         databasetemp.open("Tempcopyfile.db", ios::in);
-        File_Recopy(&databasetemp, file);
         databasetemp.close(); //closes the temp file.
         (*file).close();
     }
@@ -812,7 +776,6 @@ void Funds_Remove(char *Filename, fstream *file)
     {
         (*file).open(Filename, ios::out | ios::trunc);
         databasetemp.open("Tempcopyfile.db", ios::in);
-        File_Recopy(&databasetemp, file);
         (*file).close();
         databasetemp.close();
     }
@@ -876,11 +839,16 @@ void Funds_Add(char *Filename, fstream *file)
     {
         (*file).open(Filename, ios::out | ios::trunc);
         databasetemp.open("Tempcopyfile.db", ios::in);
-        File_Recopy(&databasetemp, file);
         (*file).close();
         databasetemp.close();
     }
 }
+
+void Change_First_Name(CLI *bools, database *Records, int *n)
+{
+	Records->Set_FName(bools->Get_FName());
+}
+
 
 /* -----------------------------------------------------------------------------===Support Functions=======================================================================================================================
  FUNCTION:          void Display_title()
@@ -918,21 +886,6 @@ void File_Write(fstream *file, database *Report)
     << Report->Get_Balance() << endl
     << Report->Get_Account() << endl
     << Report->Get_PassWd();
-}
-
-/* -----------------------------------------------------------------------------
- FUNCTION:          void File_Recopy(fstream *fromfile, fstream *tofile, int *count)
- DESCRIPTION:       moves information between two files
- RETURNS:           void function
- NOTES:
- ----------------------------------------------------------------------------- */
-void File_Recopy(fstream *fromfile, fstream *tofile)
-{
-    do{
-        database Report; //class structure for vars
-						 //      Class_Load(fromfile, &Report); //load in values from source file
-        File_Write(tofile, &Report); //write out values to destination file
-    }while ((*fromfile).eof() == 0);   //do loop until end of entries
 }
 
 /* -----------------------------------------------------------------------------

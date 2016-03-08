@@ -55,7 +55,6 @@ class database{
     float Balance;
     char Account[6];//length of 5 + 1
     char PassWd[7];//Length of 6+1
-	char NewPasswd[7];
     
 public:
     //default functions
@@ -72,7 +71,6 @@ public:
     void Set_Balance(float *);
     void Set_Account(char *);
     void Set_PassWD(char *);
-	void Set_NewPasswd(char*);
     
     //get var functions//
     char* Get_LName();
@@ -84,7 +82,6 @@ public:
     float Get_Balance() const;
     char* Get_Account();
     char* Get_PassWd();
-	char* Get_NewPasswd();
 };
 
 
