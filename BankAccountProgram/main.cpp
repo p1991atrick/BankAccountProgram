@@ -58,16 +58,14 @@ using std::vector;
 //file IO
     void Open_File(char *, fstream *);
 //management
-    void Set_Info(char *, fstream *);
-    void Display_Database(CLI *, database *, int *);
+    void Set_Info(CLI *, database *);
+    void Display_Database(CLI *, database *);
     void Delete_Account(char *, fstream *);
     void Print_File(char *, fstream *);
 //account
     void Funds_Transfer(char *, fstream *);
     void Funds_Add(char *,fstream *);
     void Funds_Remove(char *, fstream *);
-	void Change_First_Name(CLI *, database *, int *);
-	void Change_Last_Name(CLI *, database *, int *);
 //support functions
     void Display_title();
     void File_Write(fstream *, database *);
@@ -303,6 +301,10 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		{
 			threshold = 3;
 		}
+		else if (strncmp(arg+1, "Z", 1) == 0)
+		{
+			bools->addaccnt = true;
+		}
 	}
 }
 
@@ -330,6 +332,7 @@ void CLI_Help()
 	log(5) << setw(5) << "/T" << "Amount ???.\n";								//30
 	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31
 	log(5) << setw(5) << "/V" << "turns on verbose mode.\n";					//32
+	log(5) << setw(5) << "/Z" << "Add account to database\n";					//33
 }
 
 /* -----------------------------------------------------------------------------
@@ -342,13 +345,14 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 {
 	Open_File(Filename, databasefile); //all functions require that this file is opened.
 	vector<database> Records(1);
-	int n=-1, i = 0;
-	do{
+	int n=-1, i = 0; // n = for do loop only  i = number of records that were opened.
+	do{			// load file into class vector.
 		i++;
 		Records.resize(i);
 		n++;
 		Class_Load(databasefile, &Records[n]);
 	}while ((*databasefile).eof() == 0);
+	log(3) << "loaded file\n";
 	databasefile->close();
 	for (int x=0; x < i; x++)
 	{
@@ -357,23 +361,28 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 		{
 			if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
 			{
-				Display_Database(bools, rec, &i);
+				Display_Database(bools, rec);
 			}
 			if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true)
 			{
-				Change_First_Name(bools, rec, &i);
+				rec->Set_FName(bools->Get_FName());
 			}
 			if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true)
 			{
-
+				rec->Set_LName(bools->Get_LName());
+			}
+			if (bools->filename == true && bools->add_acount_true() == 1)
+			{
+				//Set_Info(bools, rec);
 			}
 		}
 	}
-	for (int x=0; x<i;i++)
+	databasefile->open(Filename, ios::out | ios::trunc);
+	for (int x=0; x<i;x++)
 	{
 		File_Write(databasefile, &Records[x]);
 	}
-
+	databasefile->close();
 }
 
 /* -----------------------------------------------------------------------------===File IO=============================================================================================================================
@@ -406,66 +415,12 @@ void Open_File(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Set_Info(char *Filename, fstream *file)
+void Set_Info(CLI *CLI_Record, database *Record)
 {
-    log(3) << "In Set_Info\n";
-    //set first name
-    cout << std::setw(25) << std::right << "Enter First Name: ";
-    char  FNAME[21];
-    cin.ignore();
-    cin.getline(FNAME, sizeof(FNAME), '\n'); //gets all char's until the next line char. (when enter was pressed)
-    //set last name
-    cout << std::setw(25) << "Enter Last Name: ";
-    char LNAME[21];
-    cin.getline(LNAME, sizeof(LNAME), '\n');
-    //set middel initial
-    cout << std::setw(25) << "Enter Middle Initial: ";
-    char MI;
-    cin >> MI;
-    if (islower(MI))
-    {
-        MI = toupper(MI);
-    }
-    while (islower(MI) || isdigit(MI) || !isalpha(MI))
-    {
-        cout << std::setw(25) << "Uppercase Letter ONLY\n";
-        cout << std::setw(25) << "Enter Middle Initial: ";
-        cin >> MI;
-    }
-    //set ssn
-    char ssn[11];
-    cout << std::setw(25) << "Enter SSN (no dashes): ";
-    cin.ignore();
-    cin.getline(ssn, sizeof(ssn), '\n');//only takes the first 9 numbers. all others are discarded/
-    //set phone area code
-    char phonearea[4];
-    cout << std::setw(25) << "Enter Phone Area Code: ";
-    cin.getline(phonearea, sizeof(phonearea), '\n');
-    //set Phone base number
-    char phone[8];
-    cout << std::setw(25) << "Enter Phone Number: ";
-    cin.getline(phone, sizeof(phone), '\n');
-    //set balance
-    cout << std::setw(25) << "Enter Account Balance: ";
-    float bal, *pbal = &bal;
-    cin >> *pbal;
-    //set account number
-    char accout[6];
-    accout[5] = '\0';
-    cout << std::setw(25) << "Enter Account Number: ";
-    cin.ignore();
-    cin.getline(accout, 6, '\n');
-    //set account pasword
-    char passwd[7];
-    cout << std::setw(25) << "Enter Account Password: ";
-    cin.getline(passwd, 7, '\n');
 
-    //write to class with overloaded constructor
-    database Record(LNAME, FNAME, MI, ssn, phonearea, phone, *pbal, accout, passwd);
-    //save to file
-    (*file).open(Filename, ios::out | ios::app);
-    File_Write(file, &Record);
-    (*file).close();
+	Record->Set_LName(CLI_Record->Get_LName());
+	Record->Set_FName(CLI_Record->Get_FName());
+ //CLI_Record->Get_MI(), CLI_Record->Get_SSN(), CLI_Record->Get_PhoneArea(), CLI_Record->Get_Phone(), CLI_Record->Get_Balance(), CLI_Record->Get_Account(), CLI_Record->Get_PassWd());
 }
 
 /* -----------------------------------------------------------------------------
@@ -474,7 +429,7 @@ void Set_Info(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Display_Database(CLI *CLI_Record, database *Record, int *n)
+void Display_Database(CLI *CLI_Record, database *Record)
 {
     cout << std::setw(30) << std::right << "Current Bank rec\n\n";
 
@@ -843,12 +798,6 @@ void Funds_Add(char *Filename, fstream *file)
         databasetemp.close();
     }
 }
-
-void Change_First_Name(CLI *bools, database *Records, int *n)
-{
-	Records->Set_FName(bools->Get_FName());
-}
-
 
 /* -----------------------------------------------------------------------------===Support Functions=======================================================================================================================
  FUNCTION:          void Display_title()
