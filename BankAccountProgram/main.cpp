@@ -67,7 +67,6 @@ using std::vector;
     void Funds_Add(char *,fstream *);
     void Funds_Remove(char *, fstream *);
 //support functions
-    void Display_title();
     void File_Write(fstream *, database *);
 	void Class_Load(fstream *, database *);
 
@@ -115,12 +114,13 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			CLI_Help();
 			exit (EXIT_CODE_CLI_ERROR+19);
 		}
+	//now look for given args
 		if (strcmp(arg+1, "?") == 0)//find if help is called
 		{
 			CLI_Help();
 			exit(EXIT_CODE_SUCCESS); //displaying Help always quits program
 		}
-		if (strncmp(arg+1, "A", 1) == 0) //find if phone number area code is called
+		else if (strncmp(arg+1, "A", 1) == 0) //find if phone number area code is called
 		{
 			if(strlen(arg+2) == 3) //lenght of the area code passed in, if not 3 fail
 			{
@@ -133,14 +133,14 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR);
 			}
 		}
-		if (strncmp(arg+1, "D", 1) == 0)//find if database file is called
+		else if (strncmp(arg+1, "D", 1) == 0)//find if database file is called
 		{
 			strncpy(Filename, arg+2, strlen(arg));
 			if(!(sizeof(Filename) > 1)) // if string is not greater then 1 == fail
 				exit(EXIT_CODE_CLI_ERROR+1);
 			bools->filename = true;
 		}
-		if (strncmp(arg+1, "F", 1) == 0)//find if first name is called
+		else if (strncmp(arg+1, "F", 1) == 0)//find if first name is called
 		{
 			if (strlen(arg+2) >1)
 			{
@@ -153,7 +153,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+2);
 			}
 		}
-		if (strncmp(arg+1, "H", 1) == 0)//find if Phone Number is called
+		else if (strncmp(arg+1, "H", 1) == 0)//find if Phone Number is called
 		{
 			if(strlen(arg+2) == 7)
 			{
@@ -167,11 +167,11 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			}
 
 		}
-		if (strncmp(arg+1, "I", 1) == 0)// print info to screen
+		else if (strncmp(arg+1, "I", 1) == 0)// print info to screen
 		{
 			bools->info = true;
 		}
-		if (strncmp(arg+1, "L", 1) == 0)//find if Last Name is called
+		else if (strncmp(arg+1, "L", 1) == 0)//find if Last Name is called
 		{
 			if (strlen(arg+2) >1)
 			{
@@ -184,7 +184,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+4);
 			}
 		}
-		if (strncmp(arg+1, "M", 1) == 0)//find if Middle initial is called
+		else if (strncmp(arg+1, "M", 1) == 0)//find if Middle initial is called
 		{
 			if (strlen(arg+2) == 1 && isalpha(*arg+2)) //check for length
 			{
@@ -197,7 +197,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+5);
 			}
 		}
-		if (strncmp(arg+1, "N", 1) == 0)//find if account number is called
+		else if (strncmp(arg+1, "N", 1) == 0)//find if account number is called
 		{
 			if (strlen(arg+2) == 5) //check for correct lenght
 			{
@@ -218,7 +218,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+6);
 			}
 		}
-		if (strncmp(arg+1, "P", 1) == 0) // find if password is called
+		else if (strncmp(arg+1, "P", 1) == 0) // find if password is called
 		{
 			if (strlen(arg+2) == 6) //check for correct lenght
 			{
@@ -239,7 +239,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+7);
 			}
 		}
-		if (strncmp(arg+1, "R", 1) == 0) // find if report file is called
+		else if (strncmp(arg+1, "R", 1) == 0) // find if report file is called
 		{
 			if (strlen(arg+2) == 0)
 			{
@@ -257,7 +257,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+8);	//this should never be able to run
 			}
 		}
-		if (strncmp(arg+1, "S", 1) == 0)
+		else if (strncmp(arg+1, "S", 1) == 0)
 		{
 			if (strlen(arg+2) == 9)
 			{
@@ -270,7 +270,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+9);
 			}
 		}
-		if (strncmp(arg+1, "T", 1) == 0)
+		else if (strncmp(arg+1, "T", 1) == 0)
 		{
 			if (strlen(arg+2) >= 1)
 			{
@@ -284,7 +284,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+10);
 			}
 		}
-		if (strncmp(arg+1, "W", 1) == 0)
+		else if (strncmp(arg+1, "W", 1) == 0)
 		{
 			if (strlen(arg+2) == 6)
 			{
@@ -297,7 +297,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+11);
 			}
 		}
-		if (strncmp(arg+1, "V", 1) == 0)
+		else if (strncmp(arg+1, "V", 1) == 0)
 		{
 			threshold = 3;
 		}
@@ -346,6 +346,7 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 	Open_File(Filename, databasefile); //all functions require that this file is opened.
 	vector<database> Records(1);
 	int n=-1, i = 0; // n = for do loop only  i = number of records that were opened.
+	bool change_file = false;
 	do{			// load file into class vector.
 		i++;
 		Records.resize(i);
@@ -356,33 +357,38 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 	databasefile->close();
 	for (int x=0; x < i; x++)
 	{
-		database *rec = &Records[i];
+		database *rec = &Records[x];
 		if (!strncmp(bools->Get_Account(), rec->Get_Account(), 5))
 		{
 			if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
 			{
 				Display_Database(bools, rec);
 			}
-			if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true)
+			else if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true)
 			{
 				rec->Set_FName(bools->Get_FName());
+				change_file = true;
 			}
-			if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true)
+			else if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true)
 			{
 				rec->Set_LName(bools->Get_LName());
+				change_file = true;
 			}
-			if (bools->filename == true && bools->add_acount_true() == 1)
+			else if (bools->filename == true && bools->add_acount_true() == 1)
 			{
 				//Set_Info(bools, rec);
 			}
 		}
 	}
-	databasefile->open(Filename, ios::out | ios::trunc);
-	for (int x=0; x<i;x++)
+	if (change_file == true)
 	{
-		File_Write(databasefile, &Records[x]);
+		databasefile->open(Filename, ios::out | ios::trunc);
+		for (int x=0; x<i;x++)
+		{
+			File_Write(databasefile, &Records[x]);
+		}
+		databasefile->close();
 	}
-	databasefile->close();
 }
 
 /* -----------------------------------------------------------------------------===File IO=============================================================================================================================
@@ -431,10 +437,8 @@ void Set_Info(CLI *CLI_Record, database *Record)
  ----------------------------------------------------------------------------- */
 void Display_Database(CLI *CLI_Record, database *Record)
 {
-    cout << std::setw(30) << std::right << "Current Bank rec\n\n";
-
-    Display_title();//set up the header table
-
+    log(3) << std::setw(30) << std::right << "Current Bank Record\n\n";
+	//print the information to the screen
 	cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
 	<< std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
 	<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
@@ -797,24 +801,6 @@ void Funds_Add(char *Filename, fstream *file)
         (*file).close();
         databasetemp.close();
     }
-}
-
-/* -----------------------------------------------------------------------------===Support Functions=======================================================================================================================
- FUNCTION:          void Display_title()
- DESCRIPTION:       Write coulum labels to screen
- RETURNS:           void function
- NOTES:
- ----------------------------------------------------------------------------- */
-void Display_title()
-{
-    //1st line
-	cout << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
-    //2nd line
-    cout << std::setw(12) << std::left << "Account" << std::setw(20) << "Last" << std::setw(20) << "First" << std::setw(6) << "MI" << std::setw(13) << "SSN"     << std::setw(16) << "Phone"  << std::setw(15) << "Account" << endl;
-    //3rd line
-    cout << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20) << "Name"  << std::setw(6) << "  " << std::setw(13) << "Number" << std::setw(16) << "Number" << std::setw(15) << "Balance" << endl;
-    //4th line
-    cout << std::setw(12) <<              "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
 }
 
 /* -----------------------------------------------------------------------------
