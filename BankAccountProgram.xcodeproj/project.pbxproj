@@ -72,10 +72,10 @@
 				CD9577BD1C5EBBB50052A835 /* My_Macros.h */,
 				CD9577B51C5EB95C0052A835 /* main.cpp */,
 				CDCD40E61C8B72D20052A835 /* main.h */,
-				CD3B6BC11C61A4CE0052A835 /* BankRecord.h */,
 				CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */,
-				CD870CF31C88F0F00052A835 /* CLI_Bool.h */,
+				CD3B6BC11C61A4CE0052A835 /* BankRecord.h */,
 				CD870CF21C88F0F00052A835 /* CLI_Bool.cpp */,
+				CD870CF31C88F0F00052A835 /* CLI_Bool.h */,
 			);
 			path = BankAccountProgram;
 			sourceTree = "<group>";

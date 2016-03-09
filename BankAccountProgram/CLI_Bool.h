@@ -32,12 +32,20 @@ public:		//this in intentional
 	bool reportfile;
 	bool sndaccount;
 	bool sndpasswd;
+	bool addaccnt;
 	
 	//constructor is needed
 	CLI();
-	//functions
+	//set functions
 	void Set_sndAccount(char *);
 	void Set_sndPassWD(char *);
+
+	//get functions
+	char* Get_sndAccount();
+	char* Get_sndPassWD();
+
+	//member functions
+	int add_acount_true();
 };
 #endif /* CLI_Bool_h */
 

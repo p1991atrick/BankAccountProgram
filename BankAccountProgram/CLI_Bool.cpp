@@ -25,6 +25,7 @@ CLI::CLI()
 	reportfile = false;
 	sndaccount = false;
 	sndpasswd = false;
+	addaccnt = false;
 }
 
 /* -----------------------------------------------------------------------------
@@ -63,3 +64,22 @@ void CLI::Set_sndPassWD(char * pass)
 	}
 }
 
+char* CLI::Get_sndAccount()
+{
+	return sndacct;
+}
+
+char* CLI::Get_sndPassWD()
+{
+	return sndpass;
+}
+
+int CLI::add_acount_true()
+{
+	if (lastname == true && firstName == true && phonearea == true && phonenumber == true && middleinitial == true && ssn == true && balance == true && account == true && password == true)
+	{
+		return 1;
+	}
+	else
+		return 0;
+}
