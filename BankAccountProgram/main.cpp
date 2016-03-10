@@ -54,7 +54,8 @@ using std::vector;
 //menu
 	void CLI_Args(int, char *argv[], char *, char *, CLI *);
 	void CLI_Help();
-	void CLI_Sort(CLI *, fstream *, char *, char *);
+	void Record_Sort(CLI *, fstream *, char *, char *);
+	void CLI_Sort(CLI *, database *, bool *);
 //file IO
     void Open_File(char *, fstream *);
 //management
@@ -93,7 +94,7 @@ int main(int argc, char * argv[])
 		exit (EXIT_CODE_NO_SELECTION);
 	}
 	CLI_Args(argc, argv, Filename, Reportname, bools);
-	CLI_Sort(bools, &databasefile, Filename, Reportname);
+	Record_Sort(bools, &databasefile, Filename, Reportname);
 	return EXIT_CODE_SUCCESS;
 }
 
@@ -300,10 +301,18 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		else if (strncmp(arg+1, "V", 1) == 0)
 		{
 			threshold = 3;
+			if(!(argc > 3))
+			{
+				exit(EXIT_CODE_CLI_ERROR+12);
+			}
 		}
-		else if (strncmp(arg+1, "Z", 1) == 0)
+		else if (strncmp(arg+1, "C", 1) == 0)
 		{
 			bools->addaccnt = true;
+			if(!(argc > 3))
+			{
+				exit(EXIT_CODE_CLI_ERROR+13);
+			}
 		}
 	}
 }
@@ -317,14 +326,14 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 void CLI_Help()
 {
 	log(5) << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
-	log(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//39
-	log(5) << setw(5) << "/A" << "Sets the phone number area code.\n";			//20
-	log(5) << setw(5) << "/C" << "Add account to database\n";					//33
-	log(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21
-	log(5) << setw(5) << "/F" << "Changes the First Name.\n";					//22
-	log(5) << setw(5) << "/H" << "Changes the Phone Number.\n";					//23
-	log(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//--
-	log(5) << setw(5) << "/L" << "Changes the Last Name.\n";					//24
+	log(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//39	#
+	log(5) << setw(5) << "/A" << "Sets the phone number area code.\n";			//20	$
+	log(5) << setw(5) << "/C" << "Add account to database\n";					//33	$
+	log(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21	#
+	log(5) << setw(5) << "/F" << "Changes the First Name.\n";					//22	$
+	log(5) << setw(5) << "/H" << "Changes the Phone Number.\n";					//23	$
+	log(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//--	$
+	log(5) << setw(5) << "/L" << "Changes the Last Name.\n";					//24	$
 	log(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25
 	log(5) << setw(5) << "/N" << "Account number.\n";							//26
 	log(5) << setw(5) << "/P" << "Account Password.\n";							//27
@@ -337,12 +346,12 @@ void CLI_Help()
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION NAME:		void CLI_Sort(CLI *, database *, fstream *, char *, char *)
+ FUNCTION NAME:		void Record_Sort(CLI *, database *, fstream *, char *, char *)
  PURPOSE:           dictates what functions run
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)
+void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)
 {
 	Open_File(Filename, databasefile); //all functions require that this file is opened.
 	vector<database> Records(1);
@@ -353,10 +362,10 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 		Records.resize(i);
 		n++;
 		Class_Load(databasefile, &Records[n]);
-	}while ((*databasefile).eof() == 0);
+	}while ((*databasefile).eof() == 0); //run until end of file
 	log(3) << "loaded file\n";
 	databasefile->close();
-	if (bools->filename == true && bools->add_acount_true() == 1)
+	if (bools->filename == true && bools->add_acount_true() == 1) // check to see if adding account
 	{
 		i++;
 		Records.resize(i);
@@ -368,31 +377,14 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 	{
 		for (int x=0; x < i; x++)
 		{
-			database *rec = &Records[x];
-			if (!strncmp(bools->Get_Account(), rec->Get_Account(), 5))
+			database *rec = &Records[x]; //create pointer to current vector location
+			if ((!strncmp(bools->Get_Account(), rec->Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), rec->Get_PassWd(), 6))) //check that account number and password match
 			{
-				if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
-				{
-					Display_Database(bools, rec);
-				}
-				else if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true)
-				{
-					rec->Set_FName(bools->Get_FName());
-					change_file = true;
-				}
-				else if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true)
-				{
-					rec->Set_LName(bools->Get_LName());
-					change_file = true;
-				}
-				else if (bools->filename == true && bools->add_acount_true() == 1)
-				{
-					//Set_Info(bools, rec);
-				}
+				CLI_Sort(bools, rec, &change_file);
 			}
 		}
 	}
-	if (change_file == true)
+	if (change_file == true) //if a record was chaged, rewrite the output file
 	{
 		databasefile->open(Filename, ios::out | ios::trunc);
 		for (int x=0; x<i;x++)
@@ -400,6 +392,39 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 			File_Write(databasefile, &Records[x], &x);
 		}
 		databasefile->close();
+	}
+}
+
+void CLI_Sort(CLI *bools, database *rec, bool *change_file)
+{
+	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true) //I
+	{
+		Display_Database(bools, rec);
+	}
+	else if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true) //F
+	{
+		rec->Set_FName(bools->Get_FName());
+		*change_file = true;
+	}
+	else if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true) //L
+	{
+		rec->Set_LName(bools->Get_LName());
+		*change_file = true;
+	}
+	else if (bools->filename == true && bools->phonearea == true && bools->account == true && bools->password == true) //A
+	{
+		rec->Set_PhoneArea(bools->Get_PhoneArea());
+		*change_file	= true;
+	}
+	else if (bools->filename == true && bools->phonenumber == true && bools->account == true && bools->password == true) //H
+	{
+		rec->Set_Phone(bools->Get_Phone());
+		*change_file = true;
+	}
+	else if (bools->filename == true && bools->middleinitial == true && bools->account == true && bools->password == true) //M
+	{
+		rec->Set_MI(bools->Get_MI());
+		*change_file = true;
 	}
 }
 
@@ -457,7 +482,7 @@ void Display_Database(CLI *CLI_Record, database *Record)
 {
     log(3) << std::setw(30) << std::right << "Current Bank Record\n\n";
 	//print the information to the screen
-	cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
+	log(5) << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
 	<< std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
 	<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
 }
