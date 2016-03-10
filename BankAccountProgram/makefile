@@ -24,12 +24,12 @@ FILE5=
 
 ARGS=-c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 
+ifndef FILE1
+	error
+endif
 
-.PHONY: build link clean all
+.PHONY: build clean all
 
-#
-# Compile ...
-#
 
 build:
 	g++ -o $(FILE1).o $(FILE1).cpp $(ARGS)
@@ -47,14 +47,11 @@ ifdef FILE5
 endif
 
 
-
-link:
-
-#1        g++ $(FILE1).o -L /usr/local/lib -o $(PROGRAM_NAME)
-#2		  g++ $(FILE1).o $(FILE2).o -L /usr/local/lib -o $(PROGRAM_NAME)
+#1	g++ $(FILE1).o -L /usr/local/lib -o $(PROGRAM_NAME)
+#2	g++ $(FILE1).o $(FILE2).o -L /usr/local/lib -o $(PROGRAM_NAME)
 	g++ $(FILE1).o $(FILE2).o $(FILE3).o -L /usr/local/lib -o $(PROGRAM_NAME)
-#4        g++ $(FILE1).o $(FILE2).o $(FILE3).o $(FILE4).o -L /usr/local/lib -o $(PROGRAM_NAME)
-#5        g++ $(FILE1).o $(FILE2).o $(FILE3).o $(FILE4).o $(FILE5).o -L /usr/local/lib -o $(PROGRAM_NAME)
+#4  g++ $(FILE1).o $(FILE2).o $(FILE3).o $(FILE4).o -L /usr/local/lib -o $(PROGRAM_NAME)
+#5  g++ $(FILE1).o $(FILE2).o $(FILE3).o $(FILE4).o $(FILE5).o -L /usr/local/lib -o $(PROGRAM_NAME)
 
 
 

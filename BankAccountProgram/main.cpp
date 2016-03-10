@@ -67,7 +67,7 @@ using std::vector;
     void Funds_Add(char *,fstream *);
     void Funds_Remove(char *, fstream *);
 //support functions
-    void File_Write(fstream *, database *);
+    void File_Write(fstream *, database *, int *);
 	void Class_Load(fstream *, database *);
 
 //verbose define
@@ -319,20 +319,21 @@ void CLI_Help()
 	log(5) << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
 	log(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//39
 	log(5) << setw(5) << "/A" << "Sets the phone number area code.\n";			//20
+	log(5) << setw(5) << "/C" << "Add account to database\n";					//33
 	log(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21
-	log(5) << setw(5) << "/F" << "Set the First Name.\n";						//22
-	log(5) << setw(5) << "/H" << "Sets the Phone Number.\n";					//23
-	log(5) << setw(5) << "/I" << "give information to user.\n";					//--
-	log(5) << setw(5) << "/L" << "Sets the Last Name.\n";						//24
-	log(5) << setw(5) << "/M" << "Sets Middle Inital.\n";						//25
+	log(5) << setw(5) << "/F" << "Changes the First Name.\n";					//22
+	log(5) << setw(5) << "/H" << "Changes the Phone Number.\n";					//23
+	log(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//--
+	log(5) << setw(5) << "/L" << "Changes the Last Name.\n";					//24
+	log(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25
 	log(5) << setw(5) << "/N" << "Account number.\n";							//26
 	log(5) << setw(5) << "/P" << "Account Password.\n";							//27
 	log(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28
-	log(5) << setw(5) << "/S" << "Social Security Number.\n";					//29
+	log(5) << setw(5) << "/S" << "Change Social Security Number.\n";			//29
 	log(5) << setw(5) << "/T" << "Amount ???.\n";								//30
 	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31
-	log(5) << setw(5) << "/V" << "turns on verbose mode.\n";					//32
-	log(5) << setw(5) << "/Z" << "Add account to database\n";					//33
+	log(5) << setw(5) << "/V" << "Sets verbose mode to true.\n";				//32
+
 }
 
 /* -----------------------------------------------------------------------------
@@ -355,28 +356,39 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 	}while ((*databasefile).eof() == 0);
 	log(3) << "loaded file\n";
 	databasefile->close();
-	for (int x=0; x < i; x++)
+	if (bools->filename == true && bools->add_acount_true() == 1)
 	{
-		database *rec = &Records[x];
-		if (!strncmp(bools->Get_Account(), rec->Get_Account(), 5))
+		i++;
+		Records.resize(i);
+		n++;
+		Set_Info(bools, &Records[n]);
+		change_file	= true;
+	}
+	else
+	{
+		for (int x=0; x < i; x++)
 		{
-			if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
+			database *rec = &Records[x];
+			if (!strncmp(bools->Get_Account(), rec->Get_Account(), 5))
 			{
-				Display_Database(bools, rec);
-			}
-			else if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true)
-			{
-				rec->Set_FName(bools->Get_FName());
-				change_file = true;
-			}
-			else if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true)
-			{
-				rec->Set_LName(bools->Get_LName());
-				change_file = true;
-			}
-			else if (bools->filename == true && bools->add_acount_true() == 1)
-			{
-				//Set_Info(bools, rec);
+				if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true)
+				{
+					Display_Database(bools, rec);
+				}
+				else if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true)
+				{
+					rec->Set_FName(bools->Get_FName());
+					change_file = true;
+				}
+				else if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true)
+				{
+					rec->Set_LName(bools->Get_LName());
+					change_file = true;
+				}
+				else if (bools->filename == true && bools->add_acount_true() == 1)
+				{
+					//Set_Info(bools, rec);
+				}
 			}
 		}
 	}
@@ -385,7 +397,7 @@ void CLI_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportn
 		databasefile->open(Filename, ios::out | ios::trunc);
 		for (int x=0; x<i;x++)
 		{
-			File_Write(databasefile, &Records[x]);
+			File_Write(databasefile, &Records[x], &x);
 		}
 		databasefile->close();
 	}
@@ -417,16 +429,22 @@ void Open_File(char *Filename, fstream *file)
 
 /* -----------------------------------------------------------------------------===Management options==================================================================================================================
  FUNCTION:          Set_Info()
- DESCRIPTION:       Adds data to the class
+ DESCRIPTION:       Adds data record to the class
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
 void Set_Info(CLI *CLI_Record, database *Record)
 {
-
 	Record->Set_LName(CLI_Record->Get_LName());
 	Record->Set_FName(CLI_Record->Get_FName());
- //CLI_Record->Get_MI(), CLI_Record->Get_SSN(), CLI_Record->Get_PhoneArea(), CLI_Record->Get_Phone(), CLI_Record->Get_Balance(), CLI_Record->Get_Account(), CLI_Record->Get_PassWd());
+	Record->Set_MI(CLI_Record->Get_MI());
+	Record->Set_SSN(CLI_Record->Get_SSN());
+	Record->Set_PhoneArea(CLI_Record->Get_PhoneArea());
+	Record->Set_Phone(CLI_Record->Get_Phone());
+	float bal = CLI_Record->Get_Balance(), *pbal = &bal;
+	Record->Set_Balance(pbal);
+	Record->Set_Account(CLI_Record->Get_Account());
+	Record->Set_PassWD(CLI_Record->Get_PassWd());
 }
 
 /* -----------------------------------------------------------------------------
@@ -442,9 +460,6 @@ void Display_Database(CLI *CLI_Record, database *Record)
 	cout << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
 	<< std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
 	<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
-
-    //white space at end of chart
-    cout << endl << endl;
 }
 
 /* -----------------------------------------------------------------------------
@@ -492,14 +507,14 @@ void Delete_Account(char *Filename, fstream *file)
                 else
                 {
                     cout << "To many wrong atempts, returning to menu";
-                    File_Write(&databasetemp, &Record);
+					//  File_Write(&databasetemp, &Record);
                 }
 
             }
         }
         else
         {
-            File_Write(&databasetemp, &Record);
+			//  File_Write(&databasetemp, &Record);
         }
         
     }while ((*file).eof() == 0);
@@ -607,7 +622,7 @@ void Funds_Transfer(char *Filename, fstream *file)
                     *pbal = Record.Get_Balance()-amount;//
                 }
                 Record.Set_Balance(pbal);//save new funds to record
-                File_Write(&databasetemp, &Record);
+										 //      File_Write(&databasetemp, &Record);
             }
             else
             {
@@ -616,7 +631,7 @@ void Funds_Transfer(char *Filename, fstream *file)
         }
         else
         {
-            File_Write(&databasetemp, &Record);
+			//     File_Write(&databasetemp, &Record);
         }
         
     }while ((*file).eof() == 0);// loops until end of file.
@@ -660,7 +675,7 @@ void Funds_Transfer(char *Filename, fstream *file)
                 temp = Record.Get_Balance() + *pbal;
                 Record.Set_Balance(&temp);
             }
-            File_Write(file, &Record);
+			// File_Write(file, &Record);
         } while (databasetemp.eof() == 0);
 		cout << "Funds transfered\n";
     }
@@ -714,7 +729,7 @@ void Funds_Remove(char *Filename, fstream *file)
                         found = 1;
                         *pamount = Report.Get_Balance() - *pamount;
                         Report.Set_Balance(pamount);
-                        File_Write(&databasetemp, &Report);
+						//               File_Write(&databasetemp, &Report);
                     }
                 }
                 else
@@ -724,7 +739,7 @@ void Funds_Remove(char *Filename, fstream *file)
             }
             else
             {
-                File_Write(&databasetemp, &Report);
+				//           File_Write(&databasetemp, &Report);
             }
         }while ((*file).eof() == 0);
     }
@@ -778,7 +793,7 @@ void Funds_Add(char *Filename, fstream *file)
                     found = 1;
                     *pamount = Report->Get_Balance() + *pamount;
                     Report->Set_Balance(pamount);
-                    File_Write(&databasetemp, Report);
+					//      File_Write(&databasetemp, Report);
                 }
                 else
                 {
@@ -787,7 +802,7 @@ void Funds_Add(char *Filename, fstream *file)
             }
             else
             {
-                File_Write(&databasetemp, Report);
+				//     File_Write(&databasetemp, Report);
             }
         }while ((*file).eof() == 0);
     }
@@ -809,9 +824,10 @@ void Funds_Add(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void File_Write(fstream *file, database *Report)
+void File_Write(fstream *file, database *Report, int *count)
 {
-    (*file) << endl << endl
+	if(count != 0)
+		(*file) << endl << endl
     << Report->Get_LName() << endl
     << Report->Get_FName() << endl
     << Report->Get_MI() << endl

@@ -9,12 +9,17 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>bankaccnt_allerrors.xcscheme</key>
+		<key>all errors.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>change first name.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
-		<key>bankaccnt_display.xcscheme</key>
+		<key>display account.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>
