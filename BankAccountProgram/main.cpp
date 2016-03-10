@@ -334,7 +334,7 @@ void CLI_Help()
 	log(5) << setw(5) << "/H" << "Changes the Phone Number.\n";					//23	$
 	log(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//--	$
 	log(5) << setw(5) << "/L" << "Changes the Last Name.\n";					//24	$
-	log(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25
+	log(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25	$
 	log(5) << setw(5) << "/N" << "Account number.\n";							//26
 	log(5) << setw(5) << "/P" << "Account Password.\n";							//27
 	log(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28

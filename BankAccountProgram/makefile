@@ -28,7 +28,7 @@ ifndef FILE1
 	error
 endif
 
-.PHONY: build clean all
+.PHONY: build clean
 
 
 build:
