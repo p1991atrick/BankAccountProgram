@@ -31,16 +31,16 @@ FILE3=CLI_Bool
 
 build:
 	g++ -o $(FILE1).o $(FILE1).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
-ifdef $(FILE2)
+ifdef FILE2
 	g++ -o $(FILE2).o $(FILE2).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 endif
-ifdef $(FILE3)
+ifdef FILE3
 	g++ -o $(FILE3).o $(FILE3).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 endif
-ifdef $(FILE4)
+ifdef FILE4
 	g++ -o $(FILE4).o $(FILE4).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 endif
-ifdef $(FILE5)
+ifdef FILE5
 	g++ -o $(FILE5).o $(FILE5).cpp -c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 endif
 
