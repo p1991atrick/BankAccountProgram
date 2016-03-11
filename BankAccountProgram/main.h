@@ -44,7 +44,7 @@ void Open_File(char *, fstream *);
 //management
 void Set_Info(CLI *, database *);
 void Display_Database(database *);
-void Delete_Account(char *, fstream *);
+int Delete_Account(vector<database> &, CLI *, int *);
 void Print_Report(char *, vector<database> &, int *);
 //account
 void Funds_Transfer(vector<database> &, CLI *, int *);

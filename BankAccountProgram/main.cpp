@@ -284,6 +284,14 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+13);
 			}
 		}
+		else if (strncmp(arg+1, "X", 1) == 0)
+		{
+			bools->deleaccnt = true;
+			if (!(argc > 3))
+			{
+				exit(EXIT_CODE_CLI_ERROR+14);
+			}
+		}
 	}
 }
 
@@ -298,7 +306,7 @@ void CLI_Help()
 	log(5) << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
 	log(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//39	#
 	log(5) << setw(5) << "/A" << "Sets the phone number area code.\n";			//20	$
-	log(5) << setw(5) << "/C" << "Add account to database\n";					//33	$
+	log(5) << setw(5) << "/C" << "Add an account to database\n";				//33	$
 	log(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21	#
 	log(5) << setw(5) << "/F" << "Changes the First Name.\n";					//22	$
 	log(5) << setw(5) << "/H" << "Changes the Phone Number.\n";					//23	$
@@ -312,6 +320,7 @@ void CLI_Help()
 	log(5) << setw(5) << "/T" << "Amount to transfer between accounts.\n";		//30	$
 	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31	$
 	log(5) << setw(5) << "/V" << "Sets verbose mode to true.\n";				//32	#
+	log(5) << setw(5) << "/X" << "Removes specified account from database\n";	//34	$
 }
 
 /* -----------------------------------------------------------------------------
@@ -351,6 +360,12 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 		Funds_Transfer(Records, bools, &i);
 		change_file = true;
 	}
+	else if (bools->deleaccnt == true)
+	{
+		n = Delete_Account(Records, bools, &i);
+		Records.erase(Records.begin()+n);
+		change_file = true;
+	}
 	else
 	{
 		for (int x=0; x < i; x++)
@@ -365,7 +380,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	if (change_file == true) //if a record was chaged, rewrite the output file
 	{
 		databasefile->open(Filename, ios::out | ios::trunc);
-		for (int x=0; x<i;x++)
+		for (int x=0; x<Records.size();x++)
 		{
 			File_Write(databasefile, &Records[x], &x);
 		}
@@ -442,7 +457,7 @@ void Open_File(char *Filename, fstream *file)
     }
     else
     {
-        log(3) << Filename << " Opened Sucsessfuly\n\n";
+        log(3) << Filename << " Opened Sucsessfuly\n";
     }
 }
 
@@ -487,65 +502,18 @@ void Display_Database(database *Record)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Delete_Account(char *Filename, fstream *file)
+int Delete_Account(vector<database> &Records, CLI *bools, int *counter)
 {
-    char accountnumber[6];
-    char accountpassword[7];
-    int trace = 0; //continuity for function
-    cout << "What is the Account Number of the account you would like to delete: ";
-    cin.ignore();
-    cin.getline(accountnumber, sizeof(accountnumber), '\n');//gets line until the point where enter was pressed
-    cout << "What is the Account Password: ";
-    cin.getline(accountpassword, sizeof(accountpassword), '\n');//gets line until the point where enter was pressed
+	int x=0;
+	for (;x<*counter;x++)
+	{
+		if ((!strncmp(bools->Get_Account(), Records[x].Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), Records[x].Get_PassWd(), 6)))
+		{
+			return x;
+		}
 
-    //start looking for offending account
-    fstream databasetemp;
-    (*file).open(Filename, ios::in);//load database
-    databasetemp.open("Tempcopyfile.db", ios::out | ios::trunc);//temp file for new information
-
-    //the brains
-    do{
-        database Record; //create report class
-						 //       Class_Load(file, &Record); //load first report from file
-        if (!strcmp(accountnumber, Record.Get_Account())) //checks for matching account number
-        {
-            if (!strcmp(accountpassword, Record.Get_PassWd())) //check for matching account password
-            {
-                cout << "\nDeleting accout " << accountnumber << endl; //if both are true, do nothing.
-            }
-            else //if password is wrong ask for it again
-            {
-                cout << "Incorrect password!\n";
-                cout << "What is the password for account " << accountnumber << ": ";
-                cin.getline(accountpassword, 7);
-                if (!strcmp(accountpassword, Record.Get_PassWd()))
-                {
-                    cout << "\nDeleting accout " << accountnumber << endl;
-                    trace = 1;
-                }
-                else
-                {
-                    cout << "To many wrong atempts, returning to menu";
-					//  File_Write(&databasetemp, &Record);
-                }
-
-            }
-        }
-        else
-        {
-			//  File_Write(&databasetemp, &Record);
-        }
-        
-    }while ((*file).eof() == 0);
-    databasetemp.close();
-    (*file).close();
-    if (trace == 1)
-    {
-        (*file).open(Filename, ios::out | ios::trunc); //reopen database file and truncate it
-        databasetemp.open("Tempcopyfile.db", ios::in);
-        databasetemp.close(); //closes the temp file.
-        (*file).close();
-    }
+	}
+	return -5;
 }
 
 /* -----------------------------------------------------------------------------
@@ -638,68 +606,55 @@ void Funds_Transfer(vector<database> &Records, CLI *bools, int *i)
  ----------------------------------------------------------------------------- */
 void Funds_Remove(char *Filename, fstream *file)
 {
-    char account[6];
-    account[5] = '\0'; //null char for end of cstring
-    char password[7];
-    password[6] = '\0'; //null char for end of cstring
-    float amount, *pamount = &amount;
-    int found = 0;
-
-
-    (*file).open(Filename, ios::in);
-    fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);
-
-    if (!(*file).fail()) //only continue if file was found.
-    {
-        cout << "What account will funds be withdrawn from: ";
-        cin.ignore();
-        cin.getline(account, sizeof(account), '\n'); //
-        do{
-            database Report;
-			//          Class_Load(&(*file), &Report);
-            if (!strncmp(account, Report.Get_Account(), sizeof(account))) //find account in question in the database file
-            {
-                cout << "What is the password for account " << Report.Get_Account() << ": ";
-                cin.getline(password, sizeof(password), '\n');
-                if (!strncmp(password, Report.Get_PassWd(), sizeof(password)))
-                {
-                    cout << "How much would you like to withdraw? You currently have "<< std::setprecision(2) << std::fixed << Report.Get_Balance() << ": ";
-                    cin >> *pamount;
-                    while (*pamount > Report.Get_Balance()) //loops until a valid number is found, 0 is valid
-                    {     //verify that the funds are there
-                        cout << "Not enough funds!\nNew Amount: ";
-                        cin >> *pamount;
-                    }
-                    //do the math
-                    if (*pamount > 0)
-                    {
-                        found = 1;
-                        *pamount = Report.Get_Balance() - *pamount;
-                        Report.Set_Balance(pamount);
-						//               File_Write(&databasetemp, &Report);
-                    }
-                }
-                else
-                {
-                    cout << "Incorrect password, returning to Main Menu\n";
-                }
-            }
-            else
-            {
-				//           File_Write(&databasetemp, &Report);
-            }
-        }while ((*file).eof() == 0);
-    }
-
-    (*file).close();
-    databasetemp.close();
-    if (found == 1) //only overwrites accounts if it sucsessfuly compleated
-    {
-        (*file).open(Filename, ios::out | ios::trunc);
-        databasetemp.open("Tempcopyfile.db", ios::in);
-        (*file).close();
-        databasetemp.close();
-    }
+//        cout << "What account will funds be withdrawn from: ";
+//        cin.ignore();
+//        cin.getline(account, sizeof(account), '\n'); //
+//        do{
+//            database Report;
+//			//          Class_Load(&(*file), &Report);
+//            if (!strncmp(account, Report.Get_Account(), sizeof(account))) //find account in question in the database file
+//            {
+//                cout << "What is the password for account " << Report.Get_Account() << ": ";
+//                cin.getline(password, sizeof(password), '\n');
+//                if (!strncmp(password, Report.Get_PassWd(), sizeof(password)))
+//                {
+//                    cout << "How much would you like to withdraw? You currently have "<< std::setprecision(2) << std::fixed << Report.Get_Balance() << ": ";
+//                    cin >> *pamount;
+//                    while (*pamount > Report.Get_Balance()) //loops until a valid number is found, 0 is valid
+//                    {     //verify that the funds are there
+//                        cout << "Not enough funds!\nNew Amount: ";
+//                        cin >> *pamount;
+//                    }
+//                    //do the math
+//                    if (*pamount > 0)
+//                    {
+//                        found = 1;
+//                        *pamount = Report.Get_Balance() - *pamount;
+//                        Report.Set_Balance(pamount);
+//						//               File_Write(&databasetemp, &Report);
+//                    }
+//                }
+//                else
+//                {
+//                    cout << "Incorrect password, returning to Main Menu\n";
+//                }
+//            }
+//            else
+//            {
+//				//           File_Write(&databasetemp, &Report);
+//            }
+//        }while ((*file).eof() == 0);
+//
+//
+//    (*file).close();
+//    databasetemp.close();
+//    if (found == 1) //only overwrites accounts if it sucsessfuly compleated
+//    {
+//        (*file).open(Filename, ios::out | ios::trunc);
+//        databasetemp.open("Tempcopyfile.db", ios::in);
+//        (*file).close();
+//        databasetemp.close();
+//    }
 }
 
 /* -----------------------------------------------------------------------------

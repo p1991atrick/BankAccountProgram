@@ -35,7 +35,7 @@ public:		//this in intentional
 	bool sndaccount;
 	bool sndpasswd;
 	bool addaccnt;
-	
+	bool deleaccnt;
 	//constructor is needed
 	CLI();
 	//set functions

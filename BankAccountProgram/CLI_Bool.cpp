@@ -26,6 +26,7 @@ CLI::CLI()
 	sndaccount = false;
 	sndpasswd = false;
 	addaccnt = false;
+	deleaccnt = false;
 }
 
 /* -----------------------------------------------------------------------------
