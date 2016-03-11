@@ -27,6 +27,7 @@
 /* Begin PBXFileReference section */
 		CD3B6BC01C61A4CE0052A835 /* BankRecord.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BankRecord.cpp; sourceTree = "<group>"; };
 		CD3B6BC11C61A4CE0052A835 /* BankRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankRecord.h; sourceTree = "<group>"; };
+		CD555DC41C92726D0052A835 /* Test.db */ = {isa = PBXFileReference; lastKnownFileType = text; name = Test.db; path = BankAccountProgram/Test.db; sourceTree = "<group>"; };
 		CD870CF21C88F0F00052A835 /* CLI_Bool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CLI_Bool.cpp; sourceTree = "<group>"; };
 		CD870CF31C88F0F00052A835 /* CLI_Bool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLI_Bool.h; sourceTree = "<group>"; };
 		CD9386C81C8A47A40052A835 /* CS202P1Test.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; name = CS202P1Test.sh; path = BankAccountProgram/CS202P1Test.sh; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 			children = (
 				CD9577BE1C5EC6720052A835 /* makefile */,
 				CD9386C81C8A47A40052A835 /* CS202P1Test.sh */,
+				CD555DC41C92726D0052A835 /* Test.db */,
 				CD9577B41C5EB95C0052A835 /* BankAccountProgram */,
 				CD9577B31C5EB95C0052A835 /* Products */,
 			);
