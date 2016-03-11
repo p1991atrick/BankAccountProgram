@@ -68,7 +68,7 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/V"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/DTest.db"

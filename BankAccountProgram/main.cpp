@@ -60,6 +60,10 @@ int main(int argc, char * argv[])
 		exit (EXIT_CODE_NO_SELECTION);
 	}
 	CLI_Args(argc, argv, Filename, Reportname, bools);
+	if ((strncmp(Filename, "a", 1)) == 0)
+	{
+		return EXIT_CODE_FILE_IO;
+	}
 	Record_Sort(bools, &databasefile, Filename, Reportname);
 	return EXIT_CODE_SUCCESS;
 }
@@ -303,16 +307,16 @@ void CLI_Help()
 	log(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25	$
 	log(5) << setw(5) << "/N" << "Account number.\n";							//26	#
 	log(5) << setw(5) << "/P" << "Account Password.\n";							//27	#
-	log(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28
-	log(5) << setw(5) << "/S" << "Change Social Security Number.\n";			//29
-	log(5) << setw(5) << "/T" << "Amount to transfer between accounts.\n";		//30
-	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31
-	log(5) << setw(5) << "/V" << "Sets verbose mode to true.\n";				//32
+	log(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28$
+	log(5) << setw(5) << "/S" << "Change Social Security Number.\n";			//29	$
+	log(5) << setw(5) << "/T" << "Amount to transfer between accounts.\n";		//30	$
+	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31	$
+	log(5) << setw(5) << "/V" << "Sets verbose mode to true.\n";				//32	#
 }
 
 /* -----------------------------------------------------------------------------
  FUNCTION NAME:		void Record_Sort(CLI *, database *, fstream *, char *, char *)
- PURPOSE:           loads classes into vector
+ PURPOSE:           loads classes into vector, and if needs to redo the output file
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
@@ -341,6 +345,11 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	else if (bools->filename == true && bools->reportfile == true)
 	{
 		Print_Report(Reportname, Records, &i);
+	}
+	else if (bools->account == true && bools->password == true && bools->sndpasswd == true && bools->sndaccount == true && bools->balance == true)
+	{
+		Funds_Transfer(Records, bools, &i);
+		change_file = true;
 	}
 	else
 	{
@@ -401,9 +410,15 @@ void CLI_Sort(CLI *bools, database *rec, bool *change_file, char *Reportname)
 		rec->Set_MI(bools->Get_MI());
 		*change_file = true;
 	}
-	else if (bools->filename == true && bools->reportfile == true)
+	else if (bools->filename == true && bools->ssn == true)
 	{
-
+		rec->Set_SSN(bools->Get_SSN());
+		*change_file = true;
+	}
+	else if (bools->filename == true && bools->newpassword == true)
+	{
+		rec->Set_PassWD(bools->Get_PassWd());
+		*change_file = true;
 	}
 }
 
@@ -575,103 +590,44 @@ void Print_Report(char *reportname, vector<database> &Records, int *i)
  RETURNS:           void function
  NOTES:             has multiple points of verification.
  ----------------------------------------------------------------------------- */
-void Funds_Transfer(char *Filename, fstream *file)
-{   //vars
-    char account1[6];
-    char account2[6];
-    float amount;
-    int found = 0; //for account continuity.
-    float bal, *pbal = &bal;
-
-    cout << "What account will the funds be comming from: ";
-    cin.ignore();
-    cin.getline(account1, 6, '\n');
-    //reset read write position to begining of file
-    (*file).open(Filename, ios::in);
-    fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);//temp file for new information
-
-    do{         //finds account that funds are coming from and removes them
-        database Record;
-        char passwd[7];
+void Funds_Transfer(vector<database> &Records, CLI *bools, int *i)
+{
+	float bal, *pbal = &bal; //temp balance holder
+	int account1 = -1, account2 = -1;
+	for (int n=0;n<*i;n++)
+	{         //find accounts that funds are being moved
+		database *Record = &Records[n];
 		//       Class_Load(file, &Record);
-        if (!strcmp(account1, Record.Get_Account()))//verify account number
+        if (!strcmp(bools->Get_Account(), Record->Get_Account()))//verify account number
         {
-            cout << "Found Account. What is the password for the account: ";
-            cin.getline(passwd, 7, '\n');
-            if (!strcmp(passwd, Record.Get_PassWd()))//verify account password
+            if (!strcmp(bools->Get_PassWd(), Record->Get_PassWd()))//verify account password
             {
-                found =1; //to allow function to continue for next if
-                cout << "You have $" << std::setprecision(2) << std::fixed << Record.Get_Balance() << endl;
-                cout << "How much will you be moving: ";
-                cin >> amount;
-                *pbal = Record.Get_Balance()-amount;
-                while (*pbal < 0)//if not enough money ask for amount again
-                {
-                    cout << "Funds not avalible!\n";
-                    cout << "Enter new amount: ";
-                    cin >> amount;
-                    *pbal = Record.Get_Balance()-amount;//
-                }
-                Record.Set_Balance(pbal);//save new funds to record
-										 //      File_Write(&databasetemp, &Record);
-            }
-            else
-            {
-                cout << "Incorrect password!";
-            }
-        }
-        else
-        {
-			//     File_Write(&databasetemp, &Record);
-        }
-        
-    }while ((*file).eof() == 0);// loops until end of file.
-	databasetemp.close();
-	databasetemp.open("Tempcopyfile.db", ios::in);
-    if (found == 1)//only runs if primary account was found
-    {
-        cout << "What account will the funds be going to: ";
-        cin.ignore();
-        cin.getline(account2, 6, '\n');
-        do{
-            database Record;
-			//          Class_Load(&databasetemp, &Record);
-            if (!strcmp(account2, Record.Get_Account()))
-            {
-                found = 2;
-            }
-        }while (databasetemp.eof() == 0 || found != 2);// loops until end of file or until account is found.
-    }
-    else
-    {
-        cout << "\nSecond account not found.\n    Returning to menu\n";
-    }
+				log(3) << "Found 1st account.\n";
+				account1 = n;
+			}
+		}
+		else if (!strcmp(bools->Get_sndAccount(), Record->Get_Account()))//verify account number
+		{
+			if (!strcmp(bools->Get_sndPassWD(), Record->Get_PassWd()))//verify account password
+			{
+				log(3) << "Found 2nd account.\n";
+				account2 = n;
+			}
+		}
 
-	databasetemp.close();
-	databasetemp.open("Tempcopyfile.db", ios::in); //set read position for temp file at begining.
-
-    if (found == 2) //only runs if both accounts were found, until this point the database file has no changes
-    {
-        cout << "Found second account\n";
-        //move files back to databasefile
-        (*file).close();
-        (*file).open(Filename, ios::out | ios::trunc);//database file truncated for new information
-        do {
-            database Record;
-            //move the money
-			//          Class_Load(&databasetemp, &Record);//load Record from file
-            if (!strcmp(account2, Record.Get_Account()))//verify find second account
-            {
-                float temp;
-                temp = Record.Get_Balance() + *pbal;
-                Record.Set_Balance(&temp);
-            }
-			// File_Write(file, &Record);
-        } while (databasetemp.eof() == 0);
-		cout << "Funds transfered\n";
     }
-    databasetemp.close();
-    (*file).close();
+    if (account1 != -1 && account2 != -1)//only runs if both accounts were found
+	{
+		*pbal = Records[account1].Get_Balance() - bools->Get_Balance(); //remove the funds from first account dry run
+		if (*pbal < 0)	//if not enough money, cancel
+		{
+			exit(EXIT_CODE_NO_FUNDS);
+		}
+		Records[account1].Set_Balance(pbal); //set the new account ballance for the first account
+		*pbal = Records[account2].Get_Balance() + bools->Get_Balance(); //add funds to 2nd account
+		Records[account2].Set_Balance(pbal);
+		log(3) << "funds transfered.\n";
+    }
 }
 
 /* -----------------------------------------------------------------------------

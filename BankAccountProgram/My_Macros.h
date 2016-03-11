@@ -63,6 +63,7 @@
 #define EXIT_CODE_FILE_IO 1
 #define EXIT_CODE_ERROR_NO_MATCH_FOUND 2
 #define EXIT_CODE_NO_SELECTION 3
+#define EXIT_CODE_NO_FUNDS 4
 #define EXIT_CODE_PROGRAM_HALT 9
 #define EXIT_CODE_CLI_ERROR 20 //20-40 are reserved for CLI argumnets
 
