@@ -358,7 +358,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 			database *rec = &Records[x]; //create pointer to current vector location
 			if ((!strncmp(bools->Get_Account(), rec->Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), rec->Get_PassWd(), 6))) //check that account number and password match
 			{
-				CLI_Sort(bools, rec, &change_file, Reportname);
+				CLI_Sort(bools, rec, &change_file);
 			}
 		}
 	}
@@ -379,11 +379,11 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void CLI_Sort(CLI *bools, database *rec, bool *change_file, char *Reportname)
+void CLI_Sort(CLI *bools, database *rec, bool *change_file)
 {
 	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true) //I
 	{
-		Display_Database(bools, rec);
+		Display_Database(rec);
 	}
 	else if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true) //F
 	{
@@ -472,7 +472,7 @@ void Set_Info(CLI *CLI_Record, database *Record)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Display_Database(CLI *CLI_Record, database *Record)
+void Display_Database(database *Record)
 {
     log(3) << std::setw(30) << std::right << "Current Bank Record\n\n";
 	//print the information to the screen
@@ -614,7 +614,7 @@ void Funds_Transfer(vector<database> &Records, CLI *bools, int *i)
 				account2 = n;
 			}
 		}
-
+		delete Record;
     }
     if (account1 != -1 && account2 != -1)//only runs if both accounts were found
 	{

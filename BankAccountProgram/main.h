@@ -38,12 +38,12 @@ using std::vector;
 void CLI_Args(int, char *argv[], char *, char *, CLI *);
 void CLI_Help();
 void Record_Sort(CLI *, fstream *, char *, char *);
-void CLI_Sort(CLI *, database *, bool *, char *);
+void CLI_Sort(CLI *, database *, bool *);
 //file IO
 void Open_File(char *, fstream *);
 //management
 void Set_Info(CLI *, database *);
-void Display_Database(CLI *, database *);
+void Display_Database(database *);
 void Delete_Account(char *, fstream *);
 void Print_Report(char *, vector<database> &, int *);
 //account
