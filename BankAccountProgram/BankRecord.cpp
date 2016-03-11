@@ -51,7 +51,7 @@ database::database()
     memset(SSN, '\0', 10);
     memset(PhoneArea, '\0', 4);
     memset(Phone, '\0', 8);
-    Balance = 0.00;
+    Balance = 000000.000000;
     memset(Account, '\0', 6);
     memset(PassWd, '\0', 7);
 }

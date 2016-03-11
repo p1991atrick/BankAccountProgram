@@ -27,6 +27,7 @@ CLI::CLI()
 	sndpasswd = false;
 	addaccnt = false;
 	deleaccnt = false;
+	addfunds = false;
 }
 
 /* -----------------------------------------------------------------------------
@@ -89,6 +90,8 @@ int CLI::transfer()
 {
 	if (account == true && sndaccount == true && password == true && sndpasswd == true && balance == true)
 		return 1;
+	else if (account == true && sndaccount == false && password == true && sndpasswd == false && balance == true)
+		return 2;
 	else
 		return 0;
 }

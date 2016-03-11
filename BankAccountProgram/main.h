@@ -10,8 +10,6 @@
 #define main_h
 
 
-extern int threshold;
-
 class mystreambuf: public std::streambuf
 {
 };

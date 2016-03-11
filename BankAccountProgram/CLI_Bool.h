@@ -15,8 +15,8 @@
 
 class CLI : public database
 {
-	char sndpass[6];
-	char sndacct[7];
+	char sndpass[7];
+	char sndacct[6];
 	
 public:		//this in intentional
 	bool phonearea;
@@ -36,6 +36,7 @@ public:		//this in intentional
 	bool sndpasswd;
 	bool addaccnt;
 	bool deleaccnt;
+	bool addfunds;
 	//constructor is needed
 	CLI();
 	//set functions

@@ -141,6 +141,8 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		else if (strncmp(arg+1, "I", 1) == 0)// print info to screen
 		{
 			bools->info = true;
+			if (argc > 3)
+				exit(EXIT_CODE_CLI_ERROR+15);
 		}
 		else if (strncmp(arg+1, "L", 1) == 0)//find if Last Name is called
 		{
@@ -310,7 +312,7 @@ void CLI_Help()
 	log(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21	#
 	log(5) << setw(5) << "/F" << "Changes the First Name.\n";					//22	$
 	log(5) << setw(5) << "/H" << "Changes the Phone Number.\n";					//23	$
-	log(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//--	$
+	log(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//35	$
 	log(5) << setw(5) << "/L" << "Changes the Last Name.\n";					//24	$
 	log(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25	$
 	log(5) << setw(5) << "/N" << "Account number.\n";							//26	#
@@ -355,7 +357,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	{
 		Print_Report(Reportname, Records, &i);
 	}
-	else if (bools->account == true && bools->password == true && bools->sndpasswd == true && bools->sndaccount == true && bools->balance == true)
+	else if (bools->transfer() == 1)
 	{
 		Funds_Transfer(Records, bools, &i);
 		change_file = true;
@@ -433,6 +435,14 @@ void CLI_Sort(CLI *bools, database *rec, bool *change_file)
 	else if (bools->newpassword == true)
 	{
 		rec->Set_PassWD(bools->Get_PassWd());
+		*change_file = true;
+	}
+	else if (bools->addfunds == true)
+	{
+		float bal, *pbal = &bal;
+		*pbal = rec->Get_Balance();
+		*pbal += bools->Get_Balance();
+		rec->Set_Balance(pbal);
 		*change_file = true;
 	}
 }
@@ -562,32 +572,31 @@ void Funds_Transfer(vector<database> &Records, CLI *bools, int *i)
 {
 	float bal, *pbal = &bal; //temp balance holder
 	int account1 = -1, account2 = -1;
-	for (int n=0;n<*i;n++)
+	for (int n=0;n<Records.size();n++)
 	{         //find accounts that funds are being moved
 		database *Record = &Records[n];
 		//       Class_Load(file, &Record);
-        if (!strcmp(bools->Get_Account(), Record->Get_Account()))//verify account number
+        if (!strncmp(bools->Get_Account(), Record->Get_Account(), 5))//verify account number
         {
-            if (!strcmp(bools->Get_PassWd(), Record->Get_PassWd()))//verify account password
+            if (!strncmp(bools->Get_PassWd(), Record->Get_PassWd(), 6))//verify account password
             {
 				log(3) << "Found 1st account.\n";
 				account1 = n;
 			}
 		}
-		else if (!strcmp(bools->Get_sndAccount(), Record->Get_Account()))//verify account number
+		else if (!strncmp(bools->Get_sndAccount(), Record->Get_Account(), 5))//verify account number
 		{
-			if (!strcmp(bools->Get_sndPassWD(), Record->Get_PassWd()))//verify account password
+			if (!strncmp(bools->Get_sndPassWD(), Record->Get_PassWd(), 6))//verify account password
 			{
 				log(3) << "Found 2nd account.\n";
 				account2 = n;
 			}
 		}
-		delete Record;
     }
     if (account1 != -1 && account2 != -1)//only runs if both accounts were found
 	{
 		*pbal = Records[account1].Get_Balance() - bools->Get_Balance(); //remove the funds from first account dry run
-		if (*pbal < 0)	//if not enough money, cancel
+		if (*pbal < bools->Get_Balance())	//if not enough money, cancel
 		{
 			exit(EXIT_CODE_NO_FUNDS);
 		}
