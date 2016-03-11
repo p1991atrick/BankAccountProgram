@@ -21,6 +21,7 @@
  ----------------------------------------------------------------------------- */
 
 #ifndef My_Macros_h
+#define My_Macros_h
 
 //trace output
 #define TRACE 0

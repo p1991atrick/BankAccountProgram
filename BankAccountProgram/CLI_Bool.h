@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 #include "BankRecord.h"
+#include "My_Macros.h"
+
 class CLI : public database
 {
 	char sndpass[6];
@@ -46,6 +48,7 @@ public:		//this in intentional
 
 	//member functions
 	int add_acount_true();
+	int transfer();
 };
 #endif /* CLI_Bool_h */
 

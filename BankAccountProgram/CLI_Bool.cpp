@@ -83,3 +83,11 @@ int CLI::add_acount_true()
 	else
 		return 0;
 }
+
+int CLI::transfer()
+{
+	if (account == true && sndaccount == true && password == true && sndpasswd == true && balance == true)
+		return 1;
+	else
+		return 0;
+}

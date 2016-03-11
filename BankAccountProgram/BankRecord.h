@@ -42,10 +42,9 @@
 #include <iostream>
 #include "My_Macros.h"
 
-using std::ostream;
 
-
-class database{
+class database
+{
     char LName[21];
     char FName[21];
     char MI;

@@ -32,44 +32,10 @@
  
  ----------------------------------------------------------------------------- */
 
-#include <vector>
-#include <fstream>
-#include <iomanip>
-#include <cstdlib>
-#include <cstring>
 #include "BankRecord.h"
 #include "CLI_Bool.h"
 #include "main.h"
 
-//namespace callouts
-using std::cout;
-using std::endl;
-using std::cin;
-using std::fstream;
-using std::ios;
-using std::setw;
-using std::vector;
-
-// Function Prototyes
-//menu
-	void CLI_Args(int, char *argv[], char *, char *, CLI *);
-	void CLI_Help();
-	void Record_Sort(CLI *, fstream *, char *, char *);
-	void CLI_Sort(CLI *, database *, bool *);
-//file IO
-    void Open_File(char *, fstream *);
-//management
-    void Set_Info(CLI *, database *);
-    void Display_Database(CLI *, database *);
-    void Delete_Account(char *, fstream *);
-    void Print_File(char *, fstream *);
-//account
-    void Funds_Transfer(char *, fstream *);
-    void Funds_Add(char *,fstream *);
-    void Funds_Remove(char *, fstream *);
-//support functions
-    void File_Write(fstream *, database *, int *);
-	void Class_Load(fstream *, database *);
 
 //verbose define
 int threshold = 4;
@@ -85,7 +51,7 @@ std::ostream nocout(&nostreambuf);
  ----------------------------------------------------------------------------- */
 int main(int argc, char * argv[])
 {
-    char Filename[41] = "a"; char Reportname[41] = "a"; //create and initialize Filenames with 'a'
+    char Filename[41] = "a"; char Reportname[41] = "BankAcct.Rpt"; //create and initialize Filenames with 'a'
     fstream databasefile; //for database file
 	CLI *bools = new CLI;	//for the true/false bool checks and CLI char*'s
 	if (argc < 2)
@@ -335,19 +301,18 @@ void CLI_Help()
 	log(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//--	$
 	log(5) << setw(5) << "/L" << "Changes the Last Name.\n";					//24	$
 	log(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25	$
-	log(5) << setw(5) << "/N" << "Account number.\n";							//26
-	log(5) << setw(5) << "/P" << "Account Password.\n";							//27
+	log(5) << setw(5) << "/N" << "Account number.\n";							//26	#
+	log(5) << setw(5) << "/P" << "Account Password.\n";							//27	#
 	log(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28
 	log(5) << setw(5) << "/S" << "Change Social Security Number.\n";			//29
-	log(5) << setw(5) << "/T" << "Amount ???.\n";								//30
+	log(5) << setw(5) << "/T" << "Amount to transfer between accounts.\n";		//30
 	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31
 	log(5) << setw(5) << "/V" << "Sets verbose mode to true.\n";				//32
-
 }
 
 /* -----------------------------------------------------------------------------
  FUNCTION NAME:		void Record_Sort(CLI *, database *, fstream *, char *, char *)
- PURPOSE:           dictates what functions run
+ PURPOSE:           loads classes into vector
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
@@ -373,6 +338,10 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 		Set_Info(bools, &Records[n]);
 		change_file	= true;
 	}
+	else if (bools->filename == true && bools->reportfile == true)
+	{
+		Print_Report(Reportname, Records, &i);
+	}
 	else
 	{
 		for (int x=0; x < i; x++)
@@ -380,7 +349,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 			database *rec = &Records[x]; //create pointer to current vector location
 			if ((!strncmp(bools->Get_Account(), rec->Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), rec->Get_PassWd(), 6))) //check that account number and password match
 			{
-				CLI_Sort(bools, rec, &change_file);
+				CLI_Sort(bools, rec, &change_file, Reportname);
 			}
 		}
 	}
@@ -395,7 +364,13 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	}
 }
 
-void CLI_Sort(CLI *bools, database *rec, bool *change_file)
+/* -----------------------------------------------------------------------------
+ FUNCTION NAME:		void CLI_Sort(CLI *, database *, bool *)
+ PURPOSE:           dictates what functions run
+ RETURNS:           void
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void CLI_Sort(CLI *bools, database *rec, bool *change_file, char *Reportname)
 {
 	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true) //I
 	{
@@ -425,6 +400,10 @@ void CLI_Sort(CLI *bools, database *rec, bool *change_file)
 	{
 		rec->Set_MI(bools->Get_MI());
 		*change_file = true;
+	}
+	else if (bools->filename == true && bools->reportfile == true)
+	{
+
 	}
 }
 
@@ -560,21 +539,9 @@ void Delete_Account(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Print_File(char *Filename, fstream *file)
+void Print_Report(char *reportname, vector<database> &Records, int *i)
 {
-    //change file name
-    cout << "Filename is \"BankAcct.Rpt\".\nDo you want to change it (y/n): ";
-    char yesno = 'N';
-    char reportname[26];
-    strncpy(reportname, "BankAcct.Rpt", 13);
-    cin >> yesno;
-    if (yesno == 'Y' || yesno == 'y')
-    {
-        cout << "Enter new name without extention: ";
-        cin.ignore();
-        cin.getline(reportname, 20); //only the first 20 char's will be used.
-        strncat(reportname, ".Rpt", 4); //add .Rpt to filename
-    }
+
     fstream reportfile(reportname, std::ios::out); //report file
 
     //header
@@ -587,20 +554,19 @@ void Print_File(char *Filename, fstream *file)
     //4th line
     reportfile << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
 
-    (*file).open(Filename, ios::in);
     //loop for #of entries
-    do{
-        database Record;
+	for (int z=0; z<*i;z++)
+	{
+        database *Record = &Records[z];
 		//        Class_Load(file, &Record);
         //body
-        reportfile << std::setw(12) << std::left << Record.Get_Account() << std::setw(20) << Record.Get_LName() << std::setw(20) << Record.Get_FName()
-        << std::setw(6) << Record.Get_MI() << std::setw(13) << Record.Get_SSN() << "(" << Record.Get_PhoneArea() << ")" << std::setw(11) << Record.Get_Phone()
-        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record.Get_Balance() << endl;
+        reportfile << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
+        << std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
+        << std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
         
-    }while ((*file).eof() == 0);
+    }
     reportfile.close();
-    (*file).close();
-	cout << "Printed report file\n";
+	log(3) << "Printed report file\n";
 }
 
 /* -----------------------------------------------------------------------------===Account options=====================================================================================================================
