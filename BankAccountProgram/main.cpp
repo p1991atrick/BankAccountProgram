@@ -360,7 +360,6 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 			{
 				CLI_Sort(bools, rec, &change_file);
 			}
-			delete rec;
 		}
 	}
 	if (change_file == true) //if a record was chaged, rewrite the output file
@@ -774,7 +773,7 @@ void Funds_Add(char *Filename, fstream *file)
  ----------------------------------------------------------------------------- */
 void File_Write(fstream *file, database *Report, int *count)
 {
-	if(count != 0)
+	if(*count != 0)
 	{
 		(*file) << endl << endl;
 	}
