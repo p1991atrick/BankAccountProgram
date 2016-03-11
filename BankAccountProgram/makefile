@@ -32,7 +32,9 @@ endif
 
 
 build:
+ifdef FILE1
 	g++ -o $(FILE1).o $(FILE1).cpp $(ARGS)
+endif
 ifdef FILE2
 	g++ -o $(FILE2).o $(FILE2).cpp $(ARGS)
 endif
