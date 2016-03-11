@@ -60,7 +60,7 @@ int main(int argc, char * argv[])
 		exit (EXIT_CODE_NO_SELECTION);
 	}
 	CLI_Args(argc, argv, Filename, Reportname, bools);
-	if ((strncmp(Filename, "a", 1)) == 0)
+	if (bools->filename == false)
 	{
 		return EXIT_CODE_FILE_IO;
 	}
@@ -334,7 +334,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	}while ((*databasefile).eof() == 0); //run until end of file
 	log(3) << "loaded file\n";
 	databasefile->close();
-	if (bools->filename == true && bools->add_acount_true() == 1) // check to see if adding account
+	if (bools->add_acount_true() == 1) // check to see if adding account
 	{
 		i++;
 		Records.resize(i);
@@ -342,7 +342,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 		Set_Info(bools, &Records[n]);
 		change_file	= true;
 	}
-	else if (bools->filename == true && bools->reportfile == true)
+	else if (bools->reportfile == true)
 	{
 		Print_Report(Reportname, Records, &i);
 	}
@@ -360,6 +360,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 			{
 				CLI_Sort(bools, rec, &change_file);
 			}
+			delete rec;
 		}
 	}
 	if (change_file == true) //if a record was chaged, rewrite the output file
@@ -381,41 +382,41 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
  ----------------------------------------------------------------------------- */
 void CLI_Sort(CLI *bools, database *rec, bool *change_file)
 {
-	if (bools->filename == true && bools->account == true && bools->password == true && bools->info == true) //I
+	if (bools->info == true) //I
 	{
 		Display_Database(rec);
 	}
-	else if (bools->filename == true && bools->account == true && bools->password == true && bools->firstName == true) //F
+	else if (bools->firstName == true) //F
 	{
 		rec->Set_FName(bools->Get_FName());
 		*change_file = true;
 	}
-	else if (bools->filename == true && bools->account == true && bools->password == true && bools->lastname== true) //L
+	else if (bools->lastname== true) //L
 	{
 		rec->Set_LName(bools->Get_LName());
 		*change_file = true;
 	}
-	else if (bools->filename == true && bools->phonearea == true && bools->account == true && bools->password == true) //A
+	else if (bools->phonearea == true) //A
 	{
 		rec->Set_PhoneArea(bools->Get_PhoneArea());
 		*change_file	= true;
 	}
-	else if (bools->filename == true && bools->phonenumber == true && bools->account == true && bools->password == true) //H
+	else if (bools->phonenumber == true) //H
 	{
 		rec->Set_Phone(bools->Get_Phone());
 		*change_file = true;
 	}
-	else if (bools->filename == true && bools->middleinitial == true && bools->account == true && bools->password == true) //M
+	else if (bools->middleinitial == true) //M
 	{
 		rec->Set_MI(bools->Get_MI());
 		*change_file = true;
 	}
-	else if (bools->filename == true && bools->ssn == true)
+	else if (bools->ssn == true)
 	{
 		rec->Set_SSN(bools->Get_SSN());
 		*change_file = true;
 	}
-	else if (bools->filename == true && bools->newpassword == true)
+	else if (bools->newpassword == true)
 	{
 		rec->Set_PassWD(bools->Get_PassWd());
 		*change_file = true;
@@ -774,8 +775,10 @@ void Funds_Add(char *Filename, fstream *file)
 void File_Write(fstream *file, database *Report, int *count)
 {
 	if(count != 0)
-		(*file) << endl << endl
-    << Report->Get_LName() << endl
+	{
+		(*file) << endl << endl;
+	}
+	(*file) << Report->Get_LName() << endl
     << Report->Get_FName() << endl
     << Report->Get_MI() << endl
     << Report->Get_SSN() << endl
