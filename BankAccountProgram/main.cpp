@@ -382,7 +382,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	if (change_file == true) //if a record was chaged, rewrite the output file
 	{
 		databasefile->open(Filename, ios::out | ios::trunc);
-		for (int x=0; x<Records.size();x++)
+		for (int x=0; x<int(Records.size());x++)
 		{
 			File_Write(databasefile, &Records[x], &x);
 		}
@@ -613,8 +613,8 @@ void Funds_Transfer(vector<database> &Records, CLI *bools, int *i)
  RETURNS:           void function
  NOTES:             has multiple points of verification.
  ----------------------------------------------------------------------------- */
-void Funds_Remove(char *Filename, fstream *file)
-{
+//void Funds_Remove(char *Filename, fstream *file)
+//{
 //        cout << "What account will funds be withdrawn from: ";
 //        cin.ignore();
 //        cin.getline(account, sizeof(account), '\n'); //
@@ -664,7 +664,7 @@ void Funds_Remove(char *Filename, fstream *file)
 //        (*file).close();
 //        databasetemp.close();
 //    }
-}
+//}
 
 /* -----------------------------------------------------------------------------
  FUNCTION:          void Funds_Add(char *Filename)
