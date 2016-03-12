@@ -359,7 +359,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	}
 	else if (bools->transfer() == 1)
 	{
-		Funds_Transfer(Records, bools, &i);
+		Funds_Transfer(Records, bools);
 		change_file = true;
 	}
 	else if (bools->deleaccnt == true)
@@ -568,11 +568,11 @@ void Print_Report(char *reportname, vector<database> &Records, int *i)
  RETURNS:           void function
  NOTES:             has multiple points of verification.
  ----------------------------------------------------------------------------- */
-void Funds_Transfer(vector<database> &Records, CLI *bools, int *i)
+void Funds_Transfer(vector<database> &Records, CLI *bools)
 {
 	float bal, *pbal = &bal; //temp balance holder
 	int account1 = -1, account2 = -1;
-	for (int n=0;n<Records.size();n++)
+	for (int n=0;n<int(Records.size());n++)
 	{         //find accounts that funds are being moved
 		database *Record = &Records[n];
 		//       Class_Load(file, &Record);

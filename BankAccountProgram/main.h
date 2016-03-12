@@ -45,7 +45,7 @@ void Display_Database(database *);
 int Delete_Account(vector<database> &, CLI *, int *);
 void Print_Report(char *, vector<database> &, int *);
 //account
-void Funds_Transfer(vector<database> &, CLI *, int *);
+void Funds_Transfer(vector<database> &, CLI *);
 void Funds_Add(char *,fstream *);
 void Funds_Remove(char *, fstream *);
 //support functions
