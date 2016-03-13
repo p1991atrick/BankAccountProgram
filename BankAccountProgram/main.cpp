@@ -159,9 +159,11 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		}
 		else if (strncmp(arg+1, "M", 1) == 0)//find if Middle initial is called
 		{
-			if (strlen(arg+2) == 1 && isalpha(*arg+2)) //check for length
+			if (strlen(arg+2) == 1 && isalpha(*(arg+2))) //check for length
 			{
-				bools->Set_MI(char(*arg+2));
+				char temp;
+				strncpy(&temp, arg+2, 1);
+				bools->Set_MI(temp);
 				bools->middleinitial = true;
 			}
 			else
@@ -319,7 +321,7 @@ void CLI_Help()
 	log(5) << setw(5) << "/P" << "Account Password.\n";							//27	#
 	log(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28$
 	log(5) << setw(5) << "/S" << "Change Social Security Number.\n";			//29	$
-	log(5) << setw(5) << "/T" << "Amount to transfer between accounts.\n";		//30	$
+	log(5) << setw(5) << "/T" << "Account Balance, or Amount to transfer between accounts.\n";		//30	$
 	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31	$
 	log(5) << setw(5) << "/V" << "Sets verbose mode to true.\n";				//32	#
 	log(5) << setw(5) << "/X" << "Removes specified account from database\n";	//34	$
