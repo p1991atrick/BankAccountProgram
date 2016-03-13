@@ -62,6 +62,7 @@ int main(int argc, char * argv[])
 	CLI_Args(argc, argv, Filename, Reportname, bools);
 	if (bools->filename == false)
 	{
+		log(3) << "No file given.\n";
 		return EXIT_CODE_FILE_IO;
 	}
 	Record_Sort(bools, &databasefile, Filename, Reportname);
