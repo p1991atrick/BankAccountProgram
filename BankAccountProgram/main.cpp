@@ -36,7 +36,6 @@
 #include "CLI_Bool.h"
 #include "main.h"
 
-
 //verbose define
 int threshold = 4;
 mystreambuf nostreambuf;
@@ -59,8 +58,8 @@ int main(int argc, char * argv[])
 		CLI_Help();
 		exit (EXIT_CODE_NO_SELECTION);
 	}
-	CLI_Args(argc, argv, Filename, Reportname, bools);
-	if (bools->filename == false)
+	CLI_Args(argc, argv, Filename, Reportname, bools); //sort and load args from CLI
+	if (bools->filename == false) //if no filename was given exit
 	{
 		log(3) << "No file given.\n";
 		return EXIT_CODE_FILE_IO;
@@ -77,6 +76,18 @@ int main(int argc, char * argv[])
  ----------------------------------------------------------------------------- */
 void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *bools)
 {//find cli vars
+	for (int i=1;i<argc;i++)//check for verbose first
+	{
+		char *arg = argv[i];
+		if (strncmp(arg+1, "V", 1) == 0)
+		{
+			threshold = 3;
+			if(!(argc > 3))//if not enough arguments given, exit
+			{
+				exit(EXIT_CODE_CLI_ERROR+12);
+			}
+		}
+	}
 	for (int i = 1; i < argc; i++)
 	{
 		char *arg = argv[i]; //set the next argument in line to be tested
@@ -273,14 +284,6 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+11);
 			}
 		}
-		else if (strncmp(arg+1, "V", 1) == 0)
-		{
-			threshold = 3;
-			if(!(argc > 3))
-			{
-				exit(EXIT_CODE_CLI_ERROR+12);
-			}
-		}
 		else if (strncmp(arg+1, "C", 1) == 0)
 		{
 			bools->addaccnt = true;
@@ -406,44 +409,52 @@ void CLI_Sort(CLI *bools, database *rec, bool *change_file)
 	{
 		rec->Set_FName(bools->Get_FName());
 		*change_file = true;
+		log(3) << "Changed First Name.\n";
 	}
 	else if (bools->lastname== true) //L
 	{
 		rec->Set_LName(bools->Get_LName());
 		*change_file = true;
+		log(3) << "Changed Last Name.\n";
 	}
 	else if (bools->phonearea == true) //A
 	{
 		rec->Set_PhoneArea(bools->Get_PhoneArea());
-		*change_file	= true;
+		*change_file = true;
+		log(3) << "Change Phone Area Code.\n";
 	}
 	else if (bools->phonenumber == true) //H
 	{
 		rec->Set_Phone(bools->Get_Phone());
 		*change_file = true;
+		log(3) << "Changed Phone Number.\n";
 	}
 	else if (bools->middleinitial == true) //M
 	{
 		rec->Set_MI(bools->Get_MI());
 		*change_file = true;
+		log(3) << "Changed Middle Initial.\n";
 	}
-	else if (bools->ssn == true)
+	else if (bools->ssn == true)// S
 	{
 		rec->Set_SSN(bools->Get_SSN());
 		*change_file = true;
+		log(3) << "Changed SSN.\n";
 	}
-	else if (bools->newpassword == true)
+	else if (bools->newpassword == true)// W
 	{
 		rec->Set_PassWD(bools->Get_PassWd());
 		*change_file = true;
+		log(3) << "Changed Password.\n";
 	}
-	else if (bools->addfunds == true)
+	else if (bools->transfer() == 2)// T
 	{
 		float bal, *pbal = &bal;
 		*pbal = rec->Get_Balance();
 		*pbal += bools->Get_Balance();
 		rec->Set_Balance(pbal);
 		*change_file = true;
+
 	}
 }
 
@@ -481,7 +492,7 @@ void Add_Account(CLI *CLI_Record, vector<database> &Records, int *i, int *n) //i
 {
 	for (int x=0;x<*i;x++)
 	{
-		database *record = &Records[x];
+		database *record = &Records[x];// creates pointer to record in use
 		if (!(strncmp(record->Get_Account(), CLI_Record->Get_Account(), 5)))
 		{
 			log(3) << "Acount already exists.\n";
@@ -489,7 +500,7 @@ void Add_Account(CLI *CLI_Record, vector<database> &Records, int *i, int *n) //i
 		}
 	}
 	*i = *i+1;
-	Records.resize(*i);
+	Records.resize(*i); //increase size of vector for new account
 	*n = *n+1;
 	Records[*n].Set_LName(CLI_Record->Get_LName());
 	Records[*n].Set_FName(CLI_Record->Get_FName());
@@ -501,7 +512,6 @@ void Add_Account(CLI *CLI_Record, vector<database> &Records, int *i, int *n) //i
 	Records[*n].Set_Balance(&bal);
 	Records[*n].Set_Account(CLI_Record->Get_Account());
 	Records[*n].Set_PassWD(CLI_Record->Get_PassWd());
-
 	log(3) << "Added account.\n";
 }
 
@@ -513,7 +523,17 @@ void Add_Account(CLI *CLI_Record, vector<database> &Records, int *i, int *n) //i
  ----------------------------------------------------------------------------- */
 void Display_Database(database *Record)
 {
-    log(3) << std::setw(30) << std::right << "Current Bank Record\n\n";
+    log(3) << std::setw(30) << std::right << "Current Bank Record\n";
+	//header
+	//1st line
+	log(3) << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+	//2nd line
+	log(3) << std::setw(12) << std::left << "Account"  << std::setw(20) << "Last" << std::setw(20)    << "First" << std::setw(6)    << "MI" << std::setw(13) << "SSN"       << std::setw(16) << "Phone"        << std::setw(15) << "Account"     << endl;
+	//3rd line
+	log(3) << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20)    << "Name"  << std::setw(6)    << "  " << std::setw(13) << "Number"    << std::setw(16) << "Number"       << std::setw(15) << "Balance"     << endl;
+	//4th line
+	log(3) << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+
 	//print the information to the screen
 	log(5) << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
 	<< std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
@@ -531,11 +551,10 @@ int Delete_Account(vector<database> &Records, CLI *bools, int *counter)
 	int x=0;
 	for (;x<*counter;x++)
 	{
-		if ((!strncmp(bools->Get_Account(), Records[x].Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), Records[x].Get_PassWd(), 6)))
+		if ((!strncmp(bools->Get_Account(), Records[x].Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), Records[x].Get_PassWd(), 6)))// check for correct account number and password
 		{
-			return x;
+			return x;	// returns the vector location number
 		}
-
 	}
 	return -5;
 }
@@ -548,9 +567,7 @@ int Delete_Account(vector<database> &Records, CLI *bools, int *counter)
  ----------------------------------------------------------------------------- */
 void Print_Report(char *reportname, vector<database> &Records, int *i)
 {
-
     fstream reportfile(reportname, std::ios::out); //report file
-
     //header
     //1st line
     reportfile << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
@@ -565,7 +582,6 @@ void Print_Report(char *reportname, vector<database> &Records, int *i)
 	for (int z=0; z<*i;z++)
 	{
         database *Record = &Records[z];
-		//        Class_Load(file, &Record);
         //body
         reportfile << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
         << std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
@@ -667,8 +683,6 @@ void Funds_Transfer(vector<database> &Records, CLI *bools)
 //				//           File_Write(&databasetemp, &Report);
 //            }
 //        }while ((*file).eof() == 0);
-//
-//
 //    (*file).close();
 //    databasetemp.close();
 //    if (found == 1) //only overwrites accounts if it sucsessfuly compleated
@@ -686,62 +700,62 @@ void Funds_Transfer(vector<database> &Records, CLI *bools)
  RETURNS:           void function
  NOTES:             has multiple points of verification.
  ----------------------------------------------------------------------------- */
-void Funds_Add(char *Filename, fstream *file)
-{
-    char account[6];
-    account[5] = '\0'; //null char for end of cstring
-    char password[7];
-    password[6] = '\0'; //null char for end of cstring
-    float amount, *pamount = &amount;
-    int found = 0;
-
-    (*file).open(Filename, ios::in);
-    fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);
-
-    if (!(*file).fail()) //only continue if file was found.
-    {
-        cout << "What account will funds be added to: ";
-        cin.ignore();
-        cin.getline(account, sizeof(account), '\n'); //
-        do{
-            database *Report = new database;
-			//           Class_Load(file, Report);
-            if (!strncmp(account, Report->Get_Account(), sizeof(account))) //find account in question in the database file
-            {
-                cout << "What is the password for account " << Report->Get_Account() << ": ";
-                cin.getline(password, sizeof(password), '\n');
-                if (!strncmp(password, Report->Get_PassWd(), sizeof(password)))
-                {
-                    cout << "How much would you like to Deposit?\n";
-                    cout << "Amount: ";
-                    cin >> *pamount;
-                    found = 1;
-                    *pamount = Report->Get_Balance() + *pamount;
-                    Report->Set_Balance(pamount);
-					//      File_Write(&databasetemp, Report);
-                }
-                else
-                {
-                    cout << "Incorrect password, returning to Main Menu\n";
-                }
-            }
-            else
-            {
-				//     File_Write(&databasetemp, Report);
-            }
-        }while ((*file).eof() == 0);
-    }
-
-    (*file).close();
-    databasetemp.close();
-    if (found == 1) //only overwrites accounts if it sucsessfuly compleated
-    {
-        (*file).open(Filename, ios::out | ios::trunc);
-        databasetemp.open("Tempcopyfile.db", ios::in);
-        (*file).close();
-        databasetemp.close();
-    }
-}
+//void Funds_Add(char *Filename, fstream *file)
+//{
+//    char account[6];
+//    account[5] = '\0'; //null char for end of cstring
+//    char password[7];
+//    password[6] = '\0'; //null char for end of cstring
+//    float amount, *pamount = &amount;
+//    int found = 0;
+//
+//    (*file).open(Filename, ios::in);
+//    fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);
+//
+//    if (!(*file).fail()) //only continue if file was found.
+//    {
+//        cout << "What account will funds be added to: ";
+//        cin.ignore();
+//        cin.getline(account, sizeof(account), '\n'); //
+//        do{
+//            database *Report = new database;
+//			//           Class_Load(file, Report);
+//            if (!strncmp(account, Report->Get_Account(), sizeof(account))) //find account in question in the database file
+//            {
+//                cout << "What is the password for account " << Report->Get_Account() << ": ";
+//                cin.getline(password, sizeof(password), '\n');
+//                if (!strncmp(password, Report->Get_PassWd(), sizeof(password)))
+//                {
+//                    cout << "How much would you like to Deposit?\n";
+//                    cout << "Amount: ";
+//                    cin >> *pamount;
+//                    found = 1;
+//                    *pamount = Report->Get_Balance() + *pamount;
+//                    Report->Set_Balance(pamount);
+//					//      File_Write(&databasetemp, Report);
+//                }
+//                else
+//                {
+//                    cout << "Incorrect password, returning to Main Menu\n";
+//                }
+//            }
+//            else
+//            {
+//				//     File_Write(&databasetemp, Report);
+//            }
+//        }while ((*file).eof() == 0);
+//    }
+//
+//    (*file).close();
+//    databasetemp.close();
+//    if (found == 1) //only overwrites accounts if it sucsessfuly compleated
+//    {
+//        (*file).open(Filename, ios::out | ios::trunc);
+//        databasetemp.open("Tempcopyfile.db", ios::in);
+//        (*file).close();
+//        databasetemp.close();
+//    }
+//}
 
 /* -----------------------------------------------------------------------------
  FUNCTION:          void File_Write(fstream *file, database *Report)
@@ -802,31 +816,3 @@ void Class_Load(fstream *databasefile, database *rec)
     rec->Set_Account(Account);
     rec->Set_PassWD(Password);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
