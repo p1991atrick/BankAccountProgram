@@ -7,27 +7,27 @@
 #
 
 #vars
-FILE=
+FILE=Test
 RFILE=
-FNAME=
-LNAME=
-MIDDLE=
-SSN=
-AREA=
-PHONE=
-AMMT=
-NEWPASS=
+FNAME=Johnny
+LNAME=Smith
+MIDDLE=X
+SSN=453658741
+AREA=557
+PHONE=6548521
+AMMT=653.26
+NEWPASS=UIOP00
 
-ACC1=
-PAS1=
-ACC2=
-PAS2=
-ACC3=
-PAS3=
+ACC1=AA001
+PAS1=POIU01
+ACC2=C123A
+PAS2=Z52C42
+ACC3=AA004
+PAS3=POIU04
 
 #commands
 
-#  Display account
+# Display account
 ./bankacct /D$(FILE) /N$(ACC1) /P$(PAS1) /I
 
 # Change First name
