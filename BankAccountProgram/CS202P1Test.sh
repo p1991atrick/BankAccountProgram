@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 #  CS202P1Test.sh
 #  
@@ -45,7 +45,7 @@ PAS_3=POIU04
 #commands
 
 # Display account
-./bankacct /V /D($FILE) /N($ACC_1) /P($PAS_1) /I
+./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
 
 # Change First name
 ./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /F$FNAME
