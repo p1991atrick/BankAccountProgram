@@ -37,7 +37,7 @@ PAS_3=POIU04
 #commands
 
 # Display account
-./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /I
+./bankacct /D$(FILE) /N$(ACC_1) /P$(PAS_1) /I
 
 # Change First name
 ./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /F$FNAME
