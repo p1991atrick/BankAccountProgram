@@ -8,7 +8,7 @@
 
 #vars
 FILE=Test
-FNAME=JONNY
+FNAME=Jonny
 LNAME=Smithers
 MIDDLE=K
 SSN=258649137
@@ -50,50 +50,71 @@ fi
 VERBOSE="$2" || "0"
 
 #commands
-
+echo
+echo
 # Verbose check
 if [ "$VERBOSE" == "1" ]; then
 	# Display account
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
+	echo
 	# Change First Name
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /F${FNAME}
+	echo
 	# Change Last Name
 	./bankacct /V /D${FILE} /N${ACC_2} /P${PAS_2} /L${LNAME}
+	echo
 	# Change Middle Initial
 	./bankacct /V /D${FILE} /N${ACC_3} /P${PAS_3} /M${MIDDLE}
+	echo
 	# Change SSN
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /S${SSN}
+	echo
 	# Change Phone Number Area Code
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /A${AREA}
+	echo
 	# Change Phone Number
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /H${PHONE}
+	echo
 	# Transfer money
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /N${ACC_2} /P${PAS_2} /T${AMMT}
+	echo
 	# Change password
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /W${NEWPASS}
+	echo
 	# Print Report file
 	./bankacct /V /R${RFILE} /D${FILE}
+	echo
 else
 	# Display account
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /I
+	echo
 	# Change First Name
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /F${FNAME}
+	echo
 	# Change Last Name
 	./bankacct /D${FILE} /N${ACC_2} /P${PAS_2} /L${LNAME}
+	echo
 	# Change Middle Initial
 	./bankacct /D${FILE} /N${ACC_3} /P${PAS_3} /M${MIDDLE}
+	echo
 	# Change SSN
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /S${SSN}
+	echo
 	# Change Phone Number Area Code
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /A${AREA}
+	echo
 	# Change Phone Number
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /H${PHONE}
+	echo
 	# Transfer money
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /N${ACC_2} /P${PAS_2} /T${AMMT}
+	echo
 	# Change password
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /W${NEWPASS}
+	echo
 	# Print Report file
 	./bankacct /R${RFILE} /D${FILE}
+	echo
 fi
 
 
