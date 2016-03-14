@@ -40,7 +40,7 @@ void CLI_Sort(CLI *, database *, bool *);
 //file IO
 void Open_File(char *, fstream *);
 //management
-void Set_Info(CLI *, database *);
+void Add_Account(CLI *, vector<database> &, int *, int *);
 void Display_Database(database *);
 int Delete_Account(vector<database> &, CLI *, int *);
 void Print_Report(char *, vector<database> &, int *);

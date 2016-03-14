@@ -350,10 +350,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	databasefile->close();
 	if (bools->add_acount_true() == 1) // check to see if adding account
 	{
-		i++;
-		Records.resize(i);
-		n++;
-		Set_Info(bools, &Records[n]);
+		Add_Account(bools, Records, &i, &n);
 		change_file	= true;
 	}
 	else if (bools->reportfile == true)
@@ -373,9 +370,9 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	}
 	else
 	{
-		for (int x=0; x < i; x++)
+		for (n=0; n<i; n++)
 		{
-			database *rec = &Records[x]; //create pointer to current vector location
+			database *rec = &Records[n]; //create pointer to current vector location
 			if ((!strncmp(bools->Get_Account(), rec->Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), rec->Get_PassWd(), 6))) //check that account number and password match
 			{
 				CLI_Sort(bools, rec, &change_file);
@@ -385,9 +382,9 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	if (change_file == true) //if a record was chaged, rewrite the output file
 	{
 		databasefile->open(Filename, ios::out | ios::trunc);
-		for (int x=0; x<int(Records.size());x++)
+		for (n=0;n<i;n++)
 		{
-			File_Write(databasefile, &Records[x], &x);
+			File_Write(databasefile, &Records[n], &n);
 		}
 		databasefile->close();
 	}
@@ -480,18 +477,32 @@ void Open_File(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Set_Info(CLI *CLI_Record, database *Record)
+void Add_Account(CLI *CLI_Record, vector<database> &Records, int *i, int *n) //i = size of vector, n =record number
 {
-	Record->Set_LName(CLI_Record->Get_LName());
-	Record->Set_FName(CLI_Record->Get_FName());
-	Record->Set_MI(CLI_Record->Get_MI());
-	Record->Set_SSN(CLI_Record->Get_SSN());
-	Record->Set_PhoneArea(CLI_Record->Get_PhoneArea());
-	Record->Set_Phone(CLI_Record->Get_Phone());
-	float bal = CLI_Record->Get_Balance(), *pbal = &bal;
-	Record->Set_Balance(pbal);
-	Record->Set_Account(CLI_Record->Get_Account());
-	Record->Set_PassWD(CLI_Record->Get_PassWd());
+	for (int x=0;x<*i;x++)
+	{
+		database *record = &Records[x];
+		if (!(strncmp(record->Get_Account(), CLI_Record->Get_Account(), 5)))
+		{
+			log(3) << "Acount already exists.\n";
+			exit(EXIT_CODE_DOUBBLE_ENTRIE);
+		}
+	}
+	*i = *i+1;
+	Records.resize(*i);
+	*n = *n+1;
+	Records[*n].Set_LName(CLI_Record->Get_LName());
+	Records[*n].Set_FName(CLI_Record->Get_FName());
+	Records[*n].Set_MI(CLI_Record->Get_MI());
+	Records[*n].Set_SSN(CLI_Record->Get_SSN());
+	Records[*n].Set_PhoneArea(CLI_Record->Get_PhoneArea());
+	Records[*n].Set_Phone(CLI_Record->Get_Phone());
+	float bal = CLI_Record->Get_Balance();
+	Records[*n].Set_Balance(&bal);
+	Records[*n].Set_Account(CLI_Record->Get_Account());
+	Records[*n].Set_PassWD(CLI_Record->Get_PassWd());
+
+	log(3) << "Added account.\n";
 }
 
 /* -----------------------------------------------------------------------------
