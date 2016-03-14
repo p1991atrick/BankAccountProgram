@@ -41,12 +41,12 @@ ACC_2=C123A
 PAS_2=Z52C42
 ACC_3=AA004
 PAS_3=POIU04
-VERBOSE=0
+VERBOSE="0"
 
 #commands
 
 # Display account
-if [$VERBOSE == 1 ]; then
+if [ "$VERBOSE" == "1" ]; then
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
 else
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /I
