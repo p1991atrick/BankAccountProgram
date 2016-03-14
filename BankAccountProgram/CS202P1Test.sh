@@ -46,7 +46,7 @@ VERBOSE=FALSE
 #commands
 
 # Display account
-if [$VERBOSE == "True" ]
+if [$VERBOSE == "True" ]; then
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
 else
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /I
