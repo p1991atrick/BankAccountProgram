@@ -7,25 +7,33 @@
 #
 
 #vars
-echo "Enter file name:"
-read FILE
-echo "Enter First name to use:"
-read FNAME
-echo "Enter Last name to use:"
-read LNAME
-echo "Enter Middle Initial to use:"
-read MIDDLE
-echo "Enter SSN to use:"
-read SSN
-echo "Enter Phone Number Area Code to use:"
-read AREA
-echo "Enter Phone Number to use:"
-read PHONE
-echo "Enter Balance to use:"
-read AMMT
-echo "Enter New Password to use:"
-read NEWPASS
-
+#echo "Enter file name:"
+#read FILE
+#echo "Enter First name to use:"
+#read FNAME
+#echo "Enter Last name to use:"
+#read LNAME
+#echo "Enter Middle Initial to use:"
+#read MIDDLE
+#echo "Enter SSN to use:"
+#read SSN
+#echo "Enter Phone Number Area Code to use:"
+#read AREA
+#echo "Enter Phone Number to use:"
+#read PHONE
+#echo "Enter Balance to use:"
+#read AMMT
+#echo "Enter New Password to use:"
+#read NEWPASS
+FILE=Test
+FNAME=JONNY
+LNAME=Smithers
+MIDDLE=K
+SSN=258649137
+AREA=557
+PHONE=5846958
+AMMT=584.32
+NEWPASS=POIU00
 
 ACC_1=AA001
 PAS_1=POIU01
@@ -37,7 +45,7 @@ PAS_3=POIU04
 #commands
 
 # Display account
-./bankacct /V /D$FILE /N$ACC_1 /P$PAS_1 /I
+./bankacct /V /D($FILE) /N($ACC_1) /P($PAS_1) /I
 
 # Change First name
 ./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /F$FNAME
