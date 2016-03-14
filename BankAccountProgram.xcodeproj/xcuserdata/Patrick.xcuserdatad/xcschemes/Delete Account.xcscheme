@@ -75,11 +75,11 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/NAA003"
+            argument = "/NAA005"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/PPOIU03"
+            argument = "/PPOIU05"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
