@@ -142,7 +142,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		else if (strncmp(arg+1, "I", 1) == 0)// print info to screen
 		{
 			bools->info = true;
-			if (argc > 3)
+			if (argc < 3)
 				exit(EXIT_CODE_CLI_ERROR+15);
 		}
 		else if (strncmp(arg+1, "L", 1) == 0)//find if Last Name is called
