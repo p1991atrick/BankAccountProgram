@@ -41,7 +41,8 @@ ACC_2=C123A
 PAS_2=Z52C42
 ACC_3=AA004
 PAS_3=POIU04
-VERBOSE="0"
+
+VERBOSE="$1" || "0"
 
 #commands
 
