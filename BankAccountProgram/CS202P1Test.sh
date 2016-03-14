@@ -45,31 +45,32 @@ PAS_3=POIU04
 #commands
 
 # Display account
+echo "displaying account"
 ./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
 
-# Change First name
-./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /F$FNAME
-
-# Change Last name
-./bankacct /D$FILE /N$ACC_2 /P$PAS_2 /L$LNAME
-
-# Change Middle initial
-./bankacct /D$FILE /N$ACC_3 /P$PAS_3  /M$MIDDLE
-
-# Change ssn
-./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /S$SSN
-
-# Change phonenumber area code
-./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /A$AREA
-
-# Change phonenumber area code
-./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /H$PHONE
-
-# Transfer money
-./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /N$ACC_2 /P$PAS_2 /T$AMMT
-
-# Change password
-./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /W$NEWPASS
-
-# Print Report file
-./bankacct /R$RFILE /D$FILE
+## Change First name
+#./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /F$FNAME
+#
+## Change Last name
+#./bankacct /D$FILE /N$ACC_2 /P$PAS_2 /L$LNAME
+#
+## Change Middle initial
+#./bankacct /D$FILE /N$ACC_3 /P$PAS_3  /M$MIDDLE
+#
+## Change ssn
+#./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /S$SSN
+#
+## Change phonenumber area code
+#./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /A$AREA
+#
+## Change phonenumber area code
+#./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /H$PHONE
+#
+## Transfer money
+#./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /N$ACC_2 /P$PAS_2 /T$AMMT
+#
+## Change password
+#./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /W$NEWPASS
+#
+## Print Report file
+#./bankacct /R$RFILE /D$FILE
