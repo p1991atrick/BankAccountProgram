@@ -46,7 +46,7 @@ PAS_3=POIU04
 
 # Display account
 echo "displaying account"
-./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
+./bankacct /V /D{$FILE} /N{$ACC_1} /P{$PAS_1} /I
 
 ## Change First name
 #./bankacct /D$FILE /N$ACC_1 /P$PAS_1 /F$FNAME
