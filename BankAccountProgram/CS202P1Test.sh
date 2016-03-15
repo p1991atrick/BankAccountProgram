@@ -61,8 +61,7 @@ else
 fi
 
 
-#commands
-echo
+# Commands
 echo
 # Verbose check
 if [ "$VERBOSE" == "1" ]; then
@@ -111,7 +110,7 @@ if [ "$VERBOSE" == "1" ]; then
 else
 	# Display account
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /I
-	echo "--------Display Account--------"
+	echo "--------Displayed Account--------"
 	# Change First Name
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /F${FNAME}
 	echo "--------Changed First Name--------"
