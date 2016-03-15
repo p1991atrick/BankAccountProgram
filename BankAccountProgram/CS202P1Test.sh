@@ -111,38 +111,38 @@ if [ "$VERBOSE" == "1" ]; then
 else
 	# Display account
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /I
-	echo
+	echo "--------Display Account--------"
 	# Change First Name
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /F${FNAME}
-	echo
+	echo "--------Changed First Name--------"
 	# Change Last Name
 	./bankacct /D${FILE} /N${ACC_2} /P${PAS_2} /L${LNAME}
-	echo
+	echo "--------Changed Last Name--------"
 	# Change Middle Initial
 	./bankacct /D${FILE} /N${ACC_3} /P${PAS_3} /M${MIDDLE}
-	echo
+	echo "--------Changed Middle Initial--------"
 	# Change SSN
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /S${SSN}
-	echo
+	echo "--------Changed SSN--------"
 	# Change Phone Number Area Code
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /A${AREA}
-	echo
+	echo "--------Changed Area Code--------"
 	# Change Phone Number
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /H${PHONE}
-	echo
+	echo "--------Changed Phone Number--------"
 	# Transfer money
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /N${ACC_2} /P${PAS_2} /T${AMMT}
-	echo
+	echo "--------Transfered Funds--------"
 	# Change password
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /W${NEWPASS}
-	echo
+	echo "--------Changed Password--------"
 	# Print Report file
 	./bankacct /R${RFILE} /D${FILE}
-	echo
+	echo "--------Printed Report File--------"
 		if [ "$PERSONAL" == "1" ]; then
 		# Create Account
 		./bankacct /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
-		echo
+		echo "--------Created Account--------"
 		# Display Database file
 		cat $FILE
 		echo
@@ -150,10 +150,11 @@ else
 		read -p "Press Enter To Continue"
 		# Remove Account From Database
 		./bankacct /X /NAA010 /PPOIU10 /D${FILE}
+		echo "--------Removed Account--------"
 		fi
 fi
 
-echo "End of File."
+echo "End of Test File."
 echo
 ## END ##
 
