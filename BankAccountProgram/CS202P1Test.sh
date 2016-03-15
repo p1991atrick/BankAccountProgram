@@ -64,6 +64,8 @@ fi
 # Commands
 echo
 if [ uname == "Linux" ]; then ## For Linux
+	echo "Running for Linux... "
+	sleep 1
 	# Verbose check
 	if [ "$VERBOSE" == "1" ]; then
 		# Display account
