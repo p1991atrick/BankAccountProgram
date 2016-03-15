@@ -106,7 +106,7 @@ if [ "$VERBOSE" == "1" ]; then
 		echo "----"
 		read -p "Press\ Enter\ To\ Continue"
 		# Remove Account From Database
-		./bankaccnt /V /X /N
+		./bankaccnt /V /X /NAA010 /PPOIU10
 	fi
 else
 	# Display account
