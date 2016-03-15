@@ -64,7 +64,7 @@ fi
 
 # Commands
 echo
-if [ "$SYS" == "linux" ]; then ## For Linux
+if [ "$SYS" == "Linux" ]; then ## For Linux
 	echo "Running for Linux... "
 	sleep 1
 	# Verbose check
