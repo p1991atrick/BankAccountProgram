@@ -78,6 +78,7 @@ fi
 echo
 if [ "$SYS" = "Linux" ]; then ## For Linux
 	echo "Running for Linux... "
+	echo
 	sleep 1
 	# Verbose check
 	if [ "$VERBOSE" == "1" ]; then
@@ -174,6 +175,9 @@ if [ "$SYS" = "Linux" ]; then ## For Linux
 	## END ##
 
 elif [ "$SYS" == "Darwin" ]; then ## For Mac
+	echo "Running for Mac... "
+	echo
+	sleep 1
 	if [ "$VERBOSE" = "1" ]; then
 		# Display account
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
