@@ -98,15 +98,15 @@ if [ "$VERBOSE" == "1" ]; then
 	echo
 	if [ "$PERSONAL" == "1" ]; then
 		# Create Account
-		./bankaccnt /V /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39
+		./bankacct /V /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39
 		echo
 		# Display Database file
 		cat $FILE
 		echo
 		echo "----"
-		read -p "Press\ Enter\ To\ Continue"
+		read -p "Press Enter To Continue"
 		# Remove Account From Database
-		./bankaccnt /V /X /NAA010 /PPOIU10
+		./bankacct /V /X /NAA010 /PPOIU10
 	fi
 else
 	# Display account
