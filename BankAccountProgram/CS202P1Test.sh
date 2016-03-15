@@ -5,8 +5,8 @@
 #
 #  Created by Patrick Kelly on 3/4/16.
 #
-#  This tool requires 2 cli args, the first and second ones SHOULD be '0'.
-#	If you understand what the arg's do you are free to use other options.
+#  This tool uses CLI arguments.
+#	If you understand what the arg's do you are free to use them.
 #
 
 
@@ -98,7 +98,7 @@ if [ "$SYS" = "Linux" ]; then ## For Linux
 		./bankacct /V /D${FILE} /N${ACC_2} /P${PAS_2} /S${SSN}
 		echo
 		# Change Phone Number Area Code
-		./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /A${AREA}
+		./bankacct /V /D${FILE} /N${ACC_3} /P${PAS_3} /A${AREA}
 		echo
 		# Change Phone Number
 		./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /H${PHONE}
