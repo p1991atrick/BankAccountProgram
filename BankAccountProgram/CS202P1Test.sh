@@ -49,7 +49,7 @@ if [ "$MAN" == "0" ]; then
 	echo "Enter New Password to use:"
 	read NEWPASS
 else
-	FILE=Test
+	FILE=Test.db
 	FNAME=Jonny
 	LNAME=Smithers
 	MIDDLE=K
