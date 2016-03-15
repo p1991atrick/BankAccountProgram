@@ -21,9 +21,21 @@ PAS_3=POIU04
 
 ### DO NOT TOUCH!! ###
 ###################
-MAN="$1" || "0" ### DO NOT TOUCH!! ###
-VERBOSE="$2"||"0" ### DO NOT TOUCH!! ###
-PERSONAL="$3"||"0" ### DO NOT TOUCH!! ###
+if [ "$1" = "1" ]; then ### DO NOT TOUCH!! ###
+	MAN="$1"
+else
+	MAN="0"
+fi
+if [ "$2" = "1" ];then ### DO NOT TOUCH!! ###
+	VERBOSE="$2"
+else
+	VERBOSE="0"
+fi
+if [ "$3" = "1" \];then ### DO NOT TOUCH!! ###
+	PERSONAL="$3"
+else
+	PERSONAL="0"
+fi
 SYS=`uname` ### DO NOT TOUCH!! ###
 ###################
 ### DO NOT TOUCH!! ###
