@@ -16,7 +16,7 @@
  
  Author          Date           Modification(s)
  -------------   -----------    ---------------
- Patrick Kelly   08-27-2015     X.X (independant file)
+ Patrick Kelly   08-27-2015     X.X (under git control)
  
  ----------------------------------------------------------------------------- */
 
@@ -33,7 +33,7 @@
 #define CLEAR_SCREEN system("clear");
 
 //press anykey to continue POSIX
-#define AKTC  system("read -p \"Press Enter to continue...\"")
+#define AKTC system("read -p \"Press Enter to continue...\"")
 
 //array size calculation    total bytes/bytes of 0 location
 #define ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))

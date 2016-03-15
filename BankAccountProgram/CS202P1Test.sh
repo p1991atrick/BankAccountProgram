@@ -85,37 +85,48 @@ if [ "$SYS" = "Linux" ]; then ## For Linux
 		# Display account
 		./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
 		echo
+		sleep 1
 		# Change First Name
 		./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /F${FNAME}
 		echo
+		sleep 1
 		# Change Last Name
 		./bankacct /V /D${FILE} /N${ACC_2} /P${PAS_2} /L${LNAME}
 		echo
+		sleep 1
 		# Change Middle Initial
 		./bankacct /V /D${FILE} /N${ACC_3} /P${PAS_3} /M${MIDDLE}
 		echo
+		sleep 1
 		# Change SSN
 		./bankacct /V /D${FILE} /N${ACC_2} /P${PAS_2} /S${SSN}
 		echo
+		sleep 1
 		# Change Phone Number Area Code
 		./bankacct /V /D${FILE} /N${ACC_3} /P${PAS_3} /A${AREA}
 		echo
+		sleep 1
 		# Change Phone Number
 		./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /H${PHONE}
 		echo
+		sleep 1
 		# Transfer money
 		./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /N${ACC_2} /P${PAS_2} /T${AMMT}
 		echo
+		sleep 1
 		# Change password
 		./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /W${NEWPASS}
 		echo
+		sleep 1
 		# Print Report file
 		./bankacct /V /R${RFILE} /D${FILE}
 		echo
+		sleep 1
 		if [ "$PERSONAL" = "1" ]; then
 			# Create Account
 			./bankacct /V /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
 			echo
+			sleep 1
 			# Display Database file
 			cat $FILE
 			echo
@@ -128,37 +139,48 @@ if [ "$SYS" = "Linux" ]; then ## For Linux
 		# Display account
 		./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /I
 		echo "--------Displayed Account--------"
+		sleep 1
 		# Change First Name
 		./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /F${FNAME}
 		echo "--------Changed First Name--------"
+		sleep 1
 		# Change Last Name
 		./bankacct /D${FILE} /N${ACC_2} /P${PAS_2} /L${LNAME}
 		echo "--------Changed Last Name--------"
+		sleep 1
 		# Change Middle Initial
 		./bankacct /D${FILE} /N${ACC_3} /P${PAS_3} /M${MIDDLE}
 		echo "--------Changed Middle Initial--------"
+		sleep 1
 		# Change SSN
 		./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /S${SSN}
 		echo "--------Changed SSN--------"
+		sleep 1
 		# Change Phone Number Area Code
 		./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /A${AREA}
 		echo "--------Changed Area Code--------"
+		sleep 1
 		# Change Phone Number
 		./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /H${PHONE}
 		echo "--------Changed Phone Number--------"
+		sleep 1
 		# Transfer money
 		./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /N${ACC_2} /P${PAS_2} /T${AMMT}
 		echo "--------Transfered Funds--------"
+		sleep 1
 		# Change password
 		./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /W${NEWPASS}
 		echo "--------Changed Password--------"
+		sleep 1
 		# Print Report file
 		./bankacct /R${RFILE} /D${FILE}
 		echo "--------Printed Report File--------"
+		sleep 1
 			if [ "$PERSONAL" == "1" ]; then
 			# Create Account
 			./bankacct /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
 			echo "--------Created Account--------"
+			sleep 1
 			# Display Database file
 			cat $FILE
 			echo
@@ -167,6 +189,7 @@ if [ "$SYS" = "Linux" ]; then ## For Linux
 			# Remove Account From Database
 			./bankacct /X /NAA010 /PPOIU10 /D${FILE}
 			echo "--------Removed Account--------"
+			sleep 1
 			fi
 	fi
 
@@ -182,37 +205,48 @@ elif [ "$SYS" == "Darwin" ]; then ## For Mac
 		# Display account
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
 		echo
+		sleep 1
 		# Change First Name
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /F${FNAME}
 		echo
+		sleep 1
 		# Change Last Name
 		bankacct /V /D${FILE} /N${ACC_2} /P${PAS_2} /L${LNAME}
 		echo
+		sleep 1
 		# Change Middle Initial
 		bankacct /V /D${FILE} /N${ACC_3} /P${PAS_3} /M${MIDDLE}
 		echo
+		sleep 1
 		# Change SSN
 		bankacct /V /D${FILE} /N${ACC_2} /P${PAS_2} /S${SSN}
 		echo
+		sleep 1
 		# Change Phone Number Area Code
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /A${AREA}
 		echo
+		sleep 1
 		# Change Phone Number
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /H${PHONE}
 		echo
+		sleep 1
 		# Transfer money
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /N${ACC_2} /P${PAS_2} /T${AMMT}
 		echo
+		sleep 1
 		# Change password
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /W${NEWPASS}
 		echo
+		sleep 1
 		# Print Report file
 		bankacct /V /R${RFILE} /D${FILE}
 		echo
+		sleep 1
 		if [ "$PERSONAL" = "1" ]; then
 			# Create Account
 			bankacct /V /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
 			echo
+			sleep 1
 			# Display Database file
 			cat $FILE
 			echo
@@ -225,37 +259,48 @@ elif [ "$SYS" == "Darwin" ]; then ## For Mac
 		# Display account
 		bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /I
 		echo "--------Displayed Account--------"
+		sleep 1
 		# Change First Name
 		bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /F${FNAME}
 		echo "--------Changed First Name--------"
+		sleep 1
 		# Change Last Name
 		bankacct /D${FILE} /N${ACC_2} /P${PAS_2} /L${LNAME}
 		echo "--------Changed Last Name--------"
+		sleep 1
 		# Change Middle Initial
 		bankacct /D${FILE} /N${ACC_3} /P${PAS_3} /M${MIDDLE}
 		echo "--------Changed Middle Initial--------"
+		sleep 1
 		# Change SSN
 		bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /S${SSN}
 		echo "--------Changed SSN--------"
+		sleep 1
 		# Change Phone Number Area Code
 		bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /A${AREA}
 		echo "--------Changed Area Code--------"
+		sleep 1
 		# Change Phone Number
 		bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /H${PHONE}
 		echo "--------Changed Phone Number--------"
+		sleep 1
 		# Transfer money
 		bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /N${ACC_2} /P${PAS_2} /T${AMMT}
 		echo "--------Transfered Funds--------"
+		sleep 1
 		# Change password
 		bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /W${NEWPASS}
 		echo "--------Changed Password--------"
+		sleep 1
 		# Print Report file
 		bankacct /R${RFILE} /D${FILE}
 		echo "--------Printed Report File--------"
+		sleep 1
 		if [ "$PERSONAL" = "1" ]; then
 			# Create Account
 			bankacct /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
 			echo "--------Created Account--------"
+			sleep 1
 			# Display Database file
 			cat $FILE
 			echo
@@ -264,6 +309,7 @@ elif [ "$SYS" == "Darwin" ]; then ## For Mac
 			# Remove Account From Database
 			bankacct /X /NAA010 /PPOIU10 /D${FILE}
 			echo "--------Removed Account--------"
+			sleep 1
 		fi
 	fi
 
