@@ -5,21 +5,31 @@
 #
 #  Created by Patrick Kelly on 3/4/16.
 #
+#  This tool requires 2 cli args, the first and second ones SHOULD be '0'.
+#	If you understand what the arg's do you are free to use other options.
+#
 
-#vars
-FILE=Test
-FNAME=Jonny
-LNAME=Smithers
-MIDDLE=K
-SSN=258649137
-AREA=557
-PHONE=5846958
-AMMT=584.32
-NEWPASS=POIU00
 
-MAN="$1" || "0"
+### Var's ###
+ACC_1=AA001
+PAS_1=POIU01
+ACC_2=C123A
+PAS_2=Z52C42
+ACC_3=AA004
+PAS_3=POIU04
+#############
 
-if [ "$MAN" == "1" ]; then
+### DO NOT TOUCH!! ###
+###################
+MAN="$1" || "0" ### DO NOT TOUCH!! ###
+VERBOSE="$2"||"0" ### DO NOT TOUCH!! ###
+PERSONAL="$3"||"0" ### DO NOT TOUCH!! ###
+###################
+### DO NOT TOUCH!! ###
+
+## Code ##
+
+if [ "$MAN" == "0" ]; then
 	echo "Enter file name to use:"
 	read FILE
 	echo "Enter First name to use:"
@@ -39,15 +49,17 @@ if [ "$MAN" == "1" ]; then
 	echo "Enter New Password to use:"
 	read NEWPASS
 else
-	ACC_1=AA001
-	PAS_1=POIU01
-	ACC_2=C123A
-	PAS_2=Z52C42
-	ACC_3=AA004
-	PAS_3=POIU04
+	FILE=Test
+	FNAME=Jonny
+	LNAME=Smithers
+	MIDDLE=K
+	SSN=258649137
+	AREA=557
+	PHONE=5846958
+	AMMT=584.32
+	NEWPASS=POIU00
 fi
 
-VERBOSE="$2" || "0"
 
 #commands
 echo
@@ -67,7 +79,7 @@ if [ "$VERBOSE" == "1" ]; then
 	./bankacct /V /D${FILE} /N${ACC_3} /P${PAS_3} /M${MIDDLE}
 	echo
 	# Change SSN
-	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /S${SSN}
+	./bankacct /V /D${FILE} /N${ACC_2} /P${PAS_2} /S${SSN}
 	echo
 	# Change Phone Number Area Code
 	./bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /A${AREA}
@@ -84,6 +96,18 @@ if [ "$VERBOSE" == "1" ]; then
 	# Print Report file
 	./bankacct /V /R${RFILE} /D${FILE}
 	echo
+	if [ "$PERSONAL" == "1" ]; then
+		# Create Account
+		./bankaccnt /V /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39
+		echo
+		# Display Database file
+		cat $FILE
+		echo
+		echo "----"
+		read -p "Press\ Enter\ To\ Continue"
+		# Remove Account From Database
+		./bankaccnt /V /X /N
+	fi
 else
 	# Display account
 	./bankacct /D${FILE} /N${ACC_1} /P${PAS_1} /I
@@ -116,6 +140,36 @@ else
 	./bankacct /R${RFILE} /D${FILE}
 	echo
 fi
+## END ##
+
+###########  ONLY CHANGE STUFF HERE IF YOU KNOW WHAT IT DOES ############
+if [ "$MAN" == "999" ]; then
+	echo "Where is the database file?"
+	read FILE
+	while ACCOUNT=`cat $FILE`
+	do
+## CODE GOES HERE ##
+	done
+
+fi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
