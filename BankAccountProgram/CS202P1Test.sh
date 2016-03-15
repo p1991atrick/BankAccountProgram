@@ -24,7 +24,7 @@ PAS_3=POIU04
 MAN="$1" || "0" ### DO NOT TOUCH!! ###
 VERBOSE="$2"||"0" ### DO NOT TOUCH!! ###
 PERSONAL="$3"||"0" ### DO NOT TOUCH!! ###
-SYS='$OSTYPE' ### DO NOT TOUCH!! ###
+SYS=`lowercase \`uname\`` ### DO NOT TOUCH!! ###
 ###################
 ### DO NOT TOUCH!! ###
 
@@ -64,7 +64,7 @@ fi
 
 # Commands
 echo
-if [ "$SYS" == "Linux-gnu" ]; then ## For Linux
+if [ "$SYS" == "linux" ]; then ## For Linux
 	echo "Running for Linux... "
 	sleep 1
 	# Verbose check
