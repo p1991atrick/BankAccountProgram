@@ -139,6 +139,18 @@ else
 	# Print Report file
 	./bankacct /R${RFILE} /D${FILE}
 	echo
+		if [ "$PERSONAL" == "1" ]; then
+		# Create Account
+		./bankacct /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
+		echo
+		# Display Database file
+		cat $FILE
+		echo
+		echo "----"
+		read -p "Press Enter To Continue"
+		# Remove Account From Database
+		./bankacct /X /NAA010 /PPOIU10 /D${FILE}
+		fi
 fi
 
 echo "End of File."

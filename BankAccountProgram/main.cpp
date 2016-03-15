@@ -370,6 +370,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 		n = Delete_Account(Records, bools, &i);
 		Records.erase(Records.begin()+n);
 		change_file = true;
+		log(3) << "Account Deleted.\n";
 	}
 	else
 	{
