@@ -30,7 +30,7 @@ SYS=`uname` ### DO NOT TOUCH!! ###
 
 ## Code ##
 
-if [ "$MAN" == "0" ]; then
+if [ "$MAN" = "0" ]; then
 	echo "Enter file name to use:"
 	read FILE
 	echo "Enter First name to use:"
@@ -64,7 +64,7 @@ fi
 
 # Commands
 echo
-if [ "$SYS" == "Linux" ]; then ## For Linux
+if [ "$SYS" = "Linux" ]; then ## For Linux
 	echo "Running for Linux... "
 	sleep 1
 	# Verbose check
@@ -99,7 +99,7 @@ if [ "$SYS" == "Linux" ]; then ## For Linux
 		# Print Report file
 		./bankacct /V /R${RFILE} /D${FILE}
 		echo
-		if [ "$PERSONAL" == "1" ]; then
+		if [ "$PERSONAL" = "1" ]; then
 			# Create Account
 			./bankacct /V /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
 			echo
@@ -162,7 +162,7 @@ if [ "$SYS" == "Linux" ]; then ## For Linux
 	## END ##
 
 elif [ "$SYS" == "Darwin" ]; then ## For Mac
-	if [ "$VERBOSE" == "1" ]; then
+	if [ "$VERBOSE" = "1" ]; then
 		# Display account
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
 		echo
@@ -193,7 +193,7 @@ elif [ "$SYS" == "Darwin" ]; then ## For Mac
 		# Print Report file
 		bankacct /V /R${RFILE} /D${FILE}
 		echo
-		if [ "$PERSONAL" == "1" ]; then
+		if [ "$PERSONAL" = "1" ]; then
 			# Create Account
 			bankacct /V /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
 			echo
@@ -236,7 +236,7 @@ elif [ "$SYS" == "Darwin" ]; then ## For Mac
 		# Print Report file
 		bankacct /R${RFILE} /D${FILE}
 		echo "--------Printed Report File--------"
-		if [ "$PERSONAL" == "1" ]; then
+		if [ "$PERSONAL" = "1" ]; then
 			# Create Account
 			bankacct /C /F${FNAME} /L${LNAME} /M${MIDDLE} /S${SSN} /A${AREA} /H${PHONE} /NAA010 /PPOIU10 /T78594.39 /D${FILE}
 			echo "--------Created Account--------"
