@@ -24,7 +24,7 @@ PAS_3=POIU04
 MAN="$1" || "0" ### DO NOT TOUCH!! ###
 VERBOSE="$2"||"0" ### DO NOT TOUCH!! ###
 PERSONAL="$3"||"0" ### DO NOT TOUCH!! ###
-SYS=`lowercase \`uname\`` ### DO NOT TOUCH!! ###
+SYS=`uname` ### DO NOT TOUCH!! ###
 ###################
 ### DO NOT TOUCH!! ###
 
