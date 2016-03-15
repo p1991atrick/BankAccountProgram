@@ -52,9 +52,9 @@
 		CD9577A91C5EB95C0052A835 = {
 			isa = PBXGroup;
 			children = (
-				CD2AED901C98D2FB0052A835 /* Test.db */,
 				CD9577BE1C5EC6720052A835 /* makefile */,
 				CD9386C81C8A47A40052A835 /* CS202P1Test.sh */,
+				CD2AED901C98D2FB0052A835 /* Test.db */,
 				CD9577B41C5EB95C0052A835 /* BankAccountProgram */,
 				CD9577B31C5EB95C0052A835 /* Products */,
 			);
