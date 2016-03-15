@@ -146,15 +146,15 @@ echo
 ## END ##
 
 ###########  ONLY CHANGE STUFF HERE IF YOU KNOW WHAT IT DOES ############
-if [ "$MAN" == "999" ]; then
-	echo "Where is the database file?"
-	read FILE
-	while [ACCOUNT=`cat $FILE`]
-	do
-## CODE GOES HERE ##
-	done
-
-fi
+#if [ "$MAN" == "999" ]; then
+#	echo "Where is the database file?"
+#	read FILE
+#	while [ACCOUNT=`cat $FILE`]
+#	do
+### CODE GOES HERE ##
+#	done
+#
+#fi
 
 
 
