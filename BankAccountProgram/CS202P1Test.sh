@@ -24,6 +24,7 @@ PAS_3=POIU04
 MAN="$1" || "0" ### DO NOT TOUCH!! ###
 VERBOSE="$2"||"0" ### DO NOT TOUCH!! ###
 PERSONAL="$3"||"0" ### DO NOT TOUCH!! ###
+SYS='uname' ### DO NOT TOUCH!! ###
 ###################
 ### DO NOT TOUCH!! ###
 
@@ -63,7 +64,7 @@ fi
 
 # Commands
 echo
-if [ uname == "Linux" ]; then ## For Linux
+if [ "$SYS" == "Linux" ]; then ## For Linux
 	echo "Running for Linux... "
 	sleep 1
 	# Verbose check
@@ -160,7 +161,7 @@ if [ uname == "Linux" ]; then ## For Linux
 	echo
 	## END ##
 
-elif [ uname == "Darwin" ]; then ## For Mac
+elif [ "$SYS" == "Darwin" ]; then ## For Mac
 	if [ "$VERBOSE" == "1" ]; then
 		# Display account
 		bankacct /V /D${FILE} /N${ACC_1} /P${PAS_1} /I
