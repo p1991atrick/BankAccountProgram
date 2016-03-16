@@ -22,7 +22,7 @@ if [ "$2" = "1" ];then ### DO NOT TOUCH!! ###
 else
 	VERBOSE="0"
 fi
-if [ "$3" = "1" \];then ### DO NOT TOUCH!! ###
+if [ "$3" = "1" ];then ### DO NOT TOUCH!! ###
 	PERSONAL="$3"
 else
 	PERSONAL="0"
