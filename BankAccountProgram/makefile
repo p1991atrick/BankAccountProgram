@@ -25,7 +25,7 @@ FILE5=
 ARGS=-c -fabi-version=6 -frepo -O -pedantic -std=c++11 -Wall -Wextra
 
 ifndef FILE1
-	error
+	exit
 endif
 
 .PHONY: build clean
