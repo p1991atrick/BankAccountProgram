@@ -368,9 +368,12 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 	else if (bools->deleaccnt == true)
 	{
 		n = Delete_Account(Records, bools, &i);
-		Records.erase(Records.begin()+n);
-		change_file = true;
-		log(3) << "Account Deleted.\n";
+		if (n>=0)
+		{
+			Records.erase(Records.begin()+n);
+			change_file = true;
+			log(3) << "Account Deleted.\n";
+		}
 	}
 	else
 	{
@@ -554,6 +557,7 @@ int Delete_Account(vector<database> &Records, CLI *bools, int *counter)
 	{
 		if ((!strncmp(bools->Get_Account(), Records[x].Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), Records[x].Get_PassWd(), 6)))// check for correct account number and password
 		{
+			*counter = *counter-1;
 			return x;	// returns the vector location number
 		}
 	}
