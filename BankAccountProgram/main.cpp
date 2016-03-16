@@ -696,69 +696,6 @@ void Funds_Transfer(vector<database> &Records, CLI *bools)
 //}
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          void Funds_Add(char *Filename)
- DESCRIPTION:       adds funds to an account
- RETURNS:           void function
- NOTES:             has multiple points of verification.
- ----------------------------------------------------------------------------- */
-//void Funds_Add(char *Filename, fstream *file)
-//{
-//    char account[6];
-//    account[5] = '\0'; //null char for end of cstring
-//    char password[7];
-//    password[6] = '\0'; //null char for end of cstring
-//    float amount, *pamount = &amount;
-//    int found = 0;
-//
-//    (*file).open(Filename, ios::in);
-//    fstream databasetemp("Tempcopyfile.db", ios::out | ios::trunc);
-//
-//    if (!(*file).fail()) //only continue if file was found.
-//    {
-//        cout << "What account will funds be added to: ";
-//        cin.ignore();
-//        cin.getline(account, sizeof(account), '\n'); //
-//        do{
-//            database *Report = new database;
-//			//           Class_Load(file, Report);
-//            if (!strncmp(account, Report->Get_Account(), sizeof(account))) //find account in question in the database file
-//            {
-//                cout << "What is the password for account " << Report->Get_Account() << ": ";
-//                cin.getline(password, sizeof(password), '\n');
-//                if (!strncmp(password, Report->Get_PassWd(), sizeof(password)))
-//                {
-//                    cout << "How much would you like to Deposit?\n";
-//                    cout << "Amount: ";
-//                    cin >> *pamount;
-//                    found = 1;
-//                    *pamount = Report->Get_Balance() + *pamount;
-//                    Report->Set_Balance(pamount);
-//					//      File_Write(&databasetemp, Report);
-//                }
-//                else
-//                {
-//                    cout << "Incorrect password, returning to Main Menu\n";
-//                }
-//            }
-//            else
-//            {
-//				//     File_Write(&databasetemp, Report);
-//            }
-//        }while ((*file).eof() == 0);
-//    }
-//
-//    (*file).close();
-//    databasetemp.close();
-//    if (found == 1) //only overwrites accounts if it sucsessfuly compleated
-//    {
-//        (*file).open(Filename, ios::out | ios::trunc);
-//        databasetemp.open("Tempcopyfile.db", ios::in);
-//        (*file).close();
-//        databasetemp.close();
-//    }
-//}
-
-/* -----------------------------------------------------------------------------
  FUNCTION:          void File_Write(fstream *file, database *Report)
  DESCRIPTION:       saves class to file
  RETURNS:           void function
