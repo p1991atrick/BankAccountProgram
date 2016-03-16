@@ -54,12 +54,18 @@ if [ "$MAN" = "0" ]; then
 	read NEWPASS
 	echo "---------------------------------------"
 	echo "Accounts to use for operations"
-	echo "Account 1:" read ACC_1
-	echo "Password: " read PAS_1
-	echo "Account 2:" read ACC_2
-	echo "Password: " read PAS_2
-	echo "Account 3:" read ACC_3
-	echo "Password: " read PAS_3
+	echo "Account 1:"
+	read ACC_1
+	echo "Password: "
+	read PAS_1
+	echo "Account 2:"
+	read ACC_2
+	echo "Password: "
+	read PAS_2
+	echo "Account 3:"
+	read ACC_3
+	echo "Password: "
+	read PAS_3
 else
 	FILE=Test.db
 	FNAME=Jonny
