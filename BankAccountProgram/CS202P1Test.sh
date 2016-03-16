@@ -10,15 +10,6 @@
 #
 
 
-### Account Var's ###
-ACC_1=AA001
-PAS_1=POIU01
-ACC_2=C123A
-PAS_2=Z52C42
-ACC_3=AA004
-PAS_3=POIU04
-#####################
-
 ### DO NOT TOUCH!! ###
 ###################
 if [ "$1" = "1" ]; then ### DO NOT TOUCH!! ###
@@ -61,6 +52,14 @@ if [ "$MAN" = "0" ]; then
 	read AMMT
 	echo "Enter New Password to use:"
 	read NEWPASS
+	echo "---------------------------------------"
+	echo "Accounts to use for operations"
+	echo "Account 1:" read ACC_1
+	echo "Password: " read PAS_1
+	echo "Account 2:" read ACC_2
+	echo "Password: " read PAS_2
+	echo "Account 3:" read ACC_3
+	echo "Password: " read PAS_3
 else
 	FILE=Test.db
 	FNAME=Jonny
@@ -71,6 +70,12 @@ else
 	PHONE=5846958
 	AMMT=584.32
 	NEWPASS=POIU00
+	ACC_1=AA001
+	PAS_1=POIU01
+	ACC_2=C123A
+	PAS_2=Z52C42
+	ACC_3=AA004
+	PAS_3=POIU04
 fi
 
 
