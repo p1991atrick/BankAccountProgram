@@ -470,11 +470,7 @@ void CLI_Sort(CLI *bools, database *rec, bool *change_file)
  ----------------------------------------------------------------------------- */
 void Open_File(char *Filename, fstream *file)
 {
-    if (strstr(Filename, ".db") == 0) //if name given does't have .db , append it to the end
-    {
-        strncat(Filename, ".db", 3);
-    }
-    (*file).open(Filename, ios::in);
+	(*file).open(Filename, ios::in); //opens the file
     if ((*file).fail()) //checks if file was found
     {
         log(3) << "File Not Found\nExiting\n";
