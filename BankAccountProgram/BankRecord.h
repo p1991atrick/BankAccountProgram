@@ -52,7 +52,7 @@ class database
     char PhoneArea[4];
     char Phone[8];
     float Balance;
-    char Account[6];//length of 5 + 1
+    char Account[6];//length of 5+1
     char PassWd[7];//Length of 6+1
     
 public:
