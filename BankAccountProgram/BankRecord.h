@@ -81,6 +81,10 @@ public:
     float Get_Balance() const;
     char* Get_Account();
     char* Get_PassWd();
+
+	//IO functions
+	friend ostream &operator<< (ostream &stream, const database &obj);
+	friend istream &operator>> (istream &stream, database &obj);
 };
 
 

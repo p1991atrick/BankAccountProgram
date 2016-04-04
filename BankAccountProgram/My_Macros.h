@@ -23,6 +23,16 @@
 #ifndef My_Macros_h
 #define My_Macros_h
 
+//namespace callouts
+using std::cout;
+using std::cin;
+using std::endl;
+using std::ostream;
+using std::istream;
+using std::fstream;
+using std::ios;
+
+
 //trace output
 #define TRACE 0
 

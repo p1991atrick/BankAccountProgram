@@ -71,7 +71,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "/DTest"
+            argument = "/DTest.db"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

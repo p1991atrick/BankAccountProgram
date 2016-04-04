@@ -317,3 +317,35 @@ char* database::Get_PassWd()
     return PassWd;
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION:          operator <<
+ DESCRIPTION:       generates obj output
+ RETURNS:           ostream
+ NOTES:
+ ----------------------------------------------------------------------------- */
+ostream &operator<< (ostream &stream, const database &obj)
+{
+	stream << obj.LName << endl << obj.FName << endl << obj.MI << endl
+	<< obj.SSN << endl << obj.PhoneArea << endl << obj.Phone << endl
+	<< obj.Balance << endl << obj.Account << endl << obj.PassWd << endl << endl;
+	return stream;
+}
+
+/* -----------------------------------------------------------------------------
+ FUNCTION:          operator >>
+ DESCRIPTION:       generate obj input
+ RETURNS:           istream
+ NOTES:
+ ----------------------------------------------------------------------------- */
+istream &operator>> (istream &stream, database &obj)
+{
+	stream >> obj.LName >> obj.FName >> obj.MI >> obj.SSN >> obj.PhoneArea >> obj.Phone
+	>> obj.Balance >> obj.Account >> obj.PassWd;
+	return stream;
+}
+
+
+
+
+
+

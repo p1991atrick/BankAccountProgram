@@ -300,6 +300,11 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+14);
 			}
 		}
+		else
+		{
+			log(3) << "not a vaild option" << endl;
+			exit(EXIT_CODE_CLI_ERROR+20);
+		}
 	}
 }
 
@@ -347,7 +352,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 		i++;
 		Records.resize(i);
 		n++;
-		Class_Load(databasefile, &Records[n]);
+		*databasefile >> Records[n];
 	}while ((*databasefile).eof() == 0); //run until end of file
 	log(3) << "loaded file\n";
 	databasefile->close();
@@ -391,7 +396,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 		databasefile->open(Filename, ios::out | ios::trunc);
 		for (n=0;n<i;n++)
 		{
-			File_Write(databasefile, &Records[n], &n);
+			*databasefile << Records[n];
 		}
 		databasefile->close();
 	}
@@ -695,62 +700,3 @@ void Funds_Transfer(vector<database> &Records, CLI *bools)
 //    }
 //}
 
-/* -----------------------------------------------------------------------------
- FUNCTION:          void File_Write(fstream *file, database *Report)
- DESCRIPTION:       saves class to file
- RETURNS:           void function
- NOTES:
- ----------------------------------------------------------------------------- */
-void File_Write(fstream *file, database *Report, int *count)
-{
-	if(*count != 0)
-	{
-		(*file) << endl << endl;
-	}
-	(*file) << Report->Get_LName() << endl
-    << Report->Get_FName() << endl
-    << Report->Get_MI() << endl
-    << Report->Get_SSN() << endl
-    << Report->Get_PhoneArea() << endl
-    << Report->Get_Phone() << endl
-    << Report->Get_Balance() << endl
-    << Report->Get_Account() << endl
-    << Report->Get_PassWd();
-}
-
-/* -----------------------------------------------------------------------------
- FUNCTION:          void Class_Load(fstream &databasefile, database *Report)
- DESCRIPTION:       loads information from file to class
- RETURNS:           void function
- NOTES:             loads informaition from database into class
- ----------------------------------------------------------------------------- */
-void Class_Load(fstream *databasefile, database *rec)
-{   //vars for temp useage
-    char Lname[21];
-    char Fnmae[21];
-    char MI;
-    char ssn[10];
-    char Phonearea[4];
-    char Phone[8];
-    float Bal, *pbal = &Bal;
-    char Account[6];
-    char Password[7];
-    (*databasefile) >> Lname;
-    (*databasefile) >> Fnmae;
-    (*databasefile) >> MI;
-    (*databasefile) >> ssn;
-    (*databasefile) >> Phonearea;
-    (*databasefile) >> Phone;
-    (*databasefile) >> *pbal;
-    (*databasefile) >> Account;
-    (*databasefile) >> Password;
-    rec->Set_LName(Lname);
-    rec->Set_FName(Fnmae);
-	rec->Set_MI(MI);
-    rec->Set_SSN(ssn);
-    rec->Set_PhoneArea(Phonearea);
-    rec->Set_Phone(Phone);
-    rec->Set_Balance(pbal);
-    rec->Set_Account(Account);
-    rec->Set_PassWD(Password);
-}

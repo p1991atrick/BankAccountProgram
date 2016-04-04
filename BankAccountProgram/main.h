@@ -47,10 +47,5 @@ void Print_Report(char *, vector<database> &, int *);
 //account
 void Funds_Transfer(vector<database> &, CLI *);
 void Funds_Remove(char *, fstream *);
-//support functions
-void File_Write(fstream *, database *, int *);
-void Class_Load(fstream *, database *);
-
-
 
 #endif /* main_h */
