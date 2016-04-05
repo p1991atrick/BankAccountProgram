@@ -300,11 +300,6 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+14);
 			}
 		}
-		else
-		{
-			log(3) << "not a vaild option" << endl;
-			exit(EXIT_CODE_CLI_ERROR+20);
-		}
 	}
 }
 
