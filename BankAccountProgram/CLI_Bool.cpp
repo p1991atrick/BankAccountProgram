@@ -36,7 +36,7 @@ DESCRIPTION:       sets the 2nd account number
 RETURNS:           void funtion
 NOTES:             contains overflow verification
 ----------------------------------------------------------------------------- */
-void CLI::Set_sndAccount(char * acount)
+void CLI::Set_sndAccount(char *acount)
 {
 	strncpy(sndacct, acount, 5);
 	for (int n = 0; n < 5; n++)//forces all alpha char's to upper case

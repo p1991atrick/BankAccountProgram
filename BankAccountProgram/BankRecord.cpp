@@ -344,6 +344,31 @@ istream &operator>> (istream &stream, database &obj)
 	return stream;
 }
 
+/* -----------------------------------------------------------------------------
+ FUNCTION:          operator >>
+ DESCRIPTION:       generate obj input
+ RETURNS:           istream
+ NOTES:
+ ----------------------------------------------------------------------------- */
+database database::operator= (const database &right)
+{
+	strncpy(LName, right.LName, strlen(right.LName));
+	strncpy(FName, right.FName, strlen(right.FName));
+	MI = right.MI;
+	strncpy(SSN, right.SSN, strlen(right.SSN));
+	strncpy(PhoneArea, right.PhoneArea, strlen(right.PhoneArea));
+	strncpy(Phone, right.Phone, strlen(right.Phone));
+	strncpy(Account, right.Account, strlen(right.Account));
+	strncpy(PassWd, right.PassWd, strlen(right.PassWd));
+	Balance = right.Balance;
+	return *this;
+}
+
+
+
+
+
+
 
 
 

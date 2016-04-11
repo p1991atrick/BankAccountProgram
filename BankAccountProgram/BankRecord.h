@@ -85,7 +85,17 @@ public:
 	//IO functions
 	friend ostream &operator<< (ostream &stream, const database &obj);
 	friend istream &operator>> (istream &stream, database &obj);
+	database operator= (const database &right);
 };
 
 
 #endif /* BankRecord_h */
+
+
+
+
+
+
+
+
+
