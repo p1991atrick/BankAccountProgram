@@ -81,6 +81,38 @@
             endingLineNumber = "779"
             landmarkName = "File_Recopy(fstream *fromfile, fstream *tofile)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "File_Recopy(std::__1::basic_fstream&lt;char, std::__1::char_traits&lt;char&gt; &gt;*, std::__1::basic_fstream&lt;char, std::__1::char_traits&lt;char&gt; &gt;*)"
+                  moduleName = "BankAccountProgram"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Patrick/Library/Mobile%20Documents/com~apple~CloudDocs/School/TMCC/CS%20202/BankAccountProgram/BankAccountProgram/main.cpp"
+                  timestampString = "482205767.065735"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "779"
+                  endingLineNumber = "779"
+                  offsetFromSymbolStart = "68">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "File_Recopy(std::__1::basic_fstream&lt;char, std::__1::char_traits&lt;char&gt; &gt;*, std::__1::basic_fstream&lt;char, std::__1::char_traits&lt;char&gt; &gt;*)"
+                  moduleName = "BankAccountProgram"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Patrick/Library/Mobile%20Documents/com~apple~CloudDocs/School/TMCC/CS%20202/BankAccountProgram/BankAccountProgram/main.cpp"
+                  timestampString = "482205767.065892"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "779"
+                  endingLineNumber = "779"
+                  offsetFromSymbolStart = "122">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
