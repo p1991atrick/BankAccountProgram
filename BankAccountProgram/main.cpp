@@ -130,7 +130,6 @@ int main(/*int argc, const char * argv[]*/)
  ----------------------------------------------------------------------------- */
 void File_IO(char *Filename, fstream *file)
 {
-	CLEAR_SCREEN;
 	cout << std::setw(30) << std::right << "\nBank Account Database\n";
     cout << "1. Create Database File\n"; //sub menu lines
     cout << "2. Open Database File\n";
@@ -190,7 +189,6 @@ int Main_Menu(int *pchoice)
         cout << "\n Not A valid choice.\nPlease pick from the list above.\nWhat is your Choice: ";
         cin >> *pchoice;
     }
-	CLEAR_SCREEN;
     return *pchoice; //sends the menu choice up to main for switch statement
 }
 
