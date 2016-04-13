@@ -87,7 +87,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				exit(EXIT_CODE_CLI_ERROR+12);
 			}
 		}
-	}
+	}	
 	for (int i = 1; i < argc; i++)
 	{
 		char *arg = argv[i]; //set the next argument in line to be tested
