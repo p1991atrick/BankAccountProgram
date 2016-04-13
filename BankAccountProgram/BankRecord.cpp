@@ -317,6 +317,27 @@ char* database::Get_PassWd()
     return PassWd;
 }
 
+//Member Functions
+/* -----------------------------------------------------------------------------
+ FUNCTION:          void subtract_ball(float)
+ DESCRIPTION:       subtracts specified funds from account if there is enough
+ RETURNS:           void
+ NOTES:
+ ----------------------------------------------------------------------------- */
+void database::subtract_ball(float n)
+{
+	if (n < Balance)
+	{
+		cout << "Insuficient Funds";
+	}
+	else
+	{
+		Balance = Balance - n;
+	}
+}
+
+
+//IO functions
 /* -----------------------------------------------------------------------------
  FUNCTION:          operator <<
  DESCRIPTION:       generates obj output
@@ -345,9 +366,9 @@ istream &operator>> (istream &stream, database &obj)
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          operator >>
- DESCRIPTION:       generate obj input
- RETURNS:           istream
+ FUNCTION:          operator =
+ DESCRIPTION:       set 2 records equal to eachother
+ RETURNS:           database class
  NOTES:
  ----------------------------------------------------------------------------- */
 database database::operator= (const database &right)
@@ -363,8 +384,6 @@ database database::operator= (const database &right)
 	Balance = right.Balance;
 	return *this;
 }
-
-
 
 
 
