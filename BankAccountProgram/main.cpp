@@ -190,7 +190,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 		{
 			if (strlen(arg+2) == 5) //check for correct lenght
 			{
-				if (bools->account == false)
+				if (bools->Arg_Given[Command_line_Record::account] == false)
 				{
 					bools->Set_Account(arg+2);
 					bools->Arg_Given[Command_line_Record::account] = true;
@@ -211,7 +211,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 		{
 			if (strlen(arg+2) == 6) //check for correct lenght
 			{
-				if (bools->password == false)
+				if (bools->Arg_Given[Command_line_Record::password] == false)
 				{
 					bools->Set_PassWD(arg+2);
 					bools->Arg_Given[Command_line_Record::password] = true;
