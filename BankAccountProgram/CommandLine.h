@@ -15,8 +15,8 @@
 
 class Command_line_Record : public database
 {
-	char sndpass[7];
-	char sndacct[6];
+	char scndpass[7];
+	char scndacct[6];
 	
 public:		//this in intentional
 	enum Status
@@ -34,8 +34,8 @@ public:		//this in intentional
 		ssn,
 		newpassword,
 		reportfile,
-		sndaccount,
-		sndpasswd,
+		scndaccount,
+		scndpasswd,
 		addaccnt,
 		deleaccnt,
 		addfunds,
@@ -44,12 +44,12 @@ public:		//this in intentional
 	//constructor is needed
 	Command_line_Record();
 	//set functions
-	void Set_sndAccount(char *);
-	void Set_sndPassWD(char *);
+	void Set_scndAccount(char *);
+	void Set_scndPassWD(char *);
 
 	//get functions
-	char* Get_sndAccount();
-	char* Get_sndPassWD();
+	char* Get_scndAccount();
+	char* Get_scndPassWD();
 
 	//member functions
 	int add_acount_true();

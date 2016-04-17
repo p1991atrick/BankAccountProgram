@@ -22,14 +22,14 @@ DESCRIPTION:       sets the 2nd account number
 RETURNS:           void funtion
 NOTES:             contains overflow verification
 ----------------------------------------------------------------------------- */
-void Command_line_Record::Set_sndAccount(char *acount)
+void Command_line_Record::Set_scndAccount(char *acount)
 {
-	strncpy(sndacct, acount, 5);
+	strncpy(scndacct, acount, 5);
 	for (int n = 0; n < 5; n++)//forces all alpha char's to upper case
 	{
-		if ((isalpha(sndacct[n])) && (islower(sndacct[n])))
+		if ((isalpha(scndacct[n])) && (islower(scndacct[n])))
 		{
-			sndacct[n] = toupper(sndacct[n]);
+			scndacct[n] = toupper(scndacct[n]);
 		}
 	}
 }
@@ -40,26 +40,26 @@ void Command_line_Record::Set_sndAccount(char *acount)
  RETURNS:           void funtion
  NOTES:             contains overflow verification
  ----------------------------------------------------------------------------- */
-void Command_line_Record::Set_sndPassWD(char * pass)
+void Command_line_Record::Set_scndPassWD(char * pass)
 {
-	strncpy(sndpass, pass, 6);
+	strncpy(scndpass, pass, 6);
 	for (int n = 0; n < 6; n++) //forces all alpha char's to upper case
 	{
-		if ((isalpha(sndpass[n]) == 0) && (islower(sndpass[n] == 0)))
+		if ((isalpha(scndpass[n]) == 0) && (islower(scndpass[n] == 0)))
 		{
-			sndpass[n] = toupper(sndpass[n]);
+			scndpass[n] = toupper(scndpass[n]);
 		}
 	}
 }
 
-char* Command_line_Record::Get_sndAccount()
+char* Command_line_Record::Get_scndAccount()
 {
-	return sndacct;
+	return scndacct;
 }
 
-char* Command_line_Record::Get_sndPassWD()
+char* Command_line_Record::Get_scndPassWD()
 {
-	return sndpass;
+	return scndpass;
 }
 
 int Command_line_Record::add_acount_true()
@@ -74,9 +74,9 @@ int Command_line_Record::add_acount_true()
 
 int Command_line_Record::transfer()
 {
-	if (Arg_Given[Command_line_Record::account] == true && Arg_Given[Command_line_Record::sndaccount] == true && Arg_Given[Command_line_Record::password] == true && Arg_Given[Command_line_Record::sndpasswd] == true && Arg_Given[Command_line_Record::balance] == true)
+	if (Arg_Given[Command_line_Record::account] == true && Arg_Given[Command_line_Record::scndaccount] == true && Arg_Given[Command_line_Record::password] == true && Arg_Given[Command_line_Record::scndpasswd] == true && Arg_Given[Command_line_Record::balance] == true)
 		return 1;
-	else if (Arg_Given[Command_line_Record::account] == true && Arg_Given[Command_line_Record::sndaccount] == false && Arg_Given[Command_line_Record::password] == true && Arg_Given[Command_line_Record::sndpasswd] == false && Arg_Given[Command_line_Record::balance] == true)
+	else if (Arg_Given[Command_line_Record::account] == true && Arg_Given[Command_line_Record::scndaccount] == false && Arg_Given[Command_line_Record::password] == true && Arg_Given[Command_line_Record::scndpasswd] == false && Arg_Given[Command_line_Record::balance] == true)
 		return 2;
 	else
 		return 0;

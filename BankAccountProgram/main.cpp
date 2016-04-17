@@ -197,8 +197,8 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 				}
 				else
 				{
-					bools->Set_sndAccount(arg+2);
-					bools->Arg_Given[Command_line_Record::sndaccount] = true;
+					bools->Set_scndAccount(arg+2);
+					bools->Arg_Given[Command_line_Record::scndaccount] = true;
 				}
 			}
 			else
@@ -218,8 +218,8 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 				}
 				else
 				{
-					bools->Set_sndPassWD(arg+2);
-					bools->Arg_Given[Command_line_Record::sndpasswd] = true;
+					bools->Set_scndPassWD(arg+2);
+					bools->Arg_Given[Command_line_Record::scndpasswd] = true;
 				}
 			}
 			else
@@ -617,9 +617,9 @@ void Funds_Transfer(vector<database> &Records, Command_line_Record *bools)
 				account1 = n;
 			}
 		}
-		else if (!strncmp(bools->Get_sndAccount(), Record->Get_Account(), 5))//verify account number
+		else if (!strncmp(bools->Get_scndAccount(), Record->Get_Account(), 5))//verify account number
 		{
-			if (!strncmp(bools->Get_sndPassWD(), Record->Get_PassWd(), 6))//verify account password
+			if (!strncmp(bools->Get_scndPassWD(), Record->Get_PassWd(), 6))//verify account password
 			{
 				log(3) << "Found 2nd account.\n";
 				account2 = n;
