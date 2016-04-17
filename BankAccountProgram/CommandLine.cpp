@@ -1,5 +1,5 @@
 //
-//  CLI_ .cpp
+//  Command_line_Record_ .cpp
 //  BankAccountProgram
 //
 //  Created by Gordon Freeman on 3/3/16.
@@ -8,35 +8,21 @@
 
 #include "CommandLine.h"
 
-CLI::CLI()
+Command_line_Record::Command_line_Record()
 {
-	phonenumber = false;
-	phonearea = false;
-	filename = false;
-	firstName = false;
-	lastname = false;
-	info = false;
-	balance = false;
-	middleinitial = false;
-	account = false;
-	password = false;
-	ssn = false;
-	newpassword = false;
-	reportfile = false;
-	sndaccount = false;
-	sndpasswd = false;
-	addaccnt = false;
-	deleaccnt = false;
-	addfunds = false;
+	for (int x=0;x<18;x++)
+	{
+		Arg_Given[x] = false;
+	}
 }
 
 /* -----------------------------------------------------------------------------
-FUNCTION:          CLI::Set_sndAccount(char * acount)
+FUNCTION:          Command_line_Record::Set_sndAccount(char * acount)
 DESCRIPTION:       sets the 2nd account number
 RETURNS:           void funtion
 NOTES:             contains overflow verification
 ----------------------------------------------------------------------------- */
-void CLI::Set_sndAccount(char *acount)
+void Command_line_Record::Set_sndAccount(char *acount)
 {
 	strncpy(sndacct, acount, 5);
 	for (int n = 0; n < 5; n++)//forces all alpha char's to upper case
@@ -49,12 +35,12 @@ void CLI::Set_sndAccount(char *acount)
 }
 
 /* -----------------------------------------------------------------------------
- FUNCTION:          CLI::Set_sndPassWD(char * pass)
+ FUNCTION:          Command_line_Record::Set_sndPassWD(char * pass)
  DESCRIPTION:       sets the 2nd account password
  RETURNS:           void funtion
  NOTES:             contains overflow verification
  ----------------------------------------------------------------------------- */
-void CLI::Set_sndPassWD(char * pass)
+void Command_line_Record::Set_sndPassWD(char * pass)
 {
 	strncpy(sndpass, pass, 6);
 	for (int n = 0; n < 6; n++) //forces all alpha char's to upper case
@@ -66,19 +52,19 @@ void CLI::Set_sndPassWD(char * pass)
 	}
 }
 
-char* CLI::Get_sndAccount()
+char* Command_line_Record::Get_sndAccount()
 {
 	return sndacct;
 }
 
-char* CLI::Get_sndPassWD()
+char* Command_line_Record::Get_sndPassWD()
 {
 	return sndpass;
 }
 
-int CLI::add_acount_true()
+int Command_line_Record::add_acount_true()
 {
-	if (lastname == true && firstName == true && phonearea == true && phonenumber == true && middleinitial == true && ssn == true && balance == true && account == true && password == true)
+	if (Arg_Given[Command_line_Record::lastname] == true && Arg_Given[Command_line_Record::firstName] == true && Arg_Given[Command_line_Record::phonearea] == true && Arg_Given[Command_line_Record::phonenumber] == true && Arg_Given[Command_line_Record::middleinitial] == true && Arg_Given[Command_line_Record::ssn] == true && Arg_Given[Command_line_Record::balance] == true && Arg_Given[Command_line_Record::account] == true && Arg_Given[Command_line_Record::password] == true)
 	{
 		return 1;
 	}
@@ -86,11 +72,11 @@ int CLI::add_acount_true()
 		return 0;
 }
 
-int CLI::transfer()
+int Command_line_Record::transfer()
 {
-	if (account == true && sndaccount == true && password == true && sndpasswd == true && balance == true)
+	if (Arg_Given[Command_line_Record::account] == true && Arg_Given[Command_line_Record::sndaccount] == true && Arg_Given[Command_line_Record::password] == true && Arg_Given[Command_line_Record::sndpasswd] == true && Arg_Given[Command_line_Record::balance] == true)
 		return 1;
-	else if (account == true && sndaccount == false && password == true && sndpasswd == false && balance == true)
+	else if (Arg_Given[Command_line_Record::account] == true && Arg_Given[Command_line_Record::sndaccount] == false && Arg_Given[Command_line_Record::password] == true && Arg_Given[Command_line_Record::sndpasswd] == false && Arg_Given[Command_line_Record::balance] == true)
 		return 2;
 	else
 		return 0;

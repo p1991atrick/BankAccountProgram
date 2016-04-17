@@ -89,7 +89,6 @@ public:
 	friend ostream &operator<< (ostream &stream, const database &obj);
 	friend istream &operator>> (istream &stream, database &obj);
 	database operator= (const database &right);
-	friend fstream &operator<< (fstream &stream, const database &obj);
 };
 
 

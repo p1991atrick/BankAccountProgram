@@ -13,32 +13,36 @@
 #include "BankRecord.h"
 #include "My_Macros.h"
 
-class CLI : public database
+class Command_line_Record : public database
 {
 	char sndpass[7];
 	char sndacct[6];
 	
 public:		//this in intentional
-	bool phonearea;
-	bool filename;
-	bool firstName;
-	bool phonenumber;
-	bool info;
-	bool lastname;
-	bool balance;
-	bool middleinitial;
-	bool account;
-	bool password;
-	bool ssn;
-	bool newpassword;
-	bool reportfile;
-	bool sndaccount;
-	bool sndpasswd;
-	bool addaccnt;
-	bool deleaccnt;
-	bool addfunds;
+	enum Status
+	{
+		phonearea,
+		filename,
+		firstName,
+		phonenumber,
+		info,
+		lastname,
+		balance,
+		middleinitial,
+		account,
+		password,
+		ssn,
+		newpassword,
+		reportfile,
+		sndaccount,
+		sndpasswd,
+		addaccnt,
+		deleaccnt,
+		addfunds,
+	};
+	bool Arg_Given[18];
 	//constructor is needed
-	CLI();
+	Command_line_Record();
 	//set functions
 	void Set_sndAccount(char *);
 	void Set_sndPassWD(char *);

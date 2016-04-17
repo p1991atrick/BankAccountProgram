@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "351"
             endingLineNumber = "351"
-            landmarkName = "Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)"
+            landmarkName = "Record_Sort(Command_line_Record * bools, fstream * databasefile, char *Filename, char *Reportname)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -47,7 +47,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "459"
             endingLineNumber = "459"
-            landmarkName = "CLI_Sort(CLI *bools, database *rec, bool *change_file)"
+            landmarkName = "CLI_Sort(Command_line_Record *bools, database *rec, bool *change_file)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -63,23 +63,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "385"
             endingLineNumber = "385"
-            landmarkName = "Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BankAccountProgram/main.cpp"
-            timestampString = "479665513.102353"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "360"
-            endingLineNumber = "360"
-            landmarkName = "Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)"
+            landmarkName = "Record_Sort(Command_line_Record * bools, fstream * databasefile, char *Filename, char *Reportname)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -111,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "348"
             endingLineNumber = "348"
-            landmarkName = "Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)"
+            landmarkName = "Record_Sort(Command_line_Record * bools, fstream * databasefile, char *Filename, char *Reportname)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -143,7 +127,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "461"
             endingLineNumber = "461"
-            landmarkName = "CLI_Sort(CLI *bools, database *rec, bool *change_file)"
+            landmarkName = "CLI_Sort(Command_line_Record *bools, database *rec, bool *change_file)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -158,25 +142,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "491"
-            endingLineNumber = "491"
-            landmarkName = "Add_Account(CLI *CLI_Record, vector&lt;database&gt; &amp;Records, int *i, int *n)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BankAccountProgram/main.cpp"
-            timestampString = "479787786.019005"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "370"
-            endingLineNumber = "370"
-            landmarkName = "Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)"
-            landmarkType = "7">
+            endingLineNumber = "491">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

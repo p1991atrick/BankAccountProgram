@@ -52,19 +52,21 @@ int main(int argc, char * argv[])
 {
     char Filename[41] = "a"; char Reportname[41] = "BankAcct.Rpt"; //create and initialize Filenames with 'a'
     fstream databasefile; //for database file
-	CLI *bools = new CLI;	//for the true/false bool checks and CLI char*'s
+	Command_line_Record *bools = new Command_line_Record;	//for the true/false bool checks and CLI char*'s
 	if (argc < 2)
 	{
 		CLI_Help();
 		exit (EXIT_CODE_NO_SELECTION);
 	}
 	CLI_Args(argc, argv, Filename, Reportname, bools); //sort and load args from CLI
-	if (bools->filename == false) //if no filename was given exit
+	if (bools->Arg_Given[Command_line_Record::filename] == false) //if no filename was given exit
 	{
 		log(3) << "No file given.\n";
+		delete bools;
 		return EXIT_CODE_FILE_IO;
 	}
 	Record_Sort(bools, &databasefile, Filename, Reportname);
+	delete bools;
 	return EXIT_CODE_SUCCESS;
 }
 
@@ -74,7 +76,7 @@ int main(int argc, char * argv[])
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *bools)
+void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_line_Record *bools)
 {//find cli vars
 	for (int i=1;i<argc;i++)//check for verbose first
 	{
@@ -107,7 +109,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		{
 			if(strlen(arg+2) == 3) //lenght of the area code passed in, if not 3 fail
 			{
-				bools->phonearea = true;
+				bools->Arg_Given[Command_line_Record::phonearea] = true;
 				bools->Set_PhoneArea(arg+2);
 			}
 			else
@@ -121,14 +123,14 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			strncpy(Filename, arg+2, strlen(arg));
 			if(!(sizeof(Filename) > 1)) // if string is not greater then 1 == fail
 				exit(EXIT_CODE_CLI_ERROR+1);
-			bools->filename = true;
+			bools->Arg_Given[Command_line_Record::filename] = true;
 		}
 		else if (strncmp(arg+1, "F", 1) == 0)//find if first name is called
 		{
 			if (strlen(arg+2) >1)
 			{
 				bools->Set_FName(arg+2);
-				bools->firstName = true;
+				bools->Arg_Given[Command_line_Record::firstName] = true;
 			}
 			else
 			{
@@ -141,7 +143,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			if(strlen(arg+2) == 7)
 			{
 				bools->Set_Phone(arg+2);
-				bools->phonenumber = true;
+				bools->Arg_Given[Command_line_Record::phonenumber] = true;
 			}
 			else
 			{
@@ -152,7 +154,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		}
 		else if (strncmp(arg+1, "I", 1) == 0)// print info to screen
 		{
-			bools->info = true;
+			bools->Arg_Given[Command_line_Record::info] = true;
 			if (argc < 3)
 				exit(EXIT_CODE_CLI_ERROR+15);
 		}
@@ -161,7 +163,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			if (strlen(arg+2) >1)
 			{
 				bools->Set_LName(arg+2);
-				bools->lastname = true;
+				bools->Arg_Given[Command_line_Record::lastname] = true;
 			}
 			else
 			{
@@ -176,7 +178,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				char temp;
 				strncpy(&temp, arg+2, 1);
 				bools->Set_MI(temp);
-				bools->middleinitial = true;
+				bools->Arg_Given[Command_line_Record::middleinitial] = true;
 			}
 			else
 			{
@@ -191,12 +193,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				if (bools->account == false)
 				{
 					bools->Set_Account(arg+2);
-					bools->account = true;
+					bools->Arg_Given[Command_line_Record::account] = true;
 				}
 				else
 				{
 					bools->Set_sndAccount(arg+2);
-					bools->sndaccount = true;
+					bools->Arg_Given[Command_line_Record::sndaccount] = true;
 				}
 			}
 			else
@@ -212,12 +214,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 				if (bools->password == false)
 				{
 					bools->Set_PassWD(arg+2);
-					bools->password = true;
+					bools->Arg_Given[Command_line_Record::password] = true;
 				}
 				else
 				{
 					bools->Set_sndPassWD(arg+2);
-					bools->sndpasswd = true;
+					bools->Arg_Given[Command_line_Record::sndpasswd] = true;
 				}
 			}
 			else
@@ -231,12 +233,12 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			if (strlen(arg+2) == 0)
 			{
 				strncpy(Reportname, "BankAcct.Rpt", 13);
-				bools->reportfile = true;
+				bools->Arg_Given[Command_line_Record::reportfile] = true;
 			}
 			else if (strlen(arg+2) >= 1)
 			{
 				strncpy(Reportname, (arg+2), strlen(arg+2));
-				bools->reportfile = true;
+				bools->Arg_Given[Command_line_Record::reportfile] = true;
 			}
 			else
 			{
@@ -249,7 +251,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			if (strlen(arg+2) == 9)
 			{
 				bools->Set_SSN(arg+2);
-				bools->ssn = true;
+				bools->Arg_Given[Command_line_Record::ssn] = true;
 			}
 			else
 			{
@@ -263,7 +265,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			{
 				float num = atof(arg+2);
 				bools->Set_Balance(&num);
-				bools->balance = true;
+				bools->Arg_Given[Command_line_Record::balance] = true;
 			}
 			else
 			{
@@ -276,7 +278,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 			if (strlen(arg+2) == 6)
 			{
 				bools->Set_PassWD(arg+2);
-				bools->newpassword = true;
+				bools->Arg_Given[Command_line_Record::newpassword] = true;
 			}
 			else
 			{
@@ -286,7 +288,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		}
 		else if (strncmp(arg+1, "C", 1) == 0)
 		{
-			bools->addaccnt = true;
+			bools->Arg_Given[Command_line_Record::addaccnt] = true;
 			if(!(argc > 3))
 			{
 				exit(EXIT_CODE_CLI_ERROR+13);
@@ -294,7 +296,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, CLI *boo
 		}
 		else if (strncmp(arg+1, "X", 1) == 0)
 		{
-			bools->deleaccnt = true;
+			bools->Arg_Given[Command_line_Record::deleaccnt] = true;
 			if (!(argc > 3))
 			{
 				exit(EXIT_CODE_CLI_ERROR+14);
@@ -337,7 +339,7 @@ void CLI_Help()
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Reportname)
+void Record_Sort(Command_line_Record * bools, fstream * databasefile, char *Filename, char *Reportname)
 {
 	Open_File(Filename, databasefile); //all functions require that this file is opened.
 	vector<database> Records(1);
@@ -356,7 +358,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 		Add_Account(bools, Records, &i, &n);
 		change_file	= true;
 	}
-	else if (bools->reportfile == true)
+	else if (bools->Arg_Given[Command_line_Record::reportfile] == true)
 	{
 		Print_Report(Reportname, Records, &i);
 	}
@@ -365,7 +367,7 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
 		Funds_Transfer(Records, bools);
 		change_file = true;
 	}
-	else if (bools->deleaccnt == true)
+	else if (bools->Arg_Given[Command_line_Record::deleaccnt] == true)
 	{
 		n = Delete_Account(Records, bools, &i);
 		if (n>=0)
@@ -403,49 +405,49 @@ void Record_Sort(CLI * bools, fstream * databasefile, char *Filename, char *Repo
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void CLI_Sort(CLI *bools, database *rec, bool *change_file)
+void CLI_Sort(Command_line_Record *bools, database *rec, bool *change_file)
 {
-	if (bools->info == true) //I
+	if (bools->Arg_Given[Command_line_Record::info] == true) //I
 	{
 		Display_Database(rec);
 	}
-	else if (bools->firstName == true) //F
+	else if (bools->Arg_Given[Command_line_Record::firstName] == true) //F
 	{
 		rec->Set_FName(bools->Get_FName());
 		*change_file = true;
 		log(3) << "Changed First Name.\n";
 	}
-	else if (bools->lastname== true) //L
+	else if (bools->Arg_Given[Command_line_Record::lastname] == true) //L
 	{
 		rec->Set_LName(bools->Get_LName());
 		*change_file = true;
 		log(3) << "Changed Last Name.\n";
 	}
-	else if (bools->phonearea == true) //A
+	else if (bools->Arg_Given[Command_line_Record::phonearea] == true) //A
 	{
 		rec->Set_PhoneArea(bools->Get_PhoneArea());
 		*change_file = true;
 		log(3) << "Change Phone Area Code.\n";
 	}
-	else if (bools->phonenumber == true) //H
+	else if (bools->Arg_Given[Command_line_Record::phonenumber] == true) //H
 	{
 		rec->Set_Phone(bools->Get_Phone());
 		*change_file = true;
 		log(3) << "Changed Phone Number.\n";
 	}
-	else if (bools->middleinitial == true) //M
+	else if (bools->Arg_Given[Command_line_Record::middleinitial] == true) //M
 	{
 		rec->Set_MI(bools->Get_MI());
 		*change_file = true;
 		log(3) << "Changed Middle Initial.\n";
 	}
-	else if (bools->ssn == true)// S
+	else if (bools->Arg_Given[Command_line_Record::ssn] == true)// S
 	{
 		rec->Set_SSN(bools->Get_SSN());
 		*change_file = true;
 		log(3) << "Changed SSN.\n";
 	}
-	else if (bools->newpassword == true)// W
+	else if (bools->Arg_Given[Command_line_Record::newpassword] == true)// W
 	{
 		rec->Set_PassWD(bools->Get_PassWd());
 		*change_file = true;
@@ -488,12 +490,12 @@ void Open_File(char *Filename, fstream *file)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-void Add_Account(CLI *CLI_Record, vector<database> &Records, int *i, int *n) //i = size of vector, n =record number
+void Add_Account(Command_line_Record *Comand_Record, vector<database> &Records, int *i, int *n) //i = size of vector, n =record number
 {
 	for (int x=0;x<*i;x++)
 	{
 		database *record = &Records[x];// creates pointer to record in use
-		if (!(strncmp(record->Get_Account(), CLI_Record->Get_Account(), 5)))
+		if (!(strncmp(record->Get_Account(), Comand_Record->Get_Account(), 5)))
 		{
 			log(3) << "Acount already exists.\n";
 			exit(EXIT_CODE_DOUBBLE_ENTRIE);
@@ -502,16 +504,16 @@ void Add_Account(CLI *CLI_Record, vector<database> &Records, int *i, int *n) //i
 	*i = *i+1;
 	Records.resize(*i); //increase size of vector for new account
 	*n = *n+1;
-	Records[*n].Set_LName(CLI_Record->Get_LName());
-	Records[*n].Set_FName(CLI_Record->Get_FName());
-	Records[*n].Set_MI(CLI_Record->Get_MI());
-	Records[*n].Set_SSN(CLI_Record->Get_SSN());
-	Records[*n].Set_PhoneArea(CLI_Record->Get_PhoneArea());
-	Records[*n].Set_Phone(CLI_Record->Get_Phone());
-	float bal = CLI_Record->Get_Balance();
+	Records[*n].Set_LName(Comand_Record->Get_LName());
+	Records[*n].Set_FName(Comand_Record->Get_FName());
+	Records[*n].Set_MI(Comand_Record->Get_MI());
+	Records[*n].Set_SSN(Comand_Record->Get_SSN());
+	Records[*n].Set_PhoneArea(Comand_Record->Get_PhoneArea());
+	Records[*n].Set_Phone(Comand_Record->Get_Phone());
+	float bal = Comand_Record->Get_Balance();
 	Records[*n].Set_Balance(&bal);
-	Records[*n].Set_Account(CLI_Record->Get_Account());
-	Records[*n].Set_PassWD(CLI_Record->Get_PassWd());
+	Records[*n].Set_Account(Comand_Record->Get_Account());
+	Records[*n].Set_PassWD(Comand_Record->Get_PassWd());
 	log(3) << "Added account.\n";
 }
 
@@ -546,7 +548,7 @@ void Display_Database(database *Record)
  RETURNS:           void function
  NOTES:
  ----------------------------------------------------------------------------- */
-int Delete_Account(vector<database> &Records, CLI *bools, int *counter)
+int Delete_Account(vector<database> &Records, Command_line_Record *bools, int *counter)
 {
 	int x=0;
 	for (;x<*counter;x++)
@@ -599,7 +601,7 @@ void Print_Report(char *reportname, vector<database> &Records, int *i)
  RETURNS:           void function
  NOTES:             has multiple points of verification.
  ----------------------------------------------------------------------------- */
-void Funds_Transfer(vector<database> &Records, CLI *bools)
+void Funds_Transfer(vector<database> &Records, Command_line_Record *bools)
 {
 	float bal, *pbal = &bal; //temp balance holder
 	int account1 = -1, account2 = -1;

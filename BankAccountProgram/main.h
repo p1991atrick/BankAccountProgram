@@ -33,19 +33,19 @@ using std::vector;
 
 // Function Prototyes
 //menu
-void CLI_Args(int, char *argv[], char *, char *, CLI *);
+void CLI_Args(int, char *argv[], char *, char *, Command_line_Record *);
 void CLI_Help();
-void Record_Sort(CLI *, fstream *, char *, char *);
-void CLI_Sort(CLI *, database *, bool *);
+void Record_Sort(Command_line_Record *, fstream *, char *, char *);
+void CLI_Sort(Command_line_Record *, database *, bool *);
 //file IO
 void Open_File(char *, fstream *);
 //management
-void Add_Account(CLI *, vector<database> &, int *, int *);
+void Add_Account(Command_line_Record *, vector<database> &, int *, int *);
 void Display_Database(database *);
-int Delete_Account(vector<database> &, CLI *, int *);
+int Delete_Account(vector<database> &, Command_line_Record *, int *);
 void Print_Report(char *, vector<database> &, int *);
 //account
-void Funds_Transfer(vector<database> &, CLI *);
+void Funds_Transfer(vector<database> &, Command_line_Record *);
 void Funds_Remove(char *, fstream *);
 
 #endif /* main_h */
