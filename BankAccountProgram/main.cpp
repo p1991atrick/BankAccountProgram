@@ -33,7 +33,7 @@
  ----------------------------------------------------------------------------- */
 
 #include "BankRecord.h"
-#include "CLI_Bool.h"
+#include "CommandLine.h"
 #include "main.h"
 
 //verbose define

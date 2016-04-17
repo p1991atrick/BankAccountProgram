@@ -6,7 +6,7 @@
 //  Copyright © 2016 Patrick Kelly. All rights reserved.
 //
 
-#include "CLI_Bool.h"
+#include "CommandLine.h"
 
 CLI::CLI()
 {

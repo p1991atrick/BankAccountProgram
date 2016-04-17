@@ -6,8 +6,8 @@
 //  Copyright © 2016 Patrick Kelly. All rights reserved.
 //
 
-#ifndef CLI_Bool_h
-#define CLI_Bool_h
+#ifndef CommandLine_h
+#define CommandLine_h
 
 #include <stdio.h>
 #include "BankRecord.h"
@@ -51,5 +51,5 @@ public:		//this in intentional
 	int add_acount_true();
 	int transfer();
 };
-#endif /* CLI_Bool_h */
+#endif /* CommandLine_h */
 
