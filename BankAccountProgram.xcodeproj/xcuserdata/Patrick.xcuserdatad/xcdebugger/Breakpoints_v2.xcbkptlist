@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "351"
             endingLineNumber = "351"
-            landmarkName = "Record_Sort(Command_line_Record * bools, fstream * databasefile, char *Filename, char *Reportname)"
+            landmarkName = "Record_Sort(Command_line_Record * GivenChars, fstream * databasefile, char *Filename, char *Reportname)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -63,7 +63,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "385"
             endingLineNumber = "385"
-            landmarkName = "Record_Sort(Command_line_Record * bools, fstream * databasefile, char *Filename, char *Reportname)"
+            landmarkName = "Record_Sort(Command_line_Record * GivenChars, fstream * databasefile, char *Filename, char *Reportname)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -95,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "348"
             endingLineNumber = "348"
-            landmarkName = "Record_Sort(Command_line_Record * bools, fstream * databasefile, char *Filename, char *Reportname)"
+            landmarkName = "Record_Sort(Command_line_Record * GivenChars, fstream * databasefile, char *Filename, char *Reportname)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

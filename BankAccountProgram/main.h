@@ -14,7 +14,7 @@ class mystreambuf: public std::streambuf
 {
 };
 
-#define log(x) ((x >= threshold)? std::cout : nocout)
+#define VERBOSE(x) ((x >= threshold)? std::cout : nocout)
 
 #include <vector>
 #include <fstream>
@@ -45,7 +45,7 @@ void Display_Database(database *);
 int Delete_Account(vector<database> &, Command_line_Record *, int *);
 void Print_Report(char *, vector<database> &, int *);
 //account
-void Funds_Transfer(vector<database> &, Command_line_Record *);
+void Funds_Transfer_Add(vector<database> &, Command_line_Record *);
 void Funds_Remove(char *, fstream *);
 
 #endif /* main_h */

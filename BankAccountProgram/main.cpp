@@ -37,7 +37,7 @@
 #include "main.h"
 
 //verbose define
-int threshold = 4;
+int threshold = 4;// anything greater then 4 will be printed to screen
 mystreambuf nostreambuf;
 std::ostream nocout(&nostreambuf);
 
@@ -61,12 +61,12 @@ int main(int argc, char * argv[])
 	CLI_Args(argc, argv, Filename, Reportname, bools); //sort and load args from CLI
 	if (bools->Arg_Given[Command_line_Record::filename] == false) //if no filename was given exit
 	{
-		log(3) << "No file given.\n";
+		VERBOSE(3) << "No file given.\n";
 		delete bools;
 		return EXIT_CODE_FILE_IO;
 	}
-	Record_Sort(bools, &databasefile, Filename, Reportname);
-	delete bools;
+	Record_Sort(bools, &databasefile, Filename, Reportname);	// contains logic for what functions need to be called
+	delete bools; //delete the pointer to the bools class
 	return EXIT_CODE_SUCCESS;
 }
 
@@ -114,7 +114,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No valid area code for phone number is not given, or not enough numbers.\n";
+				VERBOSE(3) << "No valid area code for phone number is not given, or not enough numbers.\n";
 				exit(EXIT_CODE_CLI_ERROR);
 			}
 		}
@@ -134,7 +134,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No valid name given.\n";
+				VERBOSE(3) << "No valid name given.\n";
 				exit(EXIT_CODE_CLI_ERROR+2);
 			}
 		}
@@ -147,7 +147,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No valid phone number given.\n";
+				VERBOSE(3) << "No valid phone number given.\n";
 				exit(EXIT_CODE_CLI_ERROR+3);
 			}
 
@@ -167,7 +167,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No vaild last name given.\n";
+				VERBOSE(3) << "No vaild last name given.\n";
 				exit(EXIT_CODE_CLI_ERROR+4);
 			}
 		}
@@ -182,7 +182,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No valid Middle initial given.\n";
+				VERBOSE(3) << "No valid Middle initial given.\n";
 				exit(EXIT_CODE_CLI_ERROR+5);
 			}
 		}
@@ -203,7 +203,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No vaild account number given.\n";
+				VERBOSE(3) << "No vaild account number given.\n";
 				exit(EXIT_CODE_CLI_ERROR+6);
 			}
 		}
@@ -224,7 +224,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No vaild password given.\n";
+				VERBOSE(3) << "No vaild password given.\n";
 				exit(EXIT_CODE_CLI_ERROR+7);
 			}
 		}
@@ -242,7 +242,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No valid report name given.\n";
+				VERBOSE(3) << "No valid report name given.\n";
 				exit(EXIT_CODE_CLI_ERROR+8);	//this should never be able to run
 			}
 		}
@@ -255,7 +255,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No valid SSN given.\n";
+				VERBOSE(3) << "No valid SSN given.\n";
 				exit(EXIT_CODE_CLI_ERROR+9);
 			}
 		}
@@ -269,7 +269,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No valid balance given.\n";
+				VERBOSE(3) << "No valid balance given.\n";
 				exit(EXIT_CODE_CLI_ERROR+10);
 			}
 		}
@@ -282,7 +282,7 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
 			}
 			else
 			{
-				log(3) << "No valid new password given.\n";
+				VERBOSE(3) << "No valid new password given.\n";
 				exit(EXIT_CODE_CLI_ERROR+11);
 			}
 		}
@@ -313,24 +313,24 @@ void CLI_Args(int argc, char *argv[], char *Filename, char *Reportname, Command_
  ----------------------------------------------------------------------------- */
 void CLI_Help()
 {
-	log(5) << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
-	log(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//39	#
-	log(5) << setw(5) << "/A" << "Sets the phone number area code.\n";			//20	$
-	log(5) << setw(5) << "/C" << "Add an account to database\n";				//33	$
-	log(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21	#
-	log(5) << setw(5) << "/F" << "Changes the First Name.\n";					//22	$
-	log(5) << setw(5) << "/H" << "Changes the Phone Number.\n";					//23	$
-	log(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//35	$
-	log(5) << setw(5) << "/L" << "Changes the Last Name.\n";					//24	$
-	log(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25	$
-	log(5) << setw(5) << "/N" << "Account number.\n";							//26	#
-	log(5) << setw(5) << "/P" << "Account Password.\n";							//27	#
-	log(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28$
-	log(5) << setw(5) << "/S" << "Change Social Security Number.\n";			//29	$
-	log(5) << setw(5) << "/T" << "Account Balance, or Amount to transfer between accounts.\n";		//30	$
-	log(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31	$
-	log(5) << setw(5) << "/V" << "Sets verbose mode to true.\n";				//32	#
-	log(5) << setw(5) << "/X" << "Removes specified account from database\n";	//34	$
+	VERBOSE(5) << setw(40) << std::right << "Bank Account Database Help\n\n";	//exit codes for CLI arg's failures
+	VERBOSE(5) << setw(5) << std::left << "/?" << "Shows this help menu.\n";		//39	#
+	VERBOSE(5) << setw(5) << "/A" << "Sets the phone number area code.\n";			//20	$
+	VERBOSE(5) << setw(5) << "/C" << "Add an account to database\n";				//33	$
+	VERBOSE(5) << setw(5) << "/D" << "The name of the database file to open.\n";	//21	#
+	VERBOSE(5) << setw(5) << "/F" << "Changes the First Name.\n";					//22	$
+	VERBOSE(5) << setw(5) << "/H" << "Changes the Phone Number.\n";					//23	$
+	VERBOSE(5) << setw(5) << "/I" << "Prints given record to screen.\n";			//35	$
+	VERBOSE(5) << setw(5) << "/L" << "Changes the Last Name.\n";					//24	$
+	VERBOSE(5) << setw(5) << "/M" << "Changes Middle Inital.\n";					//25	$
+	VERBOSE(5) << setw(5) << "/N" << "Account number.\n";							//26	#
+	VERBOSE(5) << setw(5) << "/P" << "Account Password.\n";							//27	#
+	VERBOSE(5) << setw(5) << "/R" << "Create report file with given filename. If no name is given the default is used.\n"; //28$
+	VERBOSE(5) << setw(5) << "/S" << "Change Social Security Number.\n";			//29	$
+	VERBOSE(5) << setw(5) << "/T" << "Account Balance, or Amount to transfer between accounts.\n";		//30	$
+	VERBOSE(5) << setw(5) << "/W" << "Sets the new password for the account.\n";	//31	$
+	VERBOSE(5) << setw(5) << "/V" << "Sets verbose mode to true.\n";				//32	#
+	VERBOSE(5) << setw(5) << "/X" << "Removes specified account from database\n";	//34	$
 }
 
 /* -----------------------------------------------------------------------------
@@ -339,42 +339,42 @@ void CLI_Help()
  RETURNS:           void
  NOTES:
  ----------------------------------------------------------------------------- */
-void Record_Sort(Command_line_Record * bools, fstream * databasefile, char *Filename, char *Reportname)
+void Record_Sort(Command_line_Record * GivenChars, fstream * databasefile, char *Filename, char *Reportname)
 {
 	Open_File(Filename, databasefile); //all functions require that this file is opened.
-	vector<database> Records(1);
+	vector<database> Records(1);	//create vector for database entries, and make at least one empty one.
 	int n=-1, i = 0; // n = for do loop only  i = number of records that were opened.
-	bool change_file = false;
+	bool change_file = false;	//T/F check to determin if vector has changed
 	do{			// load file into class vector.
 		i++;
 		Records.resize(i);
 		n++;
 		*databasefile >> Records[n];
 	}while ((*databasefile).eof() == 0); //run until end of file
-	log(3) << "loaded file\n";
+	VERBOSE(3) << "loaded file\n";
 	databasefile->close();
-	if (bools->add_acount_true() == 1) // check to see if adding account
+	if (GivenChars->add_acount_true() == 1) // check to see if adding account
 	{
-		Add_Account(bools, Records, &i, &n);
+		Add_Account(GivenChars, Records, &i, &n);
 		change_file	= true;
 	}
-	else if (bools->Arg_Given[Command_line_Record::reportfile] == true)
+	else if (GivenChars->Arg_Given[Command_line_Record::reportfile] == true)
 	{
 		Print_Report(Reportname, Records, &i);
 	}
-	else if (bools->transfer() == 1)
+	else if (GivenChars->transfer() == 1)
 	{
-		Funds_Transfer(Records, bools);
+		Funds_Transfer_Add(Records, GivenChars);
 		change_file = true;
 	}
-	else if (bools->Arg_Given[Command_line_Record::deleaccnt] == true)
+	else if (GivenChars->Arg_Given[Command_line_Record::deleaccnt] == true)
 	{
-		n = Delete_Account(Records, bools, &i);
+		n = Delete_Account(Records, GivenChars, &i);
 		if (n>=0)
 		{
 			Records.erase(Records.begin()+n);
 			change_file = true;
-			log(3) << "Account Deleted.\n";
+			VERBOSE(3) << "Account Deleted.\n";
 		}
 	}
 	else
@@ -382,9 +382,9 @@ void Record_Sort(Command_line_Record * bools, fstream * databasefile, char *File
 		for (n=0; n<i; n++)
 		{
 			database *rec = &Records[n]; //create pointer to current vector location
-			if ((!strncmp(bools->Get_Account(), rec->Get_Account(), 5)) && (!strncmp(bools->Get_PassWd(), rec->Get_PassWd(), 6))) //check that account number and password match
+			if ((!strncmp(GivenChars->Get_Account(), rec->Get_Account(), 5)) && (!strncmp(GivenChars->Get_PassWd(), rec->Get_PassWd(), 6))) //check that account number and password match
 			{
-				CLI_Sort(bools, rec, &change_file);
+				CLI_Sort(GivenChars, rec, &change_file);
 			}
 		}
 	}
@@ -415,43 +415,43 @@ void CLI_Sort(Command_line_Record *bools, database *rec, bool *change_file)
 	{
 		rec->Set_FName(bools->Get_FName());
 		*change_file = true;
-		log(3) << "Changed First Name.\n";
+		VERBOSE(3) << "Changed First Name.\n";
 	}
 	else if (bools->Arg_Given[Command_line_Record::lastname] == true) //L
 	{
 		rec->Set_LName(bools->Get_LName());
 		*change_file = true;
-		log(3) << "Changed Last Name.\n";
+		VERBOSE(3) << "Changed Last Name.\n";
 	}
 	else if (bools->Arg_Given[Command_line_Record::phonearea] == true) //A
 	{
 		rec->Set_PhoneArea(bools->Get_PhoneArea());
 		*change_file = true;
-		log(3) << "Change Phone Area Code.\n";
+		VERBOSE(3) << "Change Phone Area Code.\n";
 	}
 	else if (bools->Arg_Given[Command_line_Record::phonenumber] == true) //H
 	{
 		rec->Set_Phone(bools->Get_Phone());
 		*change_file = true;
-		log(3) << "Changed Phone Number.\n";
+		VERBOSE(3) << "Changed Phone Number.\n";
 	}
 	else if (bools->Arg_Given[Command_line_Record::middleinitial] == true) //M
 	{
 		rec->Set_MI(bools->Get_MI());
 		*change_file = true;
-		log(3) << "Changed Middle Initial.\n";
+		VERBOSE(3) << "Changed Middle Initial.\n";
 	}
 	else if (bools->Arg_Given[Command_line_Record::ssn] == true)// S
 	{
 		rec->Set_SSN(bools->Get_SSN());
 		*change_file = true;
-		log(3) << "Changed SSN.\n";
+		VERBOSE(3) << "Changed SSN.\n";
 	}
 	else if (bools->Arg_Given[Command_line_Record::newpassword] == true)// W
 	{
 		rec->Set_PassWD(bools->Get_PassWd());
 		*change_file = true;
-		log(3) << "Changed Password.\n";
+		VERBOSE(3) << "Changed Password.\n";
 	}
 	else if (bools->transfer() == 2)// T
 	{
@@ -475,12 +475,12 @@ void Open_File(char *Filename, fstream *file)
 	(*file).open(Filename, ios::in); //opens the file
     if ((*file).fail()) //checks if file was found
     {
-        log(3) << "File Not Found\nExiting\n";
+        VERBOSE(3) << "File Not Found\nExiting\n";
 		exit(EXIT_CODE_FILE_IO);    //exits program if file not found
     }
     else
     {
-        log(3) << Filename << " Opened Sucsessfuly\n";
+        VERBOSE(3) << Filename << " Opened Sucsessfuly\n";
     }
 }
 
@@ -497,7 +497,7 @@ void Add_Account(Command_line_Record *Comand_Record, vector<database> &Records, 
 		database *record = &Records[x];// creates pointer to record in use
 		if (!(strncmp(record->Get_Account(), Comand_Record->Get_Account(), 5)))
 		{
-			log(3) << "Acount already exists.\n";
+			VERBOSE(3) << "Acount already exists.\n";
 			exit(EXIT_CODE_DOUBBLE_ENTRIE);
 		}
 	}
@@ -514,7 +514,7 @@ void Add_Account(Command_line_Record *Comand_Record, vector<database> &Records, 
 	Records[*n].Set_Balance(&bal);
 	Records[*n].Set_Account(Comand_Record->Get_Account());
 	Records[*n].Set_PassWD(Comand_Record->Get_PassWd());
-	log(3) << "Added account.\n";
+	VERBOSE(3) << "Added account.\n";
 }
 
 /* -----------------------------------------------------------------------------
@@ -525,19 +525,19 @@ void Add_Account(Command_line_Record *Comand_Record, vector<database> &Records, 
  ----------------------------------------------------------------------------- */
 void Display_Database(database *Record)
 {
-    log(3) << std::setw(30) << std::right << "Current Bank Record\n";
+    VERBOSE(3) << std::setw(30) << std::right << "Current Bank Record\n";
 	//header
 	//1st line
-	log(3) << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+	VERBOSE(3) << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
 	//2nd line
-	log(3) << std::setw(12) << std::left << "Account"  << std::setw(20) << "Last" << std::setw(20)    << "First" << std::setw(6)    << "MI" << std::setw(13) << "SSN"       << std::setw(16) << "Phone"        << std::setw(15) << "Account"     << endl;
+	VERBOSE(3) << std::setw(12) << std::left << "Account"  << std::setw(20) << "Last" << std::setw(20)    << "First" << std::setw(6)    << "MI" << std::setw(13) << "SSN"       << std::setw(16) << "Phone"        << std::setw(15) << "Account"     << endl;
 	//3rd line
-	log(3) << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20)    << "Name"  << std::setw(6)    << "  " << std::setw(13) << "Number"    << std::setw(16) << "Number"       << std::setw(15) << "Balance"     << endl;
+	VERBOSE(3) << std::setw(12) << std::left << "Number"   << std::setw(20) << "Name" << std::setw(20)    << "Name"  << std::setw(6)    << "  " << std::setw(13) << "Number"    << std::setw(16) << "Number"       << std::setw(15) << "Balance"     << endl;
 	//4th line
-	log(3) << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
+	VERBOSE(3) << std::setw(12) << std::left << "--------" << std::setw(20) << "-------" << std::setw(20) << "--------" << std::setw(6) << "--" << std::setw(13) << "---------" << std::setw(16) << "------------" << std::setw(15) << "------------" << endl;
 
 	//print the information to the screen
-	log(5) << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
+	VERBOSE(5) << std::setw(12) << std::left << Record->Get_Account() << std::setw(20) << Record->Get_LName() << std::setw(20) << Record->Get_FName()
 	<< std::setw(6) << Record->Get_MI() << std::setw(13) << Record->Get_SSN() << "(" << Record->Get_PhoneArea() << ")" << std::setw(11) << Record->Get_Phone()
 	<< std::setw(12) << std::right << std::setprecision(2) << std::fixed << Record->Get_Balance() << endl;
 }
@@ -592,7 +592,7 @@ void Print_Report(char *reportname, vector<database> &Records, int *i)
         
     }
     reportfile.close();
-	log(3) << "Printed report file\n";
+	VERBOSE(3) << "Printed report file\n";
 }
 
 /* -----------------------------------------------------------------------------===Account options=====================================================================================================================
@@ -601,9 +601,9 @@ void Print_Report(char *reportname, vector<database> &Records, int *i)
  RETURNS:           void function
  NOTES:             has multiple points of verification.
  ----------------------------------------------------------------------------- */
-void Funds_Transfer(vector<database> &Records, Command_line_Record *bools)
+void Funds_Transfer_Add(vector<database> &Records, Command_line_Record *bools)
 {
-	float bal, *pbal = &bal; //temp balance holder
+	float *blnc = new float; //temp balance holder
 	int account1 = -1, account2 = -1;
 	for (int n=0;n<int(Records.size());n++)
 	{         //find accounts that funds are being moved
@@ -613,7 +613,7 @@ void Funds_Transfer(vector<database> &Records, Command_line_Record *bools)
         {
             if (!strncmp(bools->Get_PassWd(), Record->Get_PassWd(), 6))//verify account password
             {
-				log(3) << "Found 1st account.\n";
+				VERBOSE(3) << "Found 1st account.\n";
 				account1 = n;
 			}
 		}
@@ -621,23 +621,28 @@ void Funds_Transfer(vector<database> &Records, Command_line_Record *bools)
 		{
 			if (!strncmp(bools->Get_scndPassWD(), Record->Get_PassWd(), 6))//verify account password
 			{
-				log(3) << "Found 2nd account.\n";
+				VERBOSE(3) << "Found 2nd account.\n";
 				account2 = n;
 			}
 		}
     }
     if (account1 != -1 && account2 != -1)//only runs if both accounts were found
 	{
-		*pbal = Records[account1].Get_Balance() - bools->Get_Balance(); //remove the funds from first account dry run
-		if (*pbal < bools->Get_Balance())	//if not enough money, cancel
+		*blnc = Records[account1].Get_Balance() - bools->Get_Balance(); //remove the funds from first account dry run
+		if (*blnc < bools->Get_Balance())	//if not enough money, cancel
 		{
 			exit(EXIT_CODE_NO_FUNDS);
 		}
-		Records[account1].Set_Balance(pbal); //set the new account ballance for the first account
-		*pbal = Records[account2].Get_Balance() + bools->Get_Balance(); //add funds to 2nd account
-		Records[account2].Set_Balance(pbal);
-		log(3) << "funds transfered.\n";
+		Records[account1].Set_Balance(blnc); //set the new account ballance for the first account
+		*blnc = Records[account2].Get_Balance() + bools->Get_Balance(); //add funds to 2nd account
+		Records[account2].Set_Balance(blnc);
+		VERBOSE(3) << "funds transfered.\n";
     }
+	else if (account1 != -1 && account2 == -1)
+	{
+		*blnc = Records[account1].Get_Balance() + bools->Get_Balance();
+		Records.at(account1).Set_Balance(blnc);
+	}
 }
 
 /* -----------------------------------------------------------------------------
